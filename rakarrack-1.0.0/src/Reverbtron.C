@@ -280,23 +280,23 @@ memset(ftime, 0, sizeof(float)*2000);
 
 //Name
 memset(wbuf,0, sizeof(wbuf));
-fgets(wbuf,sizeof wbuf,fs);
+char *ignore = fgets(wbuf,sizeof wbuf,fs);
 
 // Subsample Compresion Skip 
 memset(wbuf,0, sizeof(wbuf));
-fgets(wbuf,sizeof wbuf,fs);
+ignore = fgets(wbuf,sizeof wbuf,fs);
 sscanf(wbuf,"%f,%f\n",&compresion,&quality);
 
 //Length
 memset(wbuf,0,sizeof(wbuf));
-fgets(wbuf,sizeof wbuf,fs);
+ignore = fgets(wbuf,sizeof wbuf,fs);
 sscanf(wbuf, "%d\n", &data_length);
 if(data_length>2000) data_length = 2000;
 //Time Data
 for(i=0;i<data_length;i++)
 {
 memset(wbuf,0, sizeof(wbuf));
-fgets(wbuf,sizeof wbuf,fs);
+ignore = fgets(wbuf,sizeof wbuf,fs);
 sscanf(wbuf,"%f,%f\n",&ftime[i],&tdata[i]);
 }
 

@@ -136,6 +136,11 @@ JACKstart (RKR * rkr_, jack_client_t * jackclient_)
 int
 jackprocess (jack_nframes_t nframes, void *arg)
 {
+  /**
+   * TODO
+   * allocate this value
+   */
+  RKR rkr;
 
   int i,count;
   jack_midi_event_t midievent;
@@ -223,6 +228,7 @@ jackprocess (jack_nframes_t nframes, void *arg)
   }
   
 
+  rkr.miramidi();
 
 
   pthread_mutex_lock (&jmutex);
@@ -293,11 +299,7 @@ JACKfinish ()
 void
 jackshutdown (void *arg)
 {
-  if (gui == 0)
-    printf ("Jack Shut Down, sorry.\n");
-  else
-    JackOUT->Message (1,JackOUT->jackcliname,
-		      "Jack Shut Down, try to save your work");
+    JackOUT->Message (1,JackOUT->jackcliname, "Jack Shut Down, try to save your work");
 };
 
 

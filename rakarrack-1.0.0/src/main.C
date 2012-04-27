@@ -90,7 +90,6 @@ main (int argc, char *argv[])
 
   Pexitprogram = 0;
   commandline = 0;
-  gui = 1;
   opterr = 0;
   int option_index = 0, opt;
   RKR rkr;
@@ -98,9 +97,7 @@ main (int argc, char *argv[])
   if (nojack)
     {
       show_help ();
-      if (gui)
-	rkr.Message (1,"rakarrack error",
-		     "Cannot make a jack client, is jackd running?");
+      rkr.Message (1,"rakarrack error", "Cannot make a jack client, is jackd running?");
       return (0);
     }
 
@@ -119,9 +116,6 @@ main (int argc, char *argv[])
 	{
 	case 'h':
 	  exitwithhelp = 1;
-	  break;
-	case 'n':
-	  gui = 0;
 	  break;
 	case 'l':
 	  if (optarguments != NULL)
@@ -163,22 +157,18 @@ main (int argc, char *argv[])
   // Launch GUI
 
 
-   if (gui) new RKRGUI (argc, argv, &rkr);
-
-
   JACKstart (&rkr, rkr.jackclient);
   rkr.InitMIDI ();
 
   rkr.ConnectMIDI ();
 
-  if (gui == 0)
-    {
-      rkr.Bypass = 1;
-      rkr.calculavol (1);
-      rkr.calculavol (2);
-      rkr.booster = 1.0f;
-
-    }
+  /**
+   * default values
+   */
+  rkr.Bypass = 1;
+  rkr.calculavol (1);
+  rkr.calculavol (2);
+  rkr.booster = 1.0f;
 
   mlockall (MCL_CURRENT | MCL_FUTURE);
 
@@ -186,12 +176,6 @@ main (int argc, char *argv[])
   
   while (Pexitprogram == 0)
     {
-      // Refresh GUI
-      if (gui)
-	{
-	  Fl::wait ();
-	}
-      else
 	{
 	  usleep (1500);
 	  if (preset != 1000)

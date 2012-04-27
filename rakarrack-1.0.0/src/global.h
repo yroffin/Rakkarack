@@ -96,10 +96,8 @@
 #include <dirent.h>
 #include <sys/time.h>
 #include <alsa/asoundlib.h>
-#include <X11/xpm.h>
 #include <jack/jack.h>
 #include <jack/midiport.h>
-#include <Fl/Fl_Preferences.H>
 #include "FPreset.h"
 #include "Reverb.h"
 #include "Chorus.h"
@@ -108,7 +106,7 @@
 #include "Distorsion.h"
 #include "EQ.h"
 #include "Compressor.h"
-#include "Alienwah.h"
+#include "plugins/Alienwah.h"
 #include "DynamicFilter.h"
 #include "Pan.h"
 #include "Harmonizer.h"
@@ -172,8 +170,6 @@ extern float r__ratio[12];
 extern int Wave_res_amount;
 extern int Wave_up_q;
 extern int Wave_down_q;
-extern Pixmap p, mask;
-extern XWMHints *hints;
 extern float freqs[12];
 extern float lfreqs[12];
 extern float aFreq;

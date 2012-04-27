@@ -1,6 +1,7 @@
 bin_PROGRAMS = rakarrack
 rakarrack_SOURCES = main.C \
-	Alienwah.h \
+	../inc/plugins/Alienwah.h \
+	plugins/Alienwah.C \
 	AnalogFilter.h \
 	APhaser.h \
 	Arpie.h \
@@ -82,7 +83,6 @@ rakarrack_SOURCES = main.C \
 	EQ.C \
 	Compressor.C \
 	AnalogFilter.C \
-	Alienwah.C \
 	Filter.C \
 	HarmonicEnhancer.C \
 	DynamicFilter.C \

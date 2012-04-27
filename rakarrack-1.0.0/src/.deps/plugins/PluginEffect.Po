@@ -1,0 +1,3 @@
+plugins/PluginEffect.o: plugins/PluginEffect.C plugins/PluginEffect.h
+
+plugins/PluginEffect.h:

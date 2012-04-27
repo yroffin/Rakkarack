@@ -28,12 +28,11 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <Fl/Fl_Preferences.H>
 #include "global.h"
 
 int Pexitprogram, preset;
 int commandline;
-int exitwithhelp, gui, nojack;
+int exitwithhelp, nojack;
 int PERIOD;
 int note_active[POLY];
 int rnote[POLY];
@@ -56,10 +55,6 @@ float r__ratio[12];
 float freqs[12];
 float lfreqs[12];
 float aFreq;
-
-Fl_Preferences rakarrack (Fl_Preferences::USER, WEBSITE, PACKAGE);
-Pixmap p, mask;
-XWMHints *hints;
 
 RKR::RKR ()
 {
@@ -107,29 +102,39 @@ RKR::RKR ()
   J_SAMPLE_RATE = jack_get_sample_rate (jackclient);
   J_PERIOD = jack_get_buffer_size (jackclient);
   
+  /**
+   * TODO
   rakarrack.get(PrefNom("Disable Warnings"),mess_dis,0);
   rakarrack.get (PrefNom ("Filter DC Offset"), DC_Offset, 0); 
   rakarrack.get (PrefNom ("UpSampling"), upsample, 0); 
   rakarrack.get (PrefNom ("UpQuality"), UpQual, 4); 
   rakarrack.get (PrefNom ("DownQuality"), DownQual, 4); 
   rakarrack.get (PrefNom ("UpAmount"), UpAmo, 0); 
+   */
 
 
   Adjust_Upsample();
 
+  /**
+   * TODO
   rakarrack.get (PrefNom ("Looper Size"), looper_size, 1);
   rakarrack.get (PrefNom ("Calibration"), aFreq, 440.0f);
+  */
   update_freqs(aFreq);
 
+  /**
+   * TODO
   rakarrack.get (PrefNom ("Vocoder Bands"), VocBands, 32);
   rakarrack.get (PrefNom ("Recognize Trigger"), rtrig, .6f);
-  
+  */
   
   Fraction_Bypass = 1.0f;
   Master_Volume = 0.50f;
   Input_Gain = 0.50f;
   Cabinet_Preset = 0;
 
+  /**
+   * TODO
   rakarrack.get (PrefNom("Harmonizer Downsample"),Har_Down,5);
   rakarrack.get (PrefNom("Harmonizer Up Quality"),Har_U_Q,4);
   rakarrack.get (PrefNom("Harmonizer Down Quality"),Har_D_Q,2);
@@ -174,6 +179,7 @@ RKR::RKR ()
 
   rakarrack.get (PrefNom ("Auto Connect Num"), cuan_jack, 2);
   rakarrack.get (PrefNom ("Auto Connect In Num"), cuan_ijack, 1);
+  */
 
   int i;
   memset (temp, 0, sizeof (temp));
@@ -190,8 +196,10 @@ RKR::RKR ()
  	strcpy (j_names, jack_names[i]);
       else
 	strcpy (j_names, "");
+      /**
+       * TODO
       rakarrack.get (PrefNom (temp), jack_po[i].name, j_names, 128);
-
+      */
     }
 
   memset(j_names,0, sizeof(j_names));
@@ -207,7 +215,10 @@ RKR::RKR ()
  	strcpy (j_names, jack_inames[i]);
       else
 	strcpy (j_names, "");
+      /**
+       * TODO
       rakarrack.get (PrefNom (temp), jack_poi[i].name, j_names, 128);
+      */
     }
 
 
@@ -869,7 +880,10 @@ efx_FLimiter->Compressor_Change_Preset(0,3);
   char temp[128];
   memset (temp, 0, sizeof (temp));
   sprintf (temp, "%s/Default.rkrb", DATADIR);
+  /**
+   * TODO
   rakarrack.get (PrefNom ("Bank Filename"), BankFilename, temp, 127);
+  */
   loadnames();
   
   if (commandline == 0)
@@ -921,8 +935,11 @@ RKR::ConnectMIDI ()
 // Get config settings and init settings
 // Get MIDI IN Setting
 
+  /**
+   * TODO
   rakarrack.get (PrefNom ("Auto Connect MIDI IN"), aconnect_MI, 0);
   rakarrack.get (PrefNom ("MIDI IN Device"), MID, "", 40);
+  */
   if (aconnect_MI)
     Conecta ();
 
