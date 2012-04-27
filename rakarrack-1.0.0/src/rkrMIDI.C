@@ -23,6 +23,7 @@
 
 
 #include "global.h"
+#include "Plugins.h"
 
 
 void

@@ -69,12 +69,8 @@ RecChord.o: RecChord.C RecChord.h global.h config.h \
  /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/jack/types.h \
  /usr/include/jack/transport.h /usr/include/jack/weakmacros.h \
- /usr/include/jack/midiport.h FPreset.h Reverb.h AnalogFilter.h Filter_.h \
- Chorus.h EffectLFO.h Echo.h Phaser.h Distorsion.h Waveshaper.h EQ.h \
- Compressor.h plugins/Alienwah.h global.h EffectLFO.h \
- plugins/PluginEffect.h DynamicFilter.h Filter.h FormantFilter.h \
- FilterParams.h SVFilter.h Pan.h Harmonizer.h smbPitchShift.h \
- /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/huge_val.h \
+ /usr/include/jack/midiport.h FPreset.h Tuner.h /usr/include/math.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_val.h \
  /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
  /usr/include/x86_64-linux-gnu/bits/huge_vall.h \
  /usr/include/x86_64-linux-gnu/bits/inf.h \
@@ -82,14 +78,8 @@ RecChord.o: RecChord.C RecChord.h global.h config.h \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
- /usr/include/x86_64-linux-gnu/bits/math-finite.h MusicDelay.h Gate.h \
- Tuner.h MIDIConverter.h RecognizeNote.h NewDist.h APhaser.h Valve.h \
- HarmonicEnhancer.h Dual_Flange.h Ring.h Exciter.h MBDist.h Arpie.h \
- Expander.h Shuffle.h Synthfilter.h MBVvol.h Convolotron.h \
- /usr/include/sndfile.h Resample.h /usr/include/samplerate.h Looper.h \
- metronome.h RyanWah.h RBFilter.h RBEcho.h CoilCrafter.h ShelfBoost.h \
- Vocoder.h Sustainer.h Sequence.h Shifter.h StompBox.h Reverbtron.h \
- Echotron.h StereoHarm.h CompBand.h Opticaltrem.h Vibe.h
+ /usr/include/x86_64-linux-gnu/bits/math-finite.h MIDIConverter.h Ring.h \
+ Resample.h /usr/include/samplerate.h
 
 RecChord.h:
 
@@ -309,51 +299,7 @@ config.h:
 
 FPreset.h:
 
-Reverb.h:
-
-AnalogFilter.h:
-
-Filter_.h:
-
-Chorus.h:
-
-EffectLFO.h:
-
-Echo.h:
-
-Phaser.h:
-
-Distorsion.h:
-
-Waveshaper.h:
-
-EQ.h:
-
-Compressor.h:
-
-plugins/Alienwah.h:
-
-global.h:
-
-EffectLFO.h:
-
-plugins/PluginEffect.h:
-
-DynamicFilter.h:
-
-Filter.h:
-
-FormantFilter.h:
-
-FilterParams.h:
-
-SVFilter.h:
-
-Pan.h:
-
-Harmonizer.h:
-
-smbPitchShift.h:
+Tuner.h:
 
 /usr/include/math.h:
 
@@ -375,82 +321,10 @@ smbPitchShift.h:
 
 /usr/include/x86_64-linux-gnu/bits/math-finite.h:
 
-MusicDelay.h:
-
-Gate.h:
-
-Tuner.h:
-
 MIDIConverter.h:
 
-RecognizeNote.h:
-
-NewDist.h:
-
-APhaser.h:
-
-Valve.h:
-
-HarmonicEnhancer.h:
-
-Dual_Flange.h:
-
 Ring.h:
-
-Exciter.h:
-
-MBDist.h:
-
-Arpie.h:
-
-Expander.h:
-
-Shuffle.h:
-
-Synthfilter.h:
-
-MBVvol.h:
-
-Convolotron.h:
-
-/usr/include/sndfile.h:
 
 Resample.h:
 
 /usr/include/samplerate.h:
-
-Looper.h:
-
-metronome.h:
-
-RyanWah.h:
-
-RBFilter.h:
-
-RBEcho.h:
-
-CoilCrafter.h:
-
-ShelfBoost.h:
-
-Vocoder.h:
-
-Sustainer.h:
-
-Sequence.h:
-
-Shifter.h:
-
-StompBox.h:
-
-Reverbtron.h:
-
-Echotron.h:
-
-StereoHarm.h:
-
-CompBand.h:
-
-Opticaltrem.h:
-
-Vibe.h:

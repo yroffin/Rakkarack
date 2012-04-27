@@ -49,30 +49,71 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_rakarrack_OBJECTS = main.$(OBJEXT) jack.$(OBJEXT) \
-	rakarrack.$(OBJEXT) process.$(OBJEXT) fileio.$(OBJEXT) \
-	varios.$(OBJEXT) FPreset.$(OBJEXT) Reverb.$(OBJEXT) \
-	Chorus.$(OBJEXT) EffectLFO.$(OBJEXT) Echo.$(OBJEXT) \
-	Phaser.$(OBJEXT) Distorsion.$(OBJEXT) EQ.$(OBJEXT) \
-	Compressor.$(OBJEXT) AnalogFilter.$(OBJEXT) \
-	plugins/PluginEffect.$(OBJEXT) \
 	plugins/Alienwah.$(OBJEXT) \
-	Filter.$(OBJEXT) HarmonicEnhancer.$(OBJEXT) \
-	DynamicFilter.$(OBJEXT) SVFilter.$(OBJEXT) RBFilter.$(OBJEXT) \
-	FormantFilter.$(OBJEXT) FilterParams.$(OBJEXT) Pan.$(OBJEXT) \
-	Harmonizer.$(OBJEXT) smbPitchShift.$(OBJEXT) Tuner.$(OBJEXT) \
-	MusicDelay.$(OBJEXT) Gate.$(OBJEXT) RecognizeNote.$(OBJEXT) \
-	RecChord.$(OBJEXT) rkrMIDI.$(OBJEXT) NewDist.$(OBJEXT) \
-	APhaser.$(OBJEXT) Dual_Flange.$(OBJEXT) Exciter.$(OBJEXT) \
-	MBDist.$(OBJEXT) Valve.$(OBJEXT) Arpie.$(OBJEXT) \
-	Expander.$(OBJEXT) Ring.$(OBJEXT) Shuffle.$(OBJEXT) \
-	MBVvol.$(OBJEXT) metronome.$(OBJEXT) Convolotron.$(OBJEXT) \
-	Synthfilter.$(OBJEXT) Resample.$(OBJEXT) Looper.$(OBJEXT) \
-	RyanWah.$(OBJEXT) RBEcho.$(OBJEXT) CoilCrafter.$(OBJEXT) \
-	ShelfBoost.$(OBJEXT) Vocoder.$(OBJEXT) Waveshaper.$(OBJEXT) \
-	Sustainer.$(OBJEXT) Sequence.$(OBJEXT) Shifter.$(OBJEXT) \
-	StompBox.$(OBJEXT) Reverbtron.$(OBJEXT) Echotron.$(OBJEXT) \
-	StereoHarm.$(OBJEXT) CompBand.$(OBJEXT) Opticaltrem.$(OBJEXT) \
-	Vibe.$(OBJEXT) MIDIConverter.$(OBJEXT)
+	plugins/AnalogFilter.$(OBJEXT) \
+	plugins/APhaser.$(OBJEXT) \
+	plugins/Arpie.$(OBJEXT) \
+	plugins/Chorus.$(OBJEXT) \
+	plugins/CoilCrafter.$(OBJEXT) \
+	plugins/CompBand.$(OBJEXT) \
+	plugins/Compressor.$(OBJEXT) \
+	plugins/Convolotron.$(OBJEXT) \
+	plugins/Distorsion.$(OBJEXT) \
+	plugins/Dual_Flange.$(OBJEXT) \
+	plugins/DynamicFilter.$(OBJEXT) \
+	plugins/Echo.$(OBJEXT) \
+	plugins/Echotron.$(OBJEXT) \
+	plugins/EffectLFO.$(OBJEXT) \
+	plugins/EQ.$(OBJEXT) \
+	plugins/Exciter.$(OBJEXT) \
+	plugins/Expander.$(OBJEXT) \
+	plugins/Filter.$(OBJEXT) \
+	plugins/FilterParams.$(OBJEXT) \
+	plugins/FormantFilter.$(OBJEXT) \
+	plugins/Gate.$(OBJEXT) \
+	plugins/HarmonicEnhancer.$(OBJEXT) \
+	plugins/Harmonizer.$(OBJEXT) \
+	plugins/Looper.$(OBJEXT) \
+	plugins/MBDist.$(OBJEXT) \
+	plugins/MBVvol.$(OBJEXT) \
+	plugins/MusicDelay.$(OBJEXT) \
+	plugins/NewDist.$(OBJEXT) \
+	plugins/Opticaltrem.$(OBJEXT) \
+	plugins/Pan.$(OBJEXT) \
+	plugins/Phaser.$(OBJEXT) \
+	plugins/PluginEffect.$(OBJEXT) \
+   	plugins/RBEcho.$(OBJEXT) \
+   	plugins/RecognizeNote.$(OBJEXT) \
+	plugins/Reverb.$(OBJEXT) \
+	plugins/Reverbtron.$(OBJEXT) \
+	plugins/RyanWah.$(OBJEXT) \
+	plugins/RBFilter.$(OBJEXT) \
+	plugins/Sequence.$(OBJEXT) \
+	plugins/ShelfBoost.$(OBJEXT) \
+	plugins/Shuffle.$(OBJEXT) \
+	plugins/StereoHarm.$(OBJEXT) \
+	plugins/StompBox.$(OBJEXT) \
+	plugins/Sustainer.$(OBJEXT) \
+	plugins/SVFilter.$(OBJEXT) \
+	plugins/Shifter.$(OBJEXT) \
+	plugins/Synthfilter.$(OBJEXT) \
+	plugins/Valve.$(OBJEXT) \
+	plugins/Vibe.$(OBJEXT) \
+	plugins/Vocoder.$(OBJEXT) \
+	Waveshaper.$(OBJEXT) \
+	rakarrack.$(OBJEXT) \
+	process.$(OBJEXT) \
+	fileio.$(OBJEXT) \
+	varios.$(OBJEXT) \
+	FPreset.$(OBJEXT) \
+	smbPitchShift.$(OBJEXT) \
+	Tuner.$(OBJEXT) \
+	RecChord.$(OBJEXT) \
+	rkrMIDI.$(OBJEXT) \
+	Ring.$(OBJEXT) \
+	metronome.$(OBJEXT) \
+	Resample.$(OBJEXT) \
+	MIDIConverter.$(OBJEXT)
 rakarrack_OBJECTS = $(am_rakarrack_OBJECTS)
 rakarrack_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I.

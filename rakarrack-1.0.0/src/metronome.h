@@ -25,8 +25,8 @@
 
 #ifndef EFFECT_METRONOME_H
 #define EFFECT_METRONOME_H
-#include "global.h"
-#include "AnalogFilter.h"
+
+#include "plugins/AnalogFilter.h"
 
 class metronome
 {

@@ -22,6 +22,7 @@
 
 #include <errno.h>
 #include "global.h"
+#include "Plugins.h"
 
 void RKR::putbuf(char *buf, int j)
 {

@@ -22,6 +22,7 @@
 */
 
 #include "global.h"
+#include "Plugins.h"
 
 int
 RKR::Message (int prio, const char *labelwin, const char *message_text)

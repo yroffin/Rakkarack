@@ -25,8 +25,9 @@
 #include <jack/midiport.h>
 #include <jack/transport.h>
 #include "jack.h"
-#include "global.h"
 
+#include "Plugins.h"
+#include "global.h"
 
 pthread_mutex_t jmutex;
 

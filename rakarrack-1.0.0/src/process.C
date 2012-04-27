@@ -29,6 +29,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include "global.h"
+#include "Plugins.h"
 
 int Pexitprogram, preset;
 int commandline;
