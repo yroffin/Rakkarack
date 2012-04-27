@@ -29,10 +29,9 @@
 #include "global.h"
 #include "smbPitchShift.h"
 
+#include "PluginEffect.h"
 
-class StereoHarm
-{
-
+class StereoHarm : public PluginEffect {
 public:
   StereoHarm (float *efxoutl_, float *efxoutr_, long int Quality, int DS, int uq, int dq);
    ~StereoHarm ();

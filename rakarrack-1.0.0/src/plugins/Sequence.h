@@ -27,9 +27,9 @@
 #include "RBFilter.h"
 #include "smbPitchShift.h"
 
+#include "PluginEffect.h"
 
-class Sequence
-{
+class Sequence : public PluginEffect {
 public:
   Sequence (float * efxoutl_, float * efxoutr_, long int Quality, int DS, int uq, int dq);
   ~Sequence ();

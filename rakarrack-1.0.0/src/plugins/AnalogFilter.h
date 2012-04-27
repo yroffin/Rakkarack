@@ -28,7 +28,7 @@
 #include "global.h"
 #include "PluginEffectFilter.h"
 
-class AnalogFilter:public Filter_
+class AnalogFilter : public PluginEffectFilter
 {
 public:
   AnalogFilter (unsigned char Ftype, float Ffreq, float Fq,

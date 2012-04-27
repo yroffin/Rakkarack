@@ -32,9 +32,9 @@
 #include "global.h"
 #include "EffectLFO.h"
 
+#include "PluginEffect.h"
 
-class Synthfilter
-{
+class Synthfilter : public PluginEffect {
 public:
   Synthfilter (float * efxoutl_, float * efxoutr_);
   ~Synthfilter ();

@@ -27,10 +27,9 @@
 
 #include "PluginEffect.h"
 
-class Filter_ : public PluginEffect
-{
+class PluginEffectFilter : public PluginEffect {
 public:
-  virtual ~ Filter_ ()  {};
+  virtual ~ PluginEffectFilter ()  {};
   virtual void filterout (float * smp) { };
   virtual void setfreq (float frequency) {};
   virtual void setfreq_and_q (float frequency, float q_) { };
@@ -39,6 +38,5 @@ public:
 
   float outgain;
 };
-
 
 #endif

@@ -28,8 +28,9 @@
 #include "EffectLFO.h"
 #include "RBFilter.h"
 
-class RyanWah
-{
+#include "PluginEffect.h"
+
+class RyanWah : public PluginEffect {
 public:
   RyanWah (float * efxoutl_, float * efxoutr_);
   ~RyanWah ();

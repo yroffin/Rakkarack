@@ -27,9 +27,9 @@
 #include "global.h"
 #include "AnalogFilter.h"
 
+#include "PluginEffect.h"
 
-class Reverbtron
-{
+class Reverbtron : public PluginEffect {
 public:
   Reverbtron (float * efxoutl_, float * efxoutr_,int DS, int uq, int dq);
   ~Reverbtron ();

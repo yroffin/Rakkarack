@@ -33,11 +33,9 @@
 #define WAIT 2
 #define DOWN 3
 
+#include "PluginEffect.h"
 
-
-class Shifter
-{
-
+class Shifter : public PluginEffect {
 public:
   Shifter (float *efxoutl_, float *efxoutr_, long int Quality, int DS, int uq, int dq);
    ~Shifter ();

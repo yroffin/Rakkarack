@@ -27,9 +27,9 @@
 #include "global.h"
 #include "AnalogFilter.h"
 #include "HarmonicEnhancer.h"
+#include "PluginEffect.h"
 
-class Valve
-{
+class Valve : public PluginEffect {
 public:
   Valve (float * efxoutl_, float * efxoutr_);
   ~Valve ();

@@ -29,9 +29,9 @@
 #include "global.h"
 #include "AnalogFilter.h"
 
+#include "PluginEffect.h"
 
-class Shuffle
-{
+class Shuffle : public PluginEffect {
 public:
   Shuffle (float * efxoutl_, float * efxoutr_);
   ~Shuffle ();

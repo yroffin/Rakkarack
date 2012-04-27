@@ -28,8 +28,7 @@
 #include "global.h"
 #include "PluginEffectFilter.h"
 
-class RBFilter:public Filter_
-{
+class RBFilter : public PluginEffectFilter {
 public:
   RBFilter (int Ftype, float Ffreq, float Fq,
 	    int Fstages);

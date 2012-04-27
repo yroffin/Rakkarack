@@ -29,8 +29,9 @@
 #include "global.h"
 #include "metronome.h"
 
-class Looper
-{
+#include "PluginEffect.h"
+
+class Looper : public PluginEffect {
 public:
   Looper (float * efxoutl_, float * efxoutr_, float size);
   ~Looper ();

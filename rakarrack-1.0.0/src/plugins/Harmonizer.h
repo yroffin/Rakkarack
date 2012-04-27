@@ -31,9 +31,9 @@
 #include "smbPitchShift.h"
 
 
-class Harmonizer
-{
+#include "PluginEffect.h"
 
+class Harmonizer : public PluginEffect {
 public:
   Harmonizer (float *efxoutl_, float *efxoutr_, long int Quality, int DS, int uq, int dq);
    ~Harmonizer ();

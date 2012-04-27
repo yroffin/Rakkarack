@@ -28,7 +28,7 @@
 #include "global.h"
 #include "PluginEffectFilter.h"
 
-class SVFilter : public Filter_
+class SVFilter : public PluginEffectFilter
 {
 public:
   SVFilter (unsigned char Ftype, float Ffreq, float Fq,

@@ -29,8 +29,9 @@
 #include "global.h"
 #include "AnalogFilter.h"
 
-class Reverb
-{
+#include "PluginEffect.h"
+
+class Reverb : public PluginEffect {
 public:
   Reverb (float * efxoutl_, float * efxoutr_);
   ~Reverb ();

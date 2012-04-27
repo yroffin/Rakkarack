@@ -29,11 +29,10 @@
 #include "global.h"
 #include "EffectLFO.h"
 
-class Vibe
-{
+#include "PluginEffect.h"
 
+class Vibe : public PluginEffect {
 public:
-
   Vibe (float * efxoutl_, float * efxoutr_);
   ~Vibe ();
 

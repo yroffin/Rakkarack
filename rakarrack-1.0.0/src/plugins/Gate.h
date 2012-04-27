@@ -1,14 +1,13 @@
-
 // Based in gate_1410.c LADSPA Swh-plugins
 
 /*
-  rakarrack - a guitar effects software
+ rakarrack - a guitar effects software
 
  Gate.h  -  Noise Gate Effect definitions
  Based on Steve Harris LADSPA gate.
  
-  Copyright (C) 2008 Josep Andreu
-  Author: Josep Andreu
+ Copyright (C) 2008 Josep Andreu
+ Author: Josep Andreu
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of version 2 of the GNU General Public License
@@ -24,8 +23,7 @@
  Foundation,
  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-*/
-
+ */
 
 #ifndef NOISEGATE_H
 #define NOISEGATE_H
@@ -33,58 +31,51 @@
 #include "AnalogFilter.h"
 #include "PluginEffect.h"
 
-class Gate : public PluginEffect {
+class Gate: public PluginEffect {
 public:
-  Gate (float * efxoutl_, float * efxoutr_);
-  ~Gate ();
+	Gate(float * efxoutl_, float * efxoutr_);
+	~Gate();
 
-  void out (float * smps_l, float * smps_r);
+	void out(float * smps_l, float * smps_r);
 
-  void Gate_Change (int np, int value);
-  void Gate_Change_Preset (int npreset);
-  void cleanup ();
-  int getpar (int npar);
+	void Gate_Change(int np, int value);
+	void Gate_Change_Preset(int npreset);
+	void cleanup();
+	int getpar(int npar);
 
+	// Compressor
 
+	int Pthreshold; // attack time  (ms)
+	int Pattack; // release time (ms)
+	int Ohold;
+	int Pdecay;
+	int Prange;
+	int Plpf;
+	int Phpf;
+	int Phold;
 
-
-  // Compressor
-
-  int Pthreshold;		// attack time  (ms)
-  int Pattack;			// release time (ms)
-  int Ohold;
-  int Pdecay;
-  int Prange;
-  int Plpf;
-  int Phpf;
-  int Phold;
-
-  float *efxoutl;
-  float *efxoutr;
-
+	float *efxoutl;
+	float *efxoutr;
 
 private:
 
-  void setlpf (int Plpf);
-  void sethpf (int Phpf);
+	void setlpf(int Plpf);
+	void sethpf(int Phpf);
 
+	int hold_count;
+	int state;
+	float range;
+	float cut;
+	float t_level;
+	float a_rate;
+	float d_rate;
+	float env;
+	float gate;
+	float fs;
+	float hold;
 
-  int hold_count;
-  int state;
-  float range;
-  float cut;
-  float t_level;
-  float a_rate;
-  float d_rate;
-  float env;
-  float gate;
-  float fs;
-  float hold;
-
-
-
-  AnalogFilter *lpfl, *lpfr, *hpfl, *hpfr;
-  class FPreset *Fpre;
+	AnalogFilter *lpfl, *lpfr, *hpfl, *hpfr;
+	class FPreset *Fpre;
 
 };
 
