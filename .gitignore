@@ -1,2 +1,2 @@
 # ignore *.o
-*.o
+src/**/*.o
