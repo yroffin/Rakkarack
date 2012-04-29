@@ -42,13 +42,8 @@ public:
 	float getfreqresponse(float freq);
 	void setvolume(int Pvolume);
 
-	int Ppreset;
+private:
 	int Pvolume; //Volumul
-
-	float outvolume; //this is the volume of effect and is public because need it in system effect. The out volume of
-
-	float *efxoutl;
-	float *efxoutr;
 
 	struct {
 		//parameters

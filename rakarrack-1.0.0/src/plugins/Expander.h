@@ -46,9 +46,7 @@ public:
 	void cleanup();
 	int getpar(int npar);
 
-	float *efxoutl;
-	float *efxoutr;
-
+private:
 	// Compressor
 
 	int Pthreshold; // Threshold, -80 to 0dB

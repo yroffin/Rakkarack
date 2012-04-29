@@ -42,11 +42,10 @@ public:
    void set_freqh(int mode, float freq); 
    void set_freql(int mode, float freq); 
 
+private:
   float realvol;
   float hpffreq;
   float lpffreq;
-
-private:
 
   float *inputl;
   float *inputr;

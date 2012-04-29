@@ -45,12 +45,9 @@ public:
 	int getpar(int npar);
 	void cleanup();
 
-	int Ppreset;
-	float outvolume;
+private:
 	float level;
 
-	float *efxoutl;
-	float *efxoutr;
 	float *lowl;
 	float *lowr;
 	float *midll;

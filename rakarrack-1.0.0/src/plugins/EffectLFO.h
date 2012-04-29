@@ -29,7 +29,7 @@
 
 #include "PluginEffect.h"
 
-class EffectLFO: public PluginEffect {
+class EffectLFO {
 public:
 	EffectLFO();
 	~EffectLFO();

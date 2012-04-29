@@ -79,7 +79,7 @@ Waveshaper.o: Waveshaper.C /usr/include/stdlib.h /usr/include/features.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/jack/types.h \
  /usr/include/jack/transport.h /usr/include/jack/weakmacros.h \
  /usr/include/jack/midiport.h FPreset.h Tuner.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h
+ RecChord.h Resample.h /usr/include/samplerate.h
 
 /usr/include/stdlib.h:
 
@@ -324,8 +324,6 @@ Tuner.h:
 MIDIConverter.h:
 
 RecChord.h:
-
-Ring.h:
 
 Resample.h:
 

@@ -42,18 +42,8 @@ public:
 	int getpar(int npar);
 	void cleanup();
 	int setfile(int value);
-	int Ppreset;
-
-	int Pchange;
-
-	float *efxoutl;
-	float *efxoutr;
-	float outvolume;
-
-	char Filename[128];
 
 private:
-
 	void setvolume(int Pvolume);
 	void setpanning(int Ppanning);
 	void sethidamp(int Phidamp);

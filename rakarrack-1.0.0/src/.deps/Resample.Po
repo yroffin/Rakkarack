@@ -79,7 +79,7 @@ Resample.o: Resample.C /usr/include/stdio.h /usr/include/features.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/jack/types.h \
  /usr/include/jack/transport.h /usr/include/jack/weakmacros.h \
  /usr/include/jack/midiport.h FPreset.h Tuner.h MIDIConverter.h \
- RecChord.h Ring.h
+ RecChord.h
 
 /usr/include/stdio.h:
 
@@ -326,5 +326,3 @@ Tuner.h:
 MIDIConverter.h:
 
 RecChord.h:
-
-Ring.h:

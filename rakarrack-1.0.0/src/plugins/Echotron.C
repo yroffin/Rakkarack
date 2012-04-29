@@ -239,11 +239,11 @@ char wbuf[128];
 if(!Puser)
 {
 Filenum = value;
-memset(Filename,0,sizeof(Filename));
-sprintf(Filename, "%s/%d.dly",DATADIR,Filenum+1);
+memset(fileName,0,sizeof(fileName));
+sprintf(fileName, "%s/%d.dly",DATADIR,Filenum+1);
 }
 
-if ((fs = fopen (Filename, "r")) == NULL) 
+if ((fs = fopen (fileName, "r")) == NULL)
 {
 loaddefault();
 return(0);

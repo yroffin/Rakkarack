@@ -44,11 +44,6 @@ public:
   int getpar (int npar);
   void cleanup ();
 
-  float outvolume;
-  float *efxoutl;
-  float *efxoutr;
-
-
 private:
   int Pwidth;
   int Pfb;

@@ -79,9 +79,9 @@ plugins/Shuffle.o: plugins/Shuffle.C /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/jack/types.h \
  /usr/include/jack/transport.h /usr/include/jack/weakmacros.h \
  /usr/include/jack/midiport.h FPreset.h global.h Tuner.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h Shifter.h \
- smbPitchShift.h plugins/AnalogFilter.h plugins/PluginEffectFilter.h \
- plugins/PluginEffect.h Waveshaper.h plugins/Shuffle.h
+ RecChord.h Resample.h /usr/include/samplerate.h plugins/AnalogFilter.h \
+ plugins/PluginEffectFilter.h plugins/PluginEffect.h Waveshaper.h \
+ plugins/Shuffle.h
 
 /usr/include/stdio.h:
 
@@ -329,15 +329,9 @@ MIDIConverter.h:
 
 RecChord.h:
 
-Ring.h:
-
 Resample.h:
 
 /usr/include/samplerate.h:
-
-Shifter.h:
-
-smbPitchShift.h:
 
 plugins/AnalogFilter.h:
 

@@ -45,23 +45,15 @@ public:
   void cleanup ();
   void settempo(int value);
   void setmvol(int value);
-  int looper_bar;
-  int looper_qua;
-  int Ppreset;
-  int progstate[6];
-  
   void getstate ();
 
-  float outvolume;
-
-  float *efxoutl;
-  float *efxoutr;
-
+private:
+  int looper_bar;
+  int looper_qua;
+  int progstate[6];
+  
   int Pplay;	//set to 1
   int Pstop;	//set to 1
-
-
-private:
 
   void initdelays ();
   void setfade ();

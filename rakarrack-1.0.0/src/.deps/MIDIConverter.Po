@@ -78,7 +78,7 @@ MIDIConverter.o: MIDIConverter.C MIDIConverter.h /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/local_lim.h \
  /usr/include/linux/limits.h /usr/include/x86_64-linux-gnu/sys/time.h \
  /usr/include/jack/jack.h /usr/include/jack/transport.h FPreset.h Tuner.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h
+ RecChord.h Resample.h /usr/include/samplerate.h
 
 MIDIConverter.h:
 
@@ -321,8 +321,6 @@ FPreset.h:
 Tuner.h:
 
 RecChord.h:
-
-Ring.h:
 
 Resample.h:
 

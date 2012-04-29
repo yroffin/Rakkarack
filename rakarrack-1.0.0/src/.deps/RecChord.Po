@@ -78,7 +78,7 @@ RecChord.o: RecChord.C RecChord.h global.h config.h \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
- /usr/include/x86_64-linux-gnu/bits/math-finite.h MIDIConverter.h Ring.h \
+ /usr/include/x86_64-linux-gnu/bits/math-finite.h MIDIConverter.h \
  Resample.h /usr/include/samplerate.h
 
 RecChord.h:
@@ -322,8 +322,6 @@ Tuner.h:
 /usr/include/x86_64-linux-gnu/bits/math-finite.h:
 
 MIDIConverter.h:
-
-Ring.h:
 
 Resample.h:
 

@@ -79,8 +79,8 @@ plugins/StereoHarm.o: plugins/StereoHarm.C plugins/StereoHarm.h global.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
  /usr/include/x86_64-linux-gnu/bits/math-finite.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h Shifter.h \
- smbPitchShift.h smbPitchShift.h
+ RecChord.h Resample.h /usr/include/samplerate.h smbPitchShift.h \
+ plugins/PluginEffectHarmonizer.h plugins/PluginEffect.h
 
 plugins/StereoHarm.h:
 
@@ -328,14 +328,12 @@ MIDIConverter.h:
 
 RecChord.h:
 
-Ring.h:
-
 Resample.h:
 
 /usr/include/samplerate.h:
 
-Shifter.h:
-
 smbPitchShift.h:
 
-smbPitchShift.h:
+plugins/PluginEffectHarmonizer.h:
+
+plugins/PluginEffect.h:

@@ -79,7 +79,7 @@ rakarrack.o: rakarrack.cxx rakarrack.h global.h config.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
  /usr/include/x86_64-linux-gnu/bits/math-finite.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h
+ RecChord.h Resample.h /usr/include/samplerate.h
 
 rakarrack.h:
 
@@ -324,8 +324,6 @@ Tuner.h:
 MIDIConverter.h:
 
 RecChord.h:
-
-Ring.h:
 
 Resample.h:
 

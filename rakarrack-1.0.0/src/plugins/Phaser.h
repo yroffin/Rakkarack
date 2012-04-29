@@ -38,16 +38,8 @@ public:
   void changepar (int npar, int value);
   int getpar (int npar);
   void cleanup ();
-  int Ppreset;
-  float outvolume;
-
-  float *efxoutl;
-  float *efxoutr;
-
-
 
 private:
-
   void setvolume (int Pvolume);
   void setpanning (int Ppanning);
   void setdepth (int Pdepth);

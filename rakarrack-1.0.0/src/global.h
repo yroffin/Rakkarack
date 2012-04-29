@@ -103,7 +103,6 @@
 #include "Tuner.h"
 #include "MIDIConverter.h"
 #include "RecChord.h"
-#include "Ring.h"
 #include "Resample.h"
 
 extern int Pexitprogram, preset;

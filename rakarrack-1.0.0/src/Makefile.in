@@ -49,6 +49,7 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_rakarrack_OBJECTS = main.$(OBJEXT) jack.$(OBJEXT) \
+	utils/Properties.$(OBJEXT) \
 	plugins/Alienwah.$(OBJEXT) \
 	plugins/AnalogFilter.$(OBJEXT) \
 	plugins/APhaser.$(OBJEXT) \
@@ -82,12 +83,14 @@ am_rakarrack_OBJECTS = main.$(OBJEXT) jack.$(OBJEXT) \
 	plugins/Pan.$(OBJEXT) \
 	plugins/Phaser.$(OBJEXT) \
 	plugins/PluginEffect.$(OBJEXT) \
+	plugins/PluginEffectHarmonizer.$(OBJEXT) \
    	plugins/RBEcho.$(OBJEXT) \
    	plugins/RecognizeNote.$(OBJEXT) \
 	plugins/Reverb.$(OBJEXT) \
 	plugins/Reverbtron.$(OBJEXT) \
 	plugins/RyanWah.$(OBJEXT) \
 	plugins/RBFilter.$(OBJEXT) \
+	plugins/Ring.$(OBJEXT) \
 	plugins/Sequence.$(OBJEXT) \
 	plugins/ShelfBoost.$(OBJEXT) \
 	plugins/Shuffle.$(OBJEXT) \
@@ -110,7 +113,6 @@ am_rakarrack_OBJECTS = main.$(OBJEXT) jack.$(OBJEXT) \
 	Tuner.$(OBJEXT) \
 	RecChord.$(OBJEXT) \
 	rkrMIDI.$(OBJEXT) \
-	Ring.$(OBJEXT) \
 	metronome.$(OBJEXT) \
 	Resample.$(OBJEXT) \
 	MIDIConverter.$(OBJEXT)
@@ -360,7 +362,7 @@ all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-.SUFFIXES: .C .cxx .o .obj
+.SUFFIXES: .cpp .C .cxx .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \

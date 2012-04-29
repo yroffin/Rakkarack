@@ -31,7 +31,13 @@ plugins/HarmonicEnhancer.o: plugins/HarmonicEnhancer.C \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
  /usr/include/x86_64-linux-gnu/bits/math-finite.h \
- plugins/HarmonicEnhancer.h plugins/PluginEffect.h plugins/AnalogFilter.h \
+ plugins/HarmonicEnhancer.h plugins/PluginEffect.h /usr/include/stdio.h \
+ /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdarg.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h plugins/AnalogFilter.h \
  global.h config.h /usr/include/pthread.h /usr/include/sched.h \
  /usr/include/x86_64-linux-gnu/bits/sched.h \
  /usr/include/x86_64-linux-gnu/bits/timex.h \
@@ -51,13 +57,7 @@ plugins/HarmonicEnhancer.o: plugins/HarmonicEnhancer.C \
  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
  /usr/include/x86_64-linux-gnu/bits/environments.h \
  /usr/include/x86_64-linux-gnu/bits/confname.h /usr/include/getopt.h \
- /usr/include/x86_64-linux-gnu/bits/unistd.h /usr/include/stdio.h \
- /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
- /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdarg.h \
- /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
- /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
- /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2.h /usr/include/fcntl.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd.h /usr/include/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/uio.h \
  /usr/include/x86_64-linux-gnu/bits/stat.h \
@@ -81,9 +81,8 @@ plugins/HarmonicEnhancer.o: plugins/HarmonicEnhancer.C \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/jack/types.h \
  /usr/include/jack/transport.h /usr/include/jack/weakmacros.h \
  /usr/include/jack/midiport.h FPreset.h global.h Tuner.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h Shifter.h \
- smbPitchShift.h plugins/PluginEffectFilter.h plugins/Compressor.h \
- FPreset.h
+ RecChord.h Resample.h /usr/include/samplerate.h \
+ plugins/PluginEffectFilter.h plugins/Compressor.h FPreset.h
 
 /usr/include/stdlib.h:
 
@@ -167,6 +166,24 @@ plugins/HarmonicEnhancer.h:
 
 plugins/PluginEffect.h:
 
+/usr/include/stdio.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdarg.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/sys_errlist.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
+
 plugins/AnalogFilter.h:
 
 global.h:
@@ -224,24 +241,6 @@ config.h:
 /usr/include/getopt.h:
 
 /usr/include/x86_64-linux-gnu/bits/unistd.h:
-
-/usr/include/stdio.h:
-
-/usr/include/libio.h:
-
-/usr/include/_G_config.h:
-
-/usr/include/wchar.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdarg.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
-
-/usr/include/x86_64-linux-gnu/bits/sys_errlist.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdio.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdio2.h:
 
 /usr/include/fcntl.h:
 
@@ -335,15 +334,9 @@ MIDIConverter.h:
 
 RecChord.h:
 
-Ring.h:
-
 Resample.h:
 
 /usr/include/samplerate.h:
-
-Shifter.h:
-
-smbPitchShift.h:
 
 plugins/PluginEffectFilter.h:
 

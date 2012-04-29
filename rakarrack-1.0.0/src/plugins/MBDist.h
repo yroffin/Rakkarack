@@ -42,20 +42,13 @@ public:
   int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
-  float outvolume;
-
-  float *efxoutl;
-  float *efxoutr;
+private:
   float *lowl;
   float *lowr;
   float *midl;
   float *midr;
   float *highl;
   float *highr;
-  
-
-private:
 
   void setvolume (int Pvolume);
   void setpanning (int Ppanning);

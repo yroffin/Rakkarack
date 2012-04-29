@@ -43,10 +43,6 @@ public:
   int getpar (int npar);
   void cleanup ();
 
-  float *efxoutl;
-  float *efxoutr;
-
-
 private:
   int Pdepth;
   int Ppanning;

@@ -43,14 +43,6 @@ public:
 	void adjust(int DS);
 	void loaddefault();
 
-	int Ppreset;
-
-	float *efxoutl;
-	float *efxoutr;
-	float outvolume;
-
-	char Filename[128];
-
 private:
 	//Parametrii
 	int Pvolume; //This is master wet/dry mix like other FX...but I am finding it is not useful

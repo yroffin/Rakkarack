@@ -40,10 +40,6 @@ public:
   void changepar (int npar, int value);
   int getpar (int npar);
   void cleanup ();
-  int Ppreset;
-  float *efxoutl;
-  float *efxoutr;
-  float outvolume;
 
 private:
   //Phaser parameters

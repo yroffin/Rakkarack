@@ -29,9 +29,9 @@
 #include "global.h"
 #include "smbPitchShift.h"
 
-#include "PluginEffect.h"
+#include "PluginEffectHarmonizer.h"
 
-class StereoHarm : public PluginEffect {
+class StereoHarm : public PluginEffectHarmonizer {
 public:
   StereoHarm (float *efxoutl_, float *efxoutr_, long int Quality, int DS, int uq, int dq);
    ~StereoHarm ();
@@ -42,14 +42,7 @@ public:
   void cleanup ();
   void adjust(int DS);
 
-
-  int Ppreset;
-  int Pintervall;
-  int Pintervalr;
-  
-  int PMIDI;
-  int PSELECT;
-  int mira;
+private:
   int DS_state;
   int nPERIOD;
   int nSAMPLE_RATE;
@@ -61,18 +54,9 @@ public:
   double u_down;
   float nfSAMPLE_RATE;
 
-
-  float *efxoutl;
-  float *efxoutr;
   float *outil,*outir;
   float *outol,*outor;
   float *templ, *tempr;
-
-  float outvolume;
-
-
-
-private:
 
   int Pvolume;
   int Plrcross;

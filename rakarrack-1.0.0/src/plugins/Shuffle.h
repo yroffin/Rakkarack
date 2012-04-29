@@ -41,16 +41,9 @@ public:
   int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
-  float outvolume;
-
-  float *efxoutl;
-  float *efxoutr;
+private:
   float *inputl;
   float *inputr;
-  
-
-private:
 
   void setvolume (int Pvolume);
   void setCross1 (int value);

@@ -79,8 +79,8 @@ plugins/Pan.o: plugins/Pan.C plugins/Pan.h global.h config.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
  /usr/include/x86_64-linux-gnu/bits/math-finite.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h Shifter.h \
- smbPitchShift.h plugins/EffectLFO.h plugins/PluginEffect.h
+ RecChord.h Resample.h /usr/include/samplerate.h plugins/EffectLFO.h \
+ plugins/PluginEffect.h
 
 plugins/Pan.h:
 
@@ -328,15 +328,9 @@ MIDIConverter.h:
 
 RecChord.h:
 
-Ring.h:
-
 Resample.h:
 
 /usr/include/samplerate.h:
-
-Shifter.h:
-
-smbPitchShift.h:
 
 plugins/EffectLFO.h:
 

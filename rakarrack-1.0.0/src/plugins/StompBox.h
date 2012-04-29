@@ -39,11 +39,6 @@ public:
   void cleanup ();
 
 
-  int Ppreset;
-
-  float *efxoutl;
-  float *efxoutr;
-
 private:
 
   void setvolume (int value);

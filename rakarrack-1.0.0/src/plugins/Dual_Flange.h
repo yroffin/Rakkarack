@@ -45,11 +45,6 @@ public:
 	int getpar(int npar);
 	void cleanup();
 
-	int Ppreset;
-
-	float *efxoutl;
-	float *efxoutr;
-
 private:
 	//Parameters
 	int Pwetdry; // 0 //Wet/Dry mix.  Range -64 to 64

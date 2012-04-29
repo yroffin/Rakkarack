@@ -41,17 +41,8 @@ public:
   int setfile (int value);
   void adjust(int DS);
 
-  int Ppreset;
-
-  float *efxoutl;
-  float *efxoutr;
-  float outvolume;
-
-  char Filename[128];
-
 
 private:
-
   void setvolume (int Pvolume);
   void setpanning (int Ppanning);
   void sethidamp (int Phidamp);

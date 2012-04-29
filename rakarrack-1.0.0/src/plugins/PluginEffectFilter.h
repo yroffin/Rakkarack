@@ -27,7 +27,7 @@
 
 #include "PluginEffect.h"
 
-class PluginEffectFilter : public PluginEffect {
+class PluginEffectFilter {
 public:
   virtual ~ PluginEffectFilter ()  {};
   virtual void filterout (float * smp) { };

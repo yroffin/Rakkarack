@@ -23,12 +23,14 @@ plugins/FormantFilter.o: plugins/FormantFilter.C /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/stdio2.h plugins/FormantFilter.h \
  plugins/PluginEffectFilter.h plugins/PluginEffect.h \
- plugins/AnalogFilter.h global.h config.h /usr/include/pthread.h \
- /usr/include/endian.h /usr/include/x86_64-linux-gnu/bits/endian.h \
+ /usr/include/string.h /usr/include/xlocale.h \
+ /usr/include/x86_64-linux-gnu/bits/string3.h plugins/AnalogFilter.h \
+ global.h config.h /usr/include/pthread.h /usr/include/endian.h \
+ /usr/include/x86_64-linux-gnu/bits/endian.h \
  /usr/include/x86_64-linux-gnu/bits/byteswap.h /usr/include/sched.h \
  /usr/include/time.h /usr/include/x86_64-linux-gnu/bits/sched.h \
  /usr/include/x86_64-linux-gnu/bits/time.h \
- /usr/include/x86_64-linux-gnu/bits/timex.h /usr/include/xlocale.h \
+ /usr/include/x86_64-linux-gnu/bits/timex.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
  /usr/include/x86_64-linux-gnu/bits/setjmp.h /usr/include/signal.h \
  /usr/include/x86_64-linux-gnu/bits/sigset.h \
@@ -55,8 +57,7 @@ plugins/FormantFilter.o: plugins/FormantFilter.C /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
  /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/x86_64-linux-gnu/sys/sysmacros.h /usr/include/alloca.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h /usr/include/string.h \
- /usr/include/x86_64-linux-gnu/bits/string3.h /usr/include/fcntl.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h /usr/include/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/uio.h \
  /usr/include/x86_64-linux-gnu/bits/stat.h \
@@ -80,8 +81,7 @@ plugins/FormantFilter.o: plugins/FormantFilter.C /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/jack/types.h \
  /usr/include/jack/transport.h /usr/include/jack/weakmacros.h \
  /usr/include/jack/midiport.h FPreset.h global.h Tuner.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h Shifter.h \
- smbPitchShift.h plugins/FilterParams.h
+ RecChord.h Resample.h /usr/include/samplerate.h plugins/FilterParams.h
 
 /usr/include/math.h:
 
@@ -145,6 +145,12 @@ plugins/PluginEffectFilter.h:
 
 plugins/PluginEffect.h:
 
+/usr/include/string.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/x86_64-linux-gnu/bits/string3.h:
+
 plugins/AnalogFilter.h:
 
 global.h:
@@ -168,8 +174,6 @@ config.h:
 /usr/include/x86_64-linux-gnu/bits/time.h:
 
 /usr/include/x86_64-linux-gnu/bits/timex.h:
-
-/usr/include/xlocale.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 
@@ -238,10 +242,6 @@ config.h:
 /usr/include/alloca.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdlib.h:
-
-/usr/include/string.h:
-
-/usr/include/x86_64-linux-gnu/bits/string3.h:
 
 /usr/include/fcntl.h:
 
@@ -335,14 +335,8 @@ MIDIConverter.h:
 
 RecChord.h:
 
-Ring.h:
-
 Resample.h:
 
 /usr/include/samplerate.h:
-
-Shifter.h:
-
-smbPitchShift.h:
 
 plugins/FilterParams.h:

@@ -41,12 +41,6 @@ public:
   void cleanup ();
   void applyfilters (float * efxoutl, float * efxoutr);
 
-  int Ppreset;
-  float outvolume;
-
-  float *efxoutl;
-  float *efxoutr;
-
 private:
   void setvolume (int Pvolume);
   void setpanning (int Ppanning);

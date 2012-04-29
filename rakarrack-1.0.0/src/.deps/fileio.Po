@@ -79,7 +79,7 @@ fileio.o: fileio.C /usr/include/errno.h /usr/include/features.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
  /usr/include/x86_64-linux-gnu/bits/math-finite.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h Plugins.h \
+ RecChord.h Resample.h /usr/include/samplerate.h Plugins.h \
  plugins/Alienwah.h global.h plugins/EffectLFO.h plugins/PluginEffect.h \
  plugins/AnalogFilter.h plugins/PluginEffectFilter.h plugins/APhaser.h \
  plugins/Arpie.h plugins/Chorus.h plugins/CoilCrafter.h \
@@ -92,14 +92,15 @@ fileio.o: fileio.C /usr/include/errno.h /usr/include/features.h \
  plugins/EQ.h plugins/Exciter.h plugins/Expander.h plugins/Filter.h \
  plugins/FilterParams.h plugins/FormantFilter.h plugins/Gate.h \
  plugins/HarmonicEnhancer.h plugins/Harmonizer.h smbPitchShift.h \
- plugins/Looper.h metronome.h plugins/AnalogFilter.h plugins/MBDist.h \
- plugins/MBVvol.h plugins/MusicDelay.h plugins/NewDist.h \
- plugins/Opticaltrem.h plugins/Pan.h plugins/Phaser.h plugins/RBEcho.h \
- plugins/RBFilter.h plugins/RecognizeNote.h plugins/Sustainer.h \
- plugins/Reverb.h plugins/Reverbtron.h plugins/RyanWah.h \
- plugins/Sequence.h plugins/Shuffle.h plugins/ShelfBoost.h \
- plugins/StompBox.h plugins/StereoHarm.h plugins/Synthfilter.h \
- plugins/Shifter.h plugins/Valve.h plugins/Vocoder.h plugins/Vibe.h
+ plugins/PluginEffectHarmonizer.h plugins/Looper.h metronome.h \
+ plugins/AnalogFilter.h plugins/MBDist.h plugins/MBVvol.h \
+ plugins/MusicDelay.h plugins/NewDist.h plugins/Opticaltrem.h \
+ plugins/Pan.h plugins/Phaser.h plugins/RBEcho.h plugins/RBFilter.h \
+ plugins/RecognizeNote.h plugins/Sustainer.h plugins/Reverb.h \
+ plugins/Ring.h plugins/Reverbtron.h plugins/RyanWah.h plugins/Sequence.h \
+ plugins/Shuffle.h plugins/ShelfBoost.h plugins/StompBox.h \
+ plugins/StereoHarm.h plugins/Synthfilter.h plugins/Shifter.h \
+ plugins/Valve.h plugins/Vocoder.h plugins/Vibe.h
 
 /usr/include/errno.h:
 
@@ -343,8 +344,6 @@ MIDIConverter.h:
 
 RecChord.h:
 
-Ring.h:
-
 Resample.h:
 
 /usr/include/samplerate.h:
@@ -435,6 +434,8 @@ plugins/Harmonizer.h:
 
 smbPitchShift.h:
 
+plugins/PluginEffectHarmonizer.h:
+
 plugins/Looper.h:
 
 metronome.h:
@@ -464,6 +465,8 @@ plugins/RecognizeNote.h:
 plugins/Sustainer.h:
 
 plugins/Reverb.h:
+
+plugins/Ring.h:
 
 plugins/Reverbtron.h:
 

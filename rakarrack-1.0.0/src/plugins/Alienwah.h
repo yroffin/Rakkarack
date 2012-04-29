@@ -47,14 +47,6 @@ public:
   int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
-
-  float *efxoutl;
-  float *efxoutr;
-
-  float outvolume;
-
-
 private:
   //Parametrii Alienwah
     EffectLFO lfo;		//lfo-ul Alienwah

@@ -45,6 +45,7 @@ public:
 
 	// Compressor
 
+private:
 	int Pthreshold; // attack time  (ms)
 	int Pattack; // release time (ms)
 	int Ohold;
@@ -53,11 +54,6 @@ public:
 	int Plpf;
 	int Phpf;
 	int Phold;
-
-	float *efxoutl;
-	float *efxoutr;
-
-private:
 
 	void setlpf(int Plpf);
 	void sethpf(int Phpf);

@@ -47,19 +47,10 @@ public:
   void applyfilters (float * efxoutl);
   void adjust(int DS);
 
-  int Ppreset;
+private:
   long int hq;
-  float outvolume;
-
-  float *efxoutl;
-  float *efxoutr;
   float *outi;
   float *outo;
-
-
-
-
-private:
 
   void setvolume (int Pvolume);
   void setpanning (int Ppan);

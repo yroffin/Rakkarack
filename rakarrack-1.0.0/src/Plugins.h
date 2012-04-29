@@ -34,6 +34,7 @@
 #include "plugins/RBFilter.h"
 #include "plugins/RecognizeNote.h"
 #include "plugins/Reverb.h"
+#include "plugins/Ring.h"
 #include "plugins/Reverbtron.h"
 #include "plugins/RyanWah.h"
 #include "plugins/Sequence.h"

@@ -24,8 +24,9 @@
 #define SUSTAINER_H
 
 #include "global.h"
+#include "PluginEffect.h"
 
-class Sustainer
+class Sustainer : public PluginEffect
 {
 public:
   Sustainer (float * efxoutl_, float * efxoutr_);
@@ -36,11 +37,6 @@ public:
   void changepar (int npar, int value);
   int getpar (int npar);
   void setpreset (int npreset);
-
-  int Ppreset;
-  
-  float *efxoutl;
-  float *efxoutr;
 
 private:
   //Parametrii

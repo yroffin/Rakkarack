@@ -37,14 +37,7 @@ public:
 	int getpar(int npar);
 	void cleanup();
 
-	int Ppreset;
-
-	float *efxoutl;
-	float *efxoutr;
-	float outvolume;
-
 private:
-
 	void setvolume(int value);
 	void setlpf(int value);
 	void sethpf(int value);

@@ -78,24 +78,9 @@ plugins/Alienwah.o: plugins/Alienwah.C /usr/include/math.h \
  /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/jack/types.h \
  /usr/include/jack/transport.h /usr/include/jack/weakmacros.h \
- /usr/include/jack/midiport.h plugins/Alienwah.h plugins/AnalogFilter.h \
- plugins/Filter_.h plugins/APhaser.h plugins/EffectLFO.h \
- plugins/PluginEffect.h plugins/Arpie.h plugins/Chorus.h \
- plugins/CoilCrafter.h plugins/HarmonicEnhancer.h plugins/AnalogFilter.h \
- plugins/CompBand.h plugins/Compressor.h FPreset.h global.h \
- plugins/Compressor.h plugins/Convolotron.h /usr/include/sndfile.h \
- Resample.h /usr/include/samplerate.h plugins/Distorsion.h Waveshaper.h \
- plugins/Dual_Flange.h plugins/DynamicFilter.h plugins/Filter.h \
- plugins/FormantFilter.h plugins/FilterParams.h plugins/SVFilter.h \
- plugins/Echo.h plugins/Echotron.h plugins/EffectLFO.h plugins/EQ.h \
- plugins/Exciter.h plugins/Expander.h plugins/FormantFilter.h \
- plugins/Gate.h plugins/HarmonicEnhancer.h plugins/Looper.h metronome.h \
- plugins/Harmonizer.h smbPitchShift.h plugins/MBDist.h plugins/MBVvol.h \
- plugins/MusicDelay.h plugins/NewDist.h plugins/Opticaltrem.h \
- plugins/Pan.h plugins/Phaser.h plugins/RBEcho.h plugins/Reverb.h \
- plugins/Reverbtron.h plugins/Shuffle.h plugins/Valve.h FPreset.h Tuner.h \
- MIDIConverter.h RecChord.h Ring.h Resample.h Shifter.h smbPitchShift.h \
- plugins/EffectLFO.h plugins/PluginEffect.h
+ /usr/include/jack/midiport.h FPreset.h global.h Tuner.h MIDIConverter.h \
+ RecChord.h Resample.h /usr/include/samplerate.h plugins/EffectLFO.h \
+ plugins/PluginEffect.h
 
 /usr/include/math.h:
 
@@ -333,113 +318,9 @@ config.h:
 
 /usr/include/jack/midiport.h:
 
-plugins/Alienwah.h:
-
-plugins/AnalogFilter.h:
-
-plugins/Filter_.h:
-
-plugins/APhaser.h:
-
-plugins/EffectLFO.h:
-
-plugins/PluginEffect.h:
-
-plugins/Arpie.h:
-
-plugins/Chorus.h:
-
-plugins/CoilCrafter.h:
-
-plugins/HarmonicEnhancer.h:
-
-plugins/AnalogFilter.h:
-
-plugins/CompBand.h:
-
-plugins/Compressor.h:
-
 FPreset.h:
 
 global.h:
-
-plugins/Compressor.h:
-
-plugins/Convolotron.h:
-
-/usr/include/sndfile.h:
-
-Resample.h:
-
-/usr/include/samplerate.h:
-
-plugins/Distorsion.h:
-
-Waveshaper.h:
-
-plugins/Dual_Flange.h:
-
-plugins/DynamicFilter.h:
-
-plugins/Filter.h:
-
-plugins/FormantFilter.h:
-
-plugins/FilterParams.h:
-
-plugins/SVFilter.h:
-
-plugins/Echo.h:
-
-plugins/Echotron.h:
-
-plugins/EffectLFO.h:
-
-plugins/EQ.h:
-
-plugins/Exciter.h:
-
-plugins/Expander.h:
-
-plugins/FormantFilter.h:
-
-plugins/Gate.h:
-
-plugins/HarmonicEnhancer.h:
-
-plugins/Looper.h:
-
-metronome.h:
-
-plugins/Harmonizer.h:
-
-smbPitchShift.h:
-
-plugins/MBDist.h:
-
-plugins/MBVvol.h:
-
-plugins/MusicDelay.h:
-
-plugins/NewDist.h:
-
-plugins/Opticaltrem.h:
-
-plugins/Pan.h:
-
-plugins/Phaser.h:
-
-plugins/RBEcho.h:
-
-plugins/Reverb.h:
-
-plugins/Reverbtron.h:
-
-plugins/Shuffle.h:
-
-plugins/Valve.h:
-
-FPreset.h:
 
 Tuner.h:
 
@@ -447,13 +328,9 @@ MIDIConverter.h:
 
 RecChord.h:
 
-Ring.h:
-
 Resample.h:
 
-Shifter.h:
-
-smbPitchShift.h:
+/usr/include/samplerate.h:
 
 plugins/EffectLFO.h:
 

@@ -257,13 +257,13 @@ memset(rbuf,0,sizeof(float) * maxx_size);
 if(!Puser)
 {
 Filenum = value;
-memset(Filename,0, sizeof(Filename));
-sprintf(Filename, "%s/%d.wav",DATADIR,Filenum+1);
+memset(fileName,0, sizeof(fileName));
+sprintf(fileName, "%s/%d.wav",DATADIR,Filenum+1);
 }
 
 
 sfinfo.format = 0;
-if(!(infile = sf_open(Filename, SFM_READ, &sfinfo))) {
+if(!(infile = sf_open(fileName, SFM_READ, &sfinfo))) {
 real_len = 1;
 length = 1;
 rbuf[0] = 1.0f;

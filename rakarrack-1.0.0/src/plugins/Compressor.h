@@ -44,8 +44,11 @@ public:
 	int getpar(int npar);
 	void cleanup();
 
-	float *efxoutl;
-	float *efxoutr;
+private:
+	/**
+	 * TODO
+	 * why no need of outvolume ?
+	 */
 
 	// Compressor
 

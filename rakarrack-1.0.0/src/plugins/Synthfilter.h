@@ -44,12 +44,6 @@ public:
   int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
-  float outvolume;
-
-  float *efxoutl;
-  float *efxoutr;
-
 private:
 
   //Control parameters

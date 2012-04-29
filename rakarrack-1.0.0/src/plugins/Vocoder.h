@@ -41,15 +41,9 @@ public:
 	void cleanup();
 	void adjust(int DS);
 
-	int Ppreset;
-	float outvolume;
-	float vulevel;
-
-	float *efxoutl;
-	float *efxoutr;
-	float *auxresampled;
-
 private:
+	float vulevel;
+	float *auxresampled;
 
 	void setvolume(int Pvolume);
 	void setpanning(int Ppanning);

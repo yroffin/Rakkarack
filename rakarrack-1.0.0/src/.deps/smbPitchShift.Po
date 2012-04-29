@@ -78,7 +78,7 @@ smbPitchShift.o: smbPitchShift.C global.h config.h /usr/include/pthread.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
  /usr/include/x86_64-linux-gnu/bits/math-finite.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h smbPitchShift.h
+ RecChord.h Resample.h /usr/include/samplerate.h smbPitchShift.h
 
 global.h:
 
@@ -321,8 +321,6 @@ Tuner.h:
 MIDIConverter.h:
 
 RecChord.h:
-
-Ring.h:
 
 Resample.h:
 

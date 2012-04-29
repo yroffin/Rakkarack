@@ -42,13 +42,6 @@ public:
   void settempo(int value);
   void adjust(int DS);
     
-  int Ppreset;
-
-  float outvolume;
-  
-  float *efxoutl;
-  float *efxoutr;
-
 private:
   //Parametrii
   int Pvolume;	       //Output Level

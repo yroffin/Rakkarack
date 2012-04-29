@@ -79,9 +79,9 @@ plugins/Filter.o: plugins/Filter.C /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/jack/types.h \
  /usr/include/jack/transport.h /usr/include/jack/weakmacros.h \
  /usr/include/jack/midiport.h FPreset.h global.h Tuner.h MIDIConverter.h \
- RecChord.h Ring.h Resample.h /usr/include/samplerate.h Shifter.h \
- smbPitchShift.h plugins/FormantFilter.h plugins/PluginEffectFilter.h \
- plugins/PluginEffect.h plugins/AnalogFilter.h plugins/FilterParams.h \
+ RecChord.h Resample.h /usr/include/samplerate.h \
+ plugins/PluginEffectFilter.h plugins/PluginEffect.h \
+ plugins/FormantFilter.h plugins/AnalogFilter.h plugins/FilterParams.h \
  plugins/SVFilter.h plugins/AnalogFilter.h
 
 /usr/include/math.h:
@@ -330,21 +330,15 @@ MIDIConverter.h:
 
 RecChord.h:
 
-Ring.h:
-
 Resample.h:
 
 /usr/include/samplerate.h:
 
-Shifter.h:
-
-smbPitchShift.h:
-
-plugins/FormantFilter.h:
-
 plugins/PluginEffectFilter.h:
 
 plugins/PluginEffect.h:
+
+plugins/FormantFilter.h:
 
 plugins/AnalogFilter.h:
 
