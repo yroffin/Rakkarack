@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+#include <stdio.h>
+#include <string.h>
+
 #ifndef _LOG4CXX_STRING_H
 #define _LOG4CXX_STRING_H
 
