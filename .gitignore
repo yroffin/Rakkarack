@@ -1,3 +1,4 @@
 **/*.o
 **/.deps
 **/autom4te.cache
+**/core*
