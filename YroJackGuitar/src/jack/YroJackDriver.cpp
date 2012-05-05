@@ -74,6 +74,10 @@ int YroJackDriver::process(jack_nframes_t nframes) {
 	 * process event
 	 */
 	int result = effectFactory->render(nframes,in1,in2,out1,out2);
+	for (jack_nframes_t i = 0; i < 4; i++) {
+		LOG->debug((const char *) "outLeft[%d] = %f", i, out1[i]);
+		LOG->debug((const char *) "outRight[%d] = %f", i, out2[i]);
+	}
 	return result;
 }
 

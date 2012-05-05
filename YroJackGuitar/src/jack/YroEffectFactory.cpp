@@ -109,6 +109,17 @@ int YroEffectFactory::render(
 	}
 
 	/**
+	 * switch
+	 */
+	LOG->debug("switch data");
+	switchIt = toProcess1;
+	toProcess1 = processed1;
+	processed1 = switchIt;
+	switchIt = toProcess2;
+	toProcess2 = processed2;
+	processed2 = switchIt;
+
+	/**
 	 * validate tranformation
 	 */
 	processed1 = audioSampleFactory->copy(nframes,processed1,out1);

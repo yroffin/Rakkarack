@@ -13,7 +13,7 @@ namespace std {
 
 YroEffectGenerator::YroEffectGenerator() : YroEffectPlugin("simple generator plugin") {
 	for (int i = 0; i < TABLE_SIZE; i++) {
-		sine[i] = 0.2f * (float) sin(((double) i / (double) TABLE_SIZE) * M_PI * 2.0f);
+		sine[i] = 30.0f * (float) sin(((double) i / (double) TABLE_SIZE) * M_PI * 2.0f);
 	}
 	left_phase = 0;
 	right_phase = 0;
