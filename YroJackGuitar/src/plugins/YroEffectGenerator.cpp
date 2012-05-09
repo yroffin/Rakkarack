@@ -13,7 +13,7 @@ namespace std {
 
 YroEffectGenerator::YroEffectGenerator() : YroEffectPlugin("simple generator plugin") {
 	for (int i = 0; i < TABLE_SIZE; i++) {
-		sine[i] = 30.0f * (float) sin(((double) i / (double) TABLE_SIZE) * M_PI * 2.0f);
+		sine[i] = .1f * (float) sin(((double) i / (double) TABLE_SIZE) * M_PI * 1.2f);
 	}
 	left_phase = 0;
 	right_phase = 0;
@@ -22,17 +22,17 @@ YroEffectGenerator::YroEffectGenerator() : YroEffectPlugin("simple generator plu
 YroEffectGenerator::~YroEffectGenerator() {
 }
 
-void YroEffectGenerator::render(jack_nframes_t nframes) {
+void YroEffectGenerator::render(jack_nframes_t nframes, float *inLeft, float *inRight) {
 	LOG->debug("render %d frames with [%s] - %08x/%08x/%08x/%08x",
 			nframes,
 			getName(),
 			inLeft,
 			inRight,
-			outLeft,
-			outRight);
+			efxoutl,
+			efxoutr);
 	for (jack_nframes_t i = 0; i < nframes; i++) {
-		outLeft[i] = sine[left_phase]; /* left */
-		outRight[i] = sine[right_phase]; /* right */
+		efxoutl[i] = sine[left_phase]; /* left */
+		efxoutr[i] = sine[right_phase]; /* right */
 		left_phase += 1;
 		if (left_phase >= TABLE_SIZE)
 			left_phase -= TABLE_SIZE;

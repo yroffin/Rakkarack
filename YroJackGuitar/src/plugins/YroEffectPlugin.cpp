@@ -21,36 +21,20 @@ YroEffectPlugin::~YroEffectPlugin() {
 /**
  * getter
  */
-float *YroEffectPlugin::getInLeft() {
-	return inLeft;
-}
-
-float *YroEffectPlugin::getInRight() {
-	return inRight;
-}
-
 float *YroEffectPlugin::getOutLeft() {
-	return outLeft;
+	return efxoutl;
 }
 
 float *YroEffectPlugin::getOutRight() {
-	return outRight;
-}
-
-void YroEffectPlugin::setInLeft(float *value) {
-	inLeft = value;
-}
-
-void YroEffectPlugin::setInRight(float *value) {
-	inRight = value;
+	return efxoutr;
 }
 
 void YroEffectPlugin::setOutLeft(float *value) {
-	outLeft = value;
+	efxoutl = value;
 }
 
 void YroEffectPlugin::setOutRight(float *value) {
-	outRight = value;
+	efxoutr = value;
 }
 
 } /* namespace std */

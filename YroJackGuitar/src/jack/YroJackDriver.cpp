@@ -13,31 +13,38 @@
 #include <signal.h>
 #include <unistd.h>
 
-#include "../plugins/YroEffectGenerator.h"
-#include "YroEffectFactory.h"
-#include "YroJackDriver.h"
+#include <core/YroParamHelper.h>
+#include <jack/YroEffectFactory.h>
+#include <jack/YroJackDriver.h>
+#include <plugins/YroEffectGenerator.h>
+#include <wx/YroJackGuitarMainWindow.h>
 
 namespace std {
 
-YroJackDriver *YroJackDriver::__instance = YroJackDriver::instance();
+YroJackDriver *YroJackDriver::__instance = 0;
 
+/**
+ * constructor
+ */
 YroJackDriver::YroJackDriver() {
+	LOG->info("Create instance for YroJackDriver ...");
 	/**
 	 * jack session handler
 	 */
 	client = 0;
-	/**
-	 * processing helper
-	 */
-	effectFactory = new YroEffectFactory();
-	audioSampleFactory = new YroAudioSampleFactory();
 }
 
+/**
+ * release resources
+ * delete this jack driver
+ */
 YroJackDriver::~YroJackDriver() {
 	if(client != 0) {
 		LOG->info((const char *) "release jack session", 0);
+		jack_deactivate(client);
+		usleep(500000);
 		jack_client_close(client);
-		usleep(100000);
+		usleep(500000);
 	}
 	delete effectFactory;
 	delete audioSampleFactory;
@@ -59,6 +66,7 @@ void _jackShutdown(void *arg) {
 
 /**
  * process stream
+ * jack_nframes_t nframes is the size of this new chunk of data to produce
  */
 int YroJackDriver::process(jack_nframes_t nframes) {
 	LOG->debug((const char *) "processing frames %d",nframes);
@@ -70,14 +78,18 @@ int YroJackDriver::process(jack_nframes_t nframes) {
 	out1 = (jack_default_audio_sample_t*) jack_port_get_buffer(output_port1, nframes);
 	out2 = (jack_default_audio_sample_t*) jack_port_get_buffer(output_port2, nframes);
 
+	LOG->debug((const char *) "jack_port_get_buffer %08x,%08x,%08x,%08x",in1,in2,out1,out2);
+
 	/**
 	 * process event
 	 */
 	int result = effectFactory->render(nframes,in1,in2,out1,out2);
-	for (jack_nframes_t i = 0; i < 4; i++) {
-		LOG->debug((const char *) "outLeft[%d] = %f", i, out1[i]);
-		LOG->debug((const char *) "outRight[%d] = %f", i, out2[i]);
-	}
+
+	/**
+	 * advertise GUI system
+	 */
+	YroJackGuitarMainWindow::instance()->OnJackNewAudioSample();
+
 	return result;
 }
 
@@ -164,6 +176,21 @@ int YroJackDriver::initialize() {
 		return -2;
 	}
 	LOG->info("output JACK ports available now");
+
+	/**
+	 * fixe sample rate and frame size
+	 */
+	YroParamHelper::instance()->setIntegerSampleRate(jack_get_sample_rate (client));
+	YroParamHelper::instance()->setIntegerPeriod(jack_get_buffer_size (client));
+
+	/**
+	 * processing helper
+	 * - YroEffectFactory the effects factory (loaded with default configuration)
+	 * - YroAudioSampleFactory the sample factory (shared by all effects)
+	 */
+	effectFactory = YroEffectFactory::instance();
+	effectFactory->load(0);
+	audioSampleFactory = YroAudioSampleFactory::instance();
 
 	/* Tell the JACK server that we are ready to roll.  Our
 	 * process() callback will start running now. */

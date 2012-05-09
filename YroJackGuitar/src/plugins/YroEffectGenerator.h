@@ -22,7 +22,7 @@ class YroEffectGenerator: public std::YroEffectPlugin {
 public:
 	YroEffectGenerator();
 	virtual ~YroEffectGenerator();
-	virtual void render(jack_nframes_t nframes);
+	virtual void render(jack_nframes_t nframes, float *inLeft, float *inRight);
 private:
 	float sine[TABLE_SIZE];
 	int left_phase;

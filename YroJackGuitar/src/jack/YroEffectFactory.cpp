@@ -5,18 +5,56 @@
  *      Author: yannick
  */
 
-#include "YroEffectFactory.h"
+#include <jack/YroEffectFactory.h>
+#include <plugins/effect/YroDistortion.h>
 
 namespace std {
 
+YroEffectFactory *YroEffectFactory::__instance = 0;
+
+/**
+ * constructor
+ */
 YroEffectFactory::YroEffectFactory() {
-	effects.push_back(new YroEffectGenerator());
+	LOG->info("Create instance for YroEffectFactory ...");
 	allocatedFrames = 0;
-	audioSampleFactory = new YroAudioSampleFactory();
+	loaded = 0;
+	audioSampleFactory = YroAudioSampleFactory::instance();
 }
 
+/**
+ * cleanup
+ */
 YroEffectFactory::~YroEffectFactory() {
-	delete audioSampleFactory;
+}
+
+/**
+ * load behaviour
+ */
+void YroEffectFactory::load(const char *config) {
+	if(loaded == 1) return;
+	//addEffect("default#0",new YroEffectGenerator());
+	YroDistortion *eff = (YroDistortion *) addEffect("distortion#1",new YroDistortion());
+	eff->setPlrcross(0);
+	eff->setPdrive(127);
+	eff->setPlevel(76);
+	eff->setPtype(27);
+	eff->setPnegate(1);
+	eff->setPprefiltering(1);
+	eff->setPstereo(0);
+	eff->setPpanning(0);
+	eff->setPoctave(0);
+	eff->setPlpf(2982);
+	eff->setPhpf(645);
+}
+
+YroEffectPlugin *YroEffectFactory::addEffect(const char *instance,YroEffectPlugin *effect) {
+	effects.insert(pair<const char*,YroEffectPlugin *>(strdup(instance),effect));
+	return effect;
+}
+
+YroEffectPlugin *YroEffectFactory::getEffect(const char *name) {
+	return effects[name];
 }
 
 /**
@@ -29,25 +67,14 @@ void YroEffectFactory::allocate(
 		jack_default_audio_sample_t *in2,
 		jack_default_audio_sample_t *out1,
 		jack_default_audio_sample_t *out2) {
-	if(allocatedFrames == 0) {
-		LOG->info((const char *) "allocation for frame size %d",nframes);
-		bufferIn1 = audioSampleFactory->allocate(nframes,in1);
-		bufferIn2 = audioSampleFactory->allocate(nframes,in2);
-		bufferOut1 = audioSampleFactory->allocate(nframes,out1);
-		bufferOut2 = audioSampleFactory->allocate(nframes,out2);
-		allocatedFrames = nframes;
-		return;
-	}
-	if(allocatedFrames != nframes) {
-		LOG->info((const char *) "re-allocation for frame size %d (before it as %d)",nframes,allocatedFrames);
-		audioSampleFactory->release(bufferIn1);
-		audioSampleFactory->release(bufferIn2);
-		audioSampleFactory->release(bufferOut1);
-		audioSampleFactory->release(bufferOut2);
-		bufferIn1 = audioSampleFactory->allocate(nframes,in1);
-		bufferIn2 = audioSampleFactory->allocate(nframes,in2);
-		bufferOut1 = audioSampleFactory->allocate(nframes,out1);
-		bufferOut2 = audioSampleFactory->allocate(nframes,out2);
+	if(allocatedFrames == 0 || allocatedFrames != nframes) {
+		LOG->info((const char *) "allocation (or reallocation for %d) for frame size %d", allocatedFrames, nframes);
+		bufferIn1 = audioSampleFactory->allocate(nframes,in1,"effects:inp1");
+		bufferIn2 = audioSampleFactory->allocate(nframes,in2, "effects:inp2");
+		bufferOut1 = audioSampleFactory->allocate(nframes,out1, "effects:out1");
+		bufferOut2 = audioSampleFactory->allocate(nframes,out2, "effects:out2");
+		audioSampleFactory->allocate(nframes,in1, "extern:left");
+		audioSampleFactory->allocate(nframes,in2, "extern:right");
 		allocatedFrames = nframes;
 		return;
 	}
@@ -55,10 +82,10 @@ void YroEffectFactory::allocate(
 	 * allocation is ok
 	 * simple copy
 	 */
-	audioSampleFactory->copy(nframes,in1,bufferIn1);
-	audioSampleFactory->copy(nframes,in2,bufferIn2);
-	audioSampleFactory->copy(nframes,out1,bufferOut1);
-	audioSampleFactory->copy(nframes,out2,bufferOut2);
+	audioSampleFactory->copy(nframes,in1,"effects:inp1");
+	audioSampleFactory->copy(nframes,in2,"effects:inp2");
+	audioSampleFactory->copy(nframes,out1,"effects:out1");
+	audioSampleFactory->copy(nframes,out2,"effects:out2");
 }
 
 /**
@@ -77,53 +104,40 @@ int YroEffectFactory::render(
 	LOG->debug((const char *) "check allocation for frames %d",nframes);
 	allocate(nframes, in1, in2, out1, out2);
 
-	jack_default_audio_sample_t *toProcess1 = bufferIn1;
-	jack_default_audio_sample_t *toProcess2 = bufferIn2;
-	jack_default_audio_sample_t *processed1 = bufferOut1;
-	jack_default_audio_sample_t *processed2 = bufferOut2;
-	jack_default_audio_sample_t *switchIt = 0;
+	jack_default_audio_sample_t *toProcess1 = audioSampleFactory->get("effects:inp1");
+	jack_default_audio_sample_t *toProcess2 = audioSampleFactory->get("effects:inp2");
+	jack_default_audio_sample_t *processed1 = audioSampleFactory->get("effects:out1");
+	jack_default_audio_sample_t *processed2 = audioSampleFactory->get("effects:out2");
 
-	vector<YroEffectPlugin *>::iterator effect;
+	map<const char *,YroEffectPlugin *>::iterator effect;
 	for(effect=effects.begin(); effect!=effects.end(); effect++) {
-		YroEffectPlugin *data = *effect;
+		YroEffectPlugin *data = effect->second;
 		LOG->debug("check allocation for plugin [%s]", data->getName());
 		/**
 		 * process the effect
 		 */
-		data->setInLeft(toProcess1);
-		data->setInRight(toProcess2);
 		data->setOutLeft(processed1);
 		data->setOutRight(processed2);
-		LOG->debug("render for plugin [%s]", data->getName());
-		data->render(nframes);
+		LOG->debug("render for plugin [%s] %08x,%08x,%08x,%08x", data->getName(), toProcess1, toProcess2, processed1, processed2);
+		data->render(nframes, toProcess1, toProcess2);
 		/**
 		 * switch
 		 */
-		LOG->debug("switch data from plugin [%s]", data->getName());
-		switchIt = toProcess1;
-		toProcess1 = processed1;
-		processed1 = switchIt;
-		switchIt = toProcess2;
-		toProcess2 = processed2;
-		processed2 = switchIt;
+		memcpy(toProcess1,processed1,nframes);
+		memcpy(toProcess2,processed2,nframes);
 	}
-
-	/**
-	 * switch
-	 */
-	LOG->debug("switch data");
-	switchIt = toProcess1;
-	toProcess1 = processed1;
-	processed1 = switchIt;
-	switchIt = toProcess2;
-	toProcess2 = processed2;
-	processed2 = switchIt;
-
 	/**
 	 * validate tranformation
 	 */
 	processed1 = audioSampleFactory->copy(nframes,processed1,out1);
 	processed2 = audioSampleFactory->copy(nframes,processed2,out2);
+
+	/**
+	 * produce output audio sample
+	 * and advertise the window system
+	 */
+	audioSampleFactory->copy(nframes,processed1,"extern:left");
+	audioSampleFactory->copy(nframes,processed2,"extern:right");
 
 	return 0;
 }

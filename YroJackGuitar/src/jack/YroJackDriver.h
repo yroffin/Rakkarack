@@ -5,13 +5,13 @@
  *      Author: yannick
  */
 
+#include <jack/jack.h>
+#include <core/YroObject.h>
+#include <jack/YroEffectFactory.h>
+#include <jack/YroAudioSampleFactory.h>
+
 #ifndef YROJACKDRIVER_H_
 #define YROJACKDRIVER_H_
-
-#include <jack/jack.h>
-#include "../core/YroObject.h"
-#include "YroEffectFactory.h"
-#include "YroAudioSampleFactory.h"
 
 namespace std {
 

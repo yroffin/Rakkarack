@@ -8,9 +8,21 @@
 #ifndef YROOBJECT_H_
 #define YROOBJECT_H_
 
-#include "../utils/YroLogger.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <utils/YroLogger.h>
 
 namespace std {
+
+struct cmp_str
+{
+   bool operator()(char const *a, char const *b)
+   {
+      return strcmp(a, b) < 0;
+   }
+};
 
 class YroObject {
 public:
