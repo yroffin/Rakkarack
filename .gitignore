@@ -1,4 +1,3 @@
 #
-YroJackGuitar/Debug/src/*.o
-YroJackGuitar/src/core
-YroJackGuitar/src/*.o
+*.o
+core*
