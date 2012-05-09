@@ -27,8 +27,11 @@ public:
 	virtual void cleanup() {};
 protected:
 	float outgain;
-	unsigned int iSampleRate;
-	float fSampleRate;
+
+	float iPERIOD;
+	float iSAMPLE_RATE;
+	float fPERIOD;
+	float fSAMPLE_RATE;
 };
 
 #endif /* YRODEFAULTFILTER_H_ */

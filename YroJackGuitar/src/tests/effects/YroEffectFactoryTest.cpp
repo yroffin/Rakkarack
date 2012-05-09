@@ -17,7 +17,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION( YroEffectFactoryTest);
 void YroEffectFactoryTest::setUp() {
 	YroJackDriver::instance();
 	YroParamHelper::instance()->setIntegerSampleRate(22050);
-	YroParamHelper::instance()->setIntegerPeriod(128);
 	YroEffectFactory::instance();
 	for (int i = 0; i < TABLE_SIZE; i++) {
 		sine[i] = .1f * (float) sin(((double) i / (double) TABLE_SIZE) * M_PI * 1.2f);
@@ -45,9 +44,10 @@ void YroEffectFactoryTest::init(jack_nframes_t nframes, jack_default_audio_sampl
 void YroEffectFactoryTest::testBasic() {
 	printf("Test: stress\n");
 	YroEffectFactory *factory = YroEffectFactory::instance();
+	YroParamHelper::instance()->setIntegerPeriod(16);
 	factory->addEffect("distortion#1",new std::YroDistortion());
 
-	jack_nframes_t nframes = 128;
+	jack_nframes_t nframes = 16;
 	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
 
 	/**
@@ -112,11 +112,10 @@ void YroEffectFactoryTest::dump(jack_nframes_t nframes,jack_default_audio_sample
 
 void YroEffectFactoryTest::testDistortion() {
 	printf("Test: YroDistortion\n");
-	YroParamHelper::instance()->setIntegerSampleRate(22050);
-	YroParamHelper::instance()->setIntegerPeriod(128);
+	YroParamHelper::instance()->setIntegerPeriod(16);
 
 	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
-	YroDistortion *eff = (YroDistortion *) factory->addEffect("distortion#1",new YroDistortion());
+	YroDistortion *eff = (YroDistortion *) factory->addEffect("distortion#2",new YroDistortion());
 
 	/**
 	 * wet/dry    : -64 ... not used in Distortion ?
@@ -144,7 +143,7 @@ void YroEffectFactoryTest::testDistortion() {
 	eff->setPlpf(2982);
 	eff->setPhpf(645);
 
-	jack_nframes_t nframes = 8;
+	jack_nframes_t nframes = 16;
 	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
 
 	/**
@@ -162,7 +161,8 @@ void YroEffectFactoryTest::testDistortion() {
 
 	dump(nframes, in1, in2, out1, out2);
 	for(jack_nframes_t x=0;x<nframes;x++) {
-		CPPUNIT_ASSERT_EQUAL(out1[x], out2[x]);
+		int c = (out1[x] != 0. && out2[x] != 0.);
+		CPPUNIT_ASSERT_EQUAL(1, c);
 	}
 
 	printf("Test: YroDistortion ended\n");

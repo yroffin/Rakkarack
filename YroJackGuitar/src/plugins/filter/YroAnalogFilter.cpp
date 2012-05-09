@@ -10,8 +10,8 @@
 
 YroAnalogFilter::YroAnalogFilter(unsigned char Ftype, float Ffreq, float Fq,
 		unsigned char Fstages) {
-	iSampleRate = YroParamHelper::instance()->getIntegerSampleRate();
-	fSampleRate = YroParamHelper::instance()->getFloatSampleRate();
+	iSAMPLE_RATE = YroParamHelper::instance()->getIntegerSampleRate();
+	fSAMPLE_RATE = YroParamHelper::instance()->getFloatSampleRate();
 
 	stages = Fstages;
 	for (int i = 0; i < 3; i++) {
@@ -58,8 +58,8 @@ void YroAnalogFilter::computefiltercoefs() {
 
 	//do not allow frequencies bigger than samplerate/2
 	float freq = this->freq;
-	if (freq > (iSampleRate / 2 - 500.0)) {
-		freq = fSampleRate * .5f - 500.0f;
+	if (freq > (iSAMPLE_RATE / 2 - 500.0)) {
+		freq = fSAMPLE_RATE * .5f - 500.0f;
 		zerocoefs = 1;
 	};
 	if (freq < 0.1)
@@ -83,7 +83,7 @@ void YroAnalogFilter::computefiltercoefs() {
 	switch (type) {
 	case 0: //LPF 1 pole
 		if (zerocoefs == 0)
-			tmp = expf(-D_PI * freq / fSampleRate);
+			tmp = expf(-D_PI * freq / fSAMPLE_RATE);
 		else
 			tmp = 0.0f;
 		c[0] = 1.0f - tmp;
@@ -95,7 +95,7 @@ void YroAnalogFilter::computefiltercoefs() {
 		break;
 	case 1: //HPF 1 pole
 		if (zerocoefs == 0)
-			tmp = expf(-D_PI * freq / fSampleRate);
+			tmp = expf(-D_PI * freq / fSAMPLE_RATE);
 		else
 			tmp = 0.0f;
 		c[0] = (1.0f + tmp) * .5f;
@@ -107,7 +107,7 @@ void YroAnalogFilter::computefiltercoefs() {
 		break;
 	case 2: //LPF 2 poles
 		if (zerocoefs == 0) {
-			omega = D_PI * freq / fSampleRate;
+			omega = D_PI * freq / fSAMPLE_RATE;
 			sn = sinf(omega);
 			cs = cosf(omega);
 			alpha = sn / (2.0f * tmpq);
@@ -129,7 +129,7 @@ void YroAnalogFilter::computefiltercoefs() {
 		break;
 	case 3: //HPF 2 poles
 		if (zerocoefs == 0) {
-			omega = D_PI * freq / fSampleRate;
+			omega = D_PI * freq / fSAMPLE_RATE;
 			sn = sinf(omega);
 			cs = cosf(omega);
 			alpha = sn / (2.0f * tmpq);
@@ -151,7 +151,7 @@ void YroAnalogFilter::computefiltercoefs() {
 		break;
 	case 4: //BPF 2 poles
 		if (zerocoefs == 0) {
-			omega = D_PI * freq / fSampleRate;
+			omega = D_PI * freq / fSAMPLE_RATE;
 			sn = sinf(omega);
 			cs = cosf(omega);
 			alpha = sn / (2.0f * tmpq);
@@ -173,7 +173,7 @@ void YroAnalogFilter::computefiltercoefs() {
 		break;
 	case 5: //NOTCH 2 poles
 		if (zerocoefs == 0) {
-			omega = D_PI * freq / fSampleRate;
+			omega = D_PI * freq / fSAMPLE_RATE;
 			sn = sinf(omega);
 			cs = cosf(omega);
 			alpha = sn / (2.0f * sqrtf(tmpq));
@@ -195,7 +195,7 @@ void YroAnalogFilter::computefiltercoefs() {
 		break;
 	case 6: //PEAK (2 poles)
 		if (zerocoefs == 0) {
-			omega = D_PI * freq / fSampleRate;
+			omega = D_PI * freq / fSAMPLE_RATE;
 			sn = sinf(omega);
 			cs = cosf(omega);
 			tmpq *= 3.0f;
@@ -218,7 +218,7 @@ void YroAnalogFilter::computefiltercoefs() {
 		break;
 	case 7: //Low Shelf - 2 poles
 		if (zerocoefs == 0) {
-			omega = D_PI * freq / fSampleRate;
+			omega = D_PI * freq / fSAMPLE_RATE;
 			sn = sinf(omega);
 			cs = cosf(omega);
 			tmpq = sqrtf(tmpq);
@@ -250,7 +250,7 @@ void YroAnalogFilter::computefiltercoefs() {
 		break;
 	case 8: //High Shelf - 2 poles
 		if (zerocoefs == 0) {
-			omega = D_PI * freq / fSampleRate;
+			omega = D_PI * freq / fSAMPLE_RATE;
 			sn = sinf(omega);
 			cs = cosf(omega);
 			tmpq = sqrtf(tmpq);
@@ -296,7 +296,7 @@ void YroAnalogFilter::setfreq(float frequency) {
 		rap = 1.0f / rap;
 
 	oldabovenq = abovenq;
-	abovenq = frequency > (iSampleRate / 2 - 500.0);
+	abovenq = frequency > (iSAMPLE_RATE / 2 - 500.0);
 
 	int nyquistthresh = (abovenq ^ oldabovenq);
 
@@ -321,8 +321,8 @@ void YroAnalogFilter::setfreq(float frequency) {
 
 void YroAnalogFilter::setSR(unsigned int value) {
 
-	iSampleRate = value;
-	fSampleRate = (float) iSampleRate;
+	iSAMPLE_RATE = value;
+	fSAMPLE_RATE = (float) iSAMPLE_RATE;
 	computefiltercoefs();
 
 }
@@ -475,7 +475,7 @@ void YroAnalogFilter::reversecoeffs() {
 ;
 
 float YroAnalogFilter::H(float freq) {
-	float fr = freq / fSampleRate * D_PI;
+	float fr = freq / fSAMPLE_RATE * D_PI;
 	float x = c[0], y = 0.0;
 	for (int n = 1; n < 3; n++) {
 		x += cosf((float) n * fr) * c[n];

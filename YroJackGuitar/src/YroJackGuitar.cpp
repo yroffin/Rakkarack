@@ -27,15 +27,6 @@ bool MyApp::OnInit()
 {
 	YroJackGuitarMainWindow *myWnd = YroJackGuitarMainWindow::instance();
 	myWnd->Show(true);
-/*
-	getchar();
-	YroLogger::instance()->info("YroJackStart ...");
-	YroJackDriver::instance()->initialize();
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	getchar();
-	delete YroJackDriver::instance();
-*/
-	return true;
 }
 
 IMPLEMENT_APP(MyApp)

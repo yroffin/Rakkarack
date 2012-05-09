@@ -5,17 +5,20 @@
  *      Author: yannick
  */
 
-#include <string.h>
-#include "YroEffectPlugin.h"
+#include <plugins/YroEffectPlugin.h>
 
 namespace std {
 
 YroEffectPlugin::YroEffectPlugin(const char *_name) {
 	name = strdup(_name);
+	iPERIOD = helper->getIntegerPeriod();
+	iSAMPLE_RATE = helper->getIntegerSampleRate();
+	fPERIOD = helper->getFloatPeriod();
+	fSAMPLE_RATE = helper->getFloatPeriod();
 }
 
 YroEffectPlugin::~YroEffectPlugin() {
-	delete name;
+	free((void *) name);
 }
 
 /**

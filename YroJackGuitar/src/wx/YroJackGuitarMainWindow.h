@@ -32,6 +32,7 @@ public:
 	}
 	virtual ~YroJackGuitarMainWindow();
 	void OnJackNewAudioSample();
+	void OnJackConnect();
 private:
 	YroJackGuitarMainWindow(wxWindow* parent);
 	static YroJackGuitarMainWindow *__instance;

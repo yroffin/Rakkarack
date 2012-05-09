@@ -24,7 +24,7 @@ public:
 	 * setter
 	 */
 	void cleanup ();
-	void applyFilters(int iPeriod, float fPeriod);
+	void applyFilters();
 
 	int getPdrive() const;
 	void setPdrive(int pdrive);

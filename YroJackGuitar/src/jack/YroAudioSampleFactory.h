@@ -5,13 +5,13 @@
  *      Author: yannick
  */
 
-#ifndef YROAUDIOSAMPLEFACTORY_H_
-#define YROAUDIOSAMPLEFACTORY_H_
-
 #include <stdio.h>
 #include <string.h>
 #include <jack/jack.h>
 #include <core/YroObject.h>
+
+#ifndef YROAUDIOSAMPLEFACTORY_H_
+#define YROAUDIOSAMPLEFACTORY_H_
 
 namespace std {
 

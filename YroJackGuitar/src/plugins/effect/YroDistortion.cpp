@@ -83,13 +83,13 @@ void YroDistortion::cleanup() {
 /*
  * Apply the filters
  */
-void YroDistortion::applyFilters(int iPeriod, float fPeriod) {
-	lpfl->filterout(iPeriod, fPeriod, efxoutl);
-	hpfl->filterout(iPeriod, fPeriod, efxoutl);
+void YroDistortion::applyFilters() {
+	lpfl->filterout(iPERIOD, fPERIOD, efxoutl);
+	hpfl->filterout(iPERIOD, fPERIOD, efxoutl);
 
 	if (Pstereo != 0) { //stereo
-		lpfr->filterout(iPeriod, fPeriod, efxoutr);
-		hpfr->filterout(iPeriod, fPeriod, efxoutr);
+		lpfr->filterout(iPERIOD, fPERIOD, efxoutr);
+		hpfr->filterout(iPERIOD, fPERIOD, efxoutr);
 	};
 
 }
@@ -132,7 +132,7 @@ void YroDistortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 	};
 
 	if (Pprefiltering != 0) {
-		applyFilters(int(nframes), float(nframes));
+		applyFilters();
 	}
 
 	//no optimised, yet (no look table)
@@ -142,7 +142,7 @@ void YroDistortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 		dwshaper->waveshapesmps(nframes, efxoutr, Ptype, Pdrive, 1);
 
 	if (Pprefiltering == 0) {
-		applyFilters(int(nframes), float(nframes));
+		applyFilters();
 	}
 
 	if (Pstereo == 0)
@@ -167,8 +167,8 @@ void YroDistortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 			octoutr[i] = rout * toggler;
 		}
 
-		blockDCr->filterout(int(nframes), float(nframes), octoutr);
-		blockDCl->filterout(int(nframes), float(nframes), octoutl);
+		blockDCr->filterout(iPERIOD, fPERIOD, octoutr);
+		blockDCl->filterout(iPERIOD, fPERIOD, octoutl);
 	}
 
 	float level = dB2rap (60.0f * (float)Plevel / 127.0f - 40.0f);

@@ -108,24 +108,39 @@ int YroEffectFactory::render(
 	jack_default_audio_sample_t *toProcess2 = audioSampleFactory->get("effects:inp2");
 	jack_default_audio_sample_t *processed1 = audioSampleFactory->get("effects:out1");
 	jack_default_audio_sample_t *processed2 = audioSampleFactory->get("effects:out2");
+	jack_default_audio_sample_t *switchIt = 0;
 
 	map<const char *,YroEffectPlugin *>::iterator effect;
 	for(effect=effects.begin(); effect!=effects.end(); effect++) {
 		YroEffectPlugin *data = effect->second;
-		LOG->debug("check allocation for plugin [%s]", data->getName());
 		/**
 		 * process the effect
 		 */
 		data->setOutLeft(processed1);
 		data->setOutRight(processed2);
-		LOG->debug("render for plugin [%s] %08x,%08x,%08x,%08x", data->getName(), toProcess1, toProcess2, processed1, processed2);
 		data->render(nframes, toProcess1, toProcess2);
 		/**
 		 * switch
 		 */
-		memcpy(toProcess1,processed1,nframes);
-		memcpy(toProcess2,processed2,nframes);
+		switchIt = toProcess1;
+		toProcess1 = processed1;
+		processed1 = switchIt;
+		switchIt = toProcess2;
+		toProcess2 = processed2;
+		processed2 = switchIt;
 	}
+
+	/**
+	 * switch
+	 */
+	LOG->debug("switch data");
+	switchIt = toProcess1;
+	toProcess1 = processed1;
+	processed1 = switchIt;
+	switchIt = toProcess2;
+	toProcess2 = processed2;
+	processed2 = switchIt;
+
 	/**
 	 * validate tranformation
 	 */

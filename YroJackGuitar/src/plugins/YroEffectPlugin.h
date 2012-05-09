@@ -100,6 +100,11 @@ protected:
 	float *efxoutl;
 	float *efxoutr;
 	const char *name;
+
+	float iPERIOD;
+	float iSAMPLE_RATE;
+	float fPERIOD;
+	float fSAMPLE_RATE;
 };
 
 } /* namespace std */
