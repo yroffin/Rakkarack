@@ -14,6 +14,7 @@
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/YroEffectGenerator.h>
 #include <plugins/effect/YroDistortion.h>
+#include <plugins/effect/YroChorus.h>
 
 namespace std {
 

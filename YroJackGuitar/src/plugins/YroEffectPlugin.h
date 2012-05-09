@@ -5,11 +5,11 @@
  *      Author: yannick
  */
 
-#ifndef YROEFFECTPLUGIN_H_
-#define YROEFFECTPLUGIN_H_
-
 #include <core/YroObject.h>
 #include <jack/jack.h>
+
+#ifndef YROEFFECTPLUGIN_H_
+#define YROEFFECTPLUGIN_H_
 
 #define D_PI 6.283185f
 #define PI 3.141598f
@@ -84,6 +84,7 @@ public:
 	 * processing
 	 */
 	virtual void render(jack_nframes_t nframes, float *inLeft, float *inRight) {}
+	virtual void setPreset(int npreset);
 
 	/**
 	 * getter
@@ -97,6 +98,7 @@ public:
 	 */
 	const char *getName() {return name;}
 protected:
+	int    preset;
 	float *efxoutl;
 	float *efxoutr;
 	const char *name;

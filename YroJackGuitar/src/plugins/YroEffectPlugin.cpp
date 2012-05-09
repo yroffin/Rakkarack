@@ -15,10 +15,15 @@ YroEffectPlugin::YroEffectPlugin(const char *_name) {
 	iSAMPLE_RATE = helper->getIntegerSampleRate();
 	fPERIOD = helper->getFloatPeriod();
 	fSAMPLE_RATE = helper->getFloatPeriod();
+	preset = 0;
 }
 
 YroEffectPlugin::~YroEffectPlugin() {
 	free((void *) name);
+}
+
+void YroEffectPlugin::setPreset(int npreset) {
+	preset = npreset;
 }
 
 /**

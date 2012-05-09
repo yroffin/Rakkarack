@@ -110,6 +110,12 @@ void YroEffectFactoryTest::dump(jack_nframes_t nframes,jack_default_audio_sample
 	printf("\n");
 }
 
+void YroEffectFactoryTest::compare(jack_nframes_t nframes,jack_default_audio_sample_t *out1, jack_default_audio_sample_t *out2) {
+	for(jack_nframes_t x=0;x<nframes;x++) {
+		CPPUNIT_ASSERT_EQUAL(int(out1[x] * 1000) % 1000, int(out2[x] * 1000) % 1000);
+	}
+}
+
 void YroEffectFactoryTest::testDistortion() {
 	printf("Test: YroDistortion\n");
 	YroParamHelper::instance()->setIntegerPeriod(16);
@@ -166,6 +172,42 @@ void YroEffectFactoryTest::testDistortion() {
 	}
 
 	printf("Test: YroDistortion ended\n");
+}
+
+void YroEffectFactoryTest::testChorus() {
+	printf("Test: YroChorus\n");
+	YroParamHelper::instance()->setIntegerPeriod(16);
+
+	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
+	YroChorus *eff = (YroChorus *) factory->addEffect("chorus#2",new YroChorus());
+
+	eff->setPlrcross(0);
+	eff->setPpanning(0);
+
+	jack_nframes_t nframes = 16;
+	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
+
+	/**
+	 * first render simulation
+	 */
+	in1 = new jack_default_audio_sample_t[nframes];
+	in2 = new jack_default_audio_sample_t[nframes];
+	out1 = new jack_default_audio_sample_t[nframes];
+	out2 = new jack_default_audio_sample_t[nframes];
+
+	init(nframes, in1, in2);
+	init(nframes, out1, out2);
+
+	factory->render(nframes, in1, in2, out1, out2);
+
+	dump(nframes, in1, in2, out1, out2);
+
+	float verif1[16] = {-0.001284, -0.003113, -0.003914, -0.004067, -0.004036, -0.003816, -0.003551, -0.003246, -0.002938, -0.002620, -0.002223, -0.001692, -0.000171, -0.000027, 0.000070, 0.000134};
+	compare(nframes, out1, verif1);
+	float verif2[16] = {-0.324965, -0.787524, -0.990300, -1.029034, -1.021163, -0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343, -0.428202, -0.043322, -0.006895, 0.017683, 0.033956};
+	compare(nframes, out2, verif2);
+
+	printf("Test: YroChorus ended\n");
 }
 
 } /* namespace test */
