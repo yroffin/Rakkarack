@@ -8,7 +8,11 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include src/wx/subdir.mk
 -include src/utils/subdir.mk
+-include src/tests/effects/subdir.mk
+-include src/plugins/filter/subdir.mk
+-include src/plugins/effect/subdir.mk
 -include src/plugins/subdir.mk
 -include src/jack/subdir.mk
 -include src/core/subdir.mk

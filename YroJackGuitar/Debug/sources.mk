@@ -23,7 +23,11 @@ C_UPPER_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+src/wx \
 src/utils \
+src/tests/effects \
+src/plugins/filter \
+src/plugins/effect \
 src/plugins \
 src/jack \
 src/core \

@@ -1,9 +1,16 @@
 src/jack/YroAudioSampleFactory.d: ../src/jack/YroAudioSampleFactory.cpp \
- ../src/jack/YroAudioSampleFactory.h ../src/jack/../core/YroObject.h \
- ../src/jack/../core/../utils/YroLogger.h
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroInternalException.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/jack/YroAudioSampleFactory.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroObject.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/utils/YroLogger.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroParamHelper.h
 
-../src/jack/YroAudioSampleFactory.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroInternalException.h:
 
-../src/jack/../core/YroObject.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/jack/YroAudioSampleFactory.h:
 
-../src/jack/../core/../utils/YroLogger.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroObject.h:
+
+/home/yannick/git/Rakkarack/YroJackGuitar/src/utils/YroLogger.h:
+
+/home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroParamHelper.h:

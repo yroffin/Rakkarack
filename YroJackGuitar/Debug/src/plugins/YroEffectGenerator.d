@@ -1,12 +1,15 @@
 src/plugins/YroEffectGenerator.d: ../src/plugins/YroEffectGenerator.cpp \
  ../src/plugins/YroEffectGenerator.h ../src/plugins/YroEffectPlugin.h \
- ../src/plugins/../core/YroObject.h \
- ../src/plugins/../core/../utils/YroLogger.h
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroObject.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/utils/YroLogger.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroParamHelper.h
 
 ../src/plugins/YroEffectGenerator.h:
 
 ../src/plugins/YroEffectPlugin.h:
 
-../src/plugins/../core/YroObject.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroObject.h:
 
-../src/plugins/../core/../utils/YroLogger.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/utils/YroLogger.h:
+
+/home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroParamHelper.h:

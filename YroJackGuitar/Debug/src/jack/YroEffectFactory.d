@@ -1,24 +1,40 @@
 src/jack/YroEffectFactory.d: ../src/jack/YroEffectFactory.cpp \
- ../src/jack/YroEffectFactory.h ../src/jack/../core/YroObject.h \
- ../src/jack/../core/../utils/YroLogger.h \
- ../src/jack/../plugins/YroEffectPlugin.h \
- ../src/jack/../plugins/../core/YroObject.h \
- ../src/jack/../plugins/YroEffectGenerator.h \
- ../src/jack/../plugins/YroEffectPlugin.h \
- ../src/jack/YroAudioSampleFactory.h
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/jack/YroEffectFactory.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroObject.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/utils/YroLogger.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroParamHelper.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/jack/YroAudioSampleFactory.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/YroEffectPlugin.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/YroEffectGenerator.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/YroEffectPlugin.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/effect/YroDistortion.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/filter/YroAnalogFilter.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/filter/YroDefaultFilter.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/filter/YroWaveShaper.h \
+ /home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/filter/YroResample.h
 
-../src/jack/YroEffectFactory.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/jack/YroEffectFactory.h:
 
-../src/jack/../core/YroObject.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroObject.h:
 
-../src/jack/../core/../utils/YroLogger.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/utils/YroLogger.h:
 
-../src/jack/../plugins/YroEffectPlugin.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/core/YroParamHelper.h:
 
-../src/jack/../plugins/../core/YroObject.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/jack/YroAudioSampleFactory.h:
 
-../src/jack/../plugins/YroEffectGenerator.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/YroEffectPlugin.h:
 
-../src/jack/../plugins/YroEffectPlugin.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/YroEffectGenerator.h:
 
-../src/jack/YroAudioSampleFactory.h:
+/home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/YroEffectPlugin.h:
+
+/home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/effect/YroDistortion.h:
+
+/home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/filter/YroAnalogFilter.h:
+
+/home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/filter/YroDefaultFilter.h:
+
+/home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/filter/YroWaveShaper.h:
+
+/home/yannick/git/Rakkarack/YroJackGuitar/src/plugins/filter/YroResample.h:
