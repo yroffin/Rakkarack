@@ -30,11 +30,6 @@
 
 
 
-struct COMPLEXTYPE
-{
-  float a, b;
-};
-
 class Alienwah
 {
 public:
@@ -56,6 +51,11 @@ public:
 
 
 private:
+  struct COMPLEXTYPE
+  {
+    float a, b;
+  };
+
   //Parametrii Alienwah
     EffectLFO lfo;		//lfo-ul Alienwah
   int Pvolume;

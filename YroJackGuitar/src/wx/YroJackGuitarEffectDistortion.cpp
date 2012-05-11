@@ -5,13 +5,10 @@ using namespace std;
 
 YroJackGuitarEffectDistortion::YroJackGuitarEffectDistortion(wxWindow* parent) :
 		EffectDistortion(parent) {
-	/**
-	 * TODO
-	effect = (std::YroDistortion *) YroEffectFactory::instance()->getEffect("distortion#1");
+	effect = (std::Distortion *) YroEffectFactory::instance()->getEffect("distortion#1");
 	m_Pdrive->SetRange(0,100);
 	m_Pdrive->SetValue(effect->getPdrive());
 	m_Preset->SetSelection(effect->getPreset());
-	 */
 }
 
 void YroJackGuitarEffectDistortion::OnSpinCtrl(wxSpinEvent& event) {

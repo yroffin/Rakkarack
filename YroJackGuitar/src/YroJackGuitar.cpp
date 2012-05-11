@@ -27,6 +27,7 @@ bool MyApp::OnInit()
 {
 	YroJackGuitarMainWindow *myWnd = YroJackGuitarMainWindow::instance();
 	myWnd->Show(true);
+	return true;
 }
 
 IMPLEMENT_APP(MyApp)

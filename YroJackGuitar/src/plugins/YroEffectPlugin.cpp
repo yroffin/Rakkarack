@@ -15,6 +15,7 @@ YroEffectPlugin::YroEffectPlugin(const char *_name) {
 	iSAMPLE_RATE = helper->getIntegerSampleRate();
 	fPERIOD = helper->getFloatPeriod();
 	fSAMPLE_RATE = helper->getFloatPeriod();
+	cSAMPLE_RATE = 1.0f / fSAMPLE_RATE;
 	preset = 0;
 }
 

@@ -83,7 +83,8 @@ public:
 	/**
 	 * processing
 	 */
-	virtual void render(jack_nframes_t nframes, float *inLeft, float *inRight) {}
+	virtual void render(jack_nframes_t nframes, float *inLeft, float *inRight) {
+	}
 	virtual void setPreset(int npreset);
 
 	/**
@@ -96,18 +97,22 @@ public:
 	/**
 	 * inline
 	 */
-	const char *getName() {return name;}
+	const char *getName() {
+		return name;
+	}
 protected:
-	int    preset;
+	int preset;
 	float *efxoutl;
 	float *efxoutr;
 	const char *name;
 
-	float iPERIOD;
-	float iSAMPLE_RATE;
+	int   iPERIOD;
+	int   iSAMPLE_RATE;
 	float fPERIOD;
 	float fSAMPLE_RATE;
+	float cSAMPLE_RATE;
 };
 
 } /* namespace std */
+
 #endif /* YROEFFECTPLUGIN_H_ */

@@ -1,0 +1,80 @@
+/*
+  rakarrack - a guitar effects software
+
+  pan.h  -  Auto/Pan - Extra stereo definitions
+  Copyright (C) 2008-2010 Josep Andreu
+  Author: Josep Andreu
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of version 2 of the GNU General Public License
+ as published by the Free Software Foundation.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License (version 2) for more details.
+
+ You should have received a copy of the GNU General Public License
+ (version2)  along with this program; if not, write to the Free Software
+ Foundation,
+ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+*/
+
+#ifndef AUTOPAN_H
+#define AUTOPAN_H
+
+#include <plugins/YroEffectPlugin.h>
+#include <plugins/misc/YroLowfrequencyOscillation.h>
+
+
+
+namespace std {
+
+class Pan : public YroEffectPlugin
+
+{
+
+public:
+  Pan();
+   ~Pan();
+  void render(jack_nframes_t nframes,float *smpsl, float *smpsr);
+  void setpreset (int npreset);
+  void changepar (int npar, int value);
+  int getpar (int npar);
+  void cleanup ();
+
+
+  int Ppreset;
+  float outvolume;
+
+  float *efxoutl;
+  float *efxoutr;
+
+
+
+private:
+
+  void setvolume (int Pvolume);
+  void setpanning (int Ppanning);
+  void setextra (int Pdepth);
+
+  int Pvolume;
+  int Ppanning;
+  int Pextra;
+  int PAutoPan;
+  int PextraON;
+
+
+  float dvalue;
+  float panning, mul;
+  float lfol, lfor;
+  float ll, lr;
+
+  YroLowfrequencyOscillation lfo;
+  
+
+};
+
+}
+#endif

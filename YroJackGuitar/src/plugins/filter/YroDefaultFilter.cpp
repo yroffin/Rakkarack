@@ -12,8 +12,18 @@ YroDefaultFilter::YroDefaultFilter() {
 	iSAMPLE_RATE = helper->getIntegerSampleRate();
 	fPERIOD = helper->getFloatPeriod();
 	fSAMPLE_RATE = helper->getFloatPeriod();
+	cSAMPLE_RATE = 1.0f / fSAMPLE_RATE;
 }
 
 YroDefaultFilter::~YroDefaultFilter() {
 }
+
+float YroDefaultFilter::getOutgain() const {
+	return outgain;
+}
+
+void YroDefaultFilter::setOutgain(float outgain) {
+	this->outgain = outgain;
+}
+
 

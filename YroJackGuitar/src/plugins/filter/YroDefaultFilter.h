@@ -16,6 +16,8 @@ class YroDefaultFilter : public std::YroObject {
 public:
 	YroDefaultFilter();
 	virtual ~YroDefaultFilter();
+	float getOutgain() const;
+	void setOutgain(float outgain);
 	/**
 	 * default function
 	 */
@@ -28,10 +30,11 @@ public:
 protected:
 	float outgain;
 
-	float iPERIOD;
-	float iSAMPLE_RATE;
+	int   iPERIOD;
+	int   iSAMPLE_RATE;
 	float fPERIOD;
 	float fSAMPLE_RATE;
+	float cSAMPLE_RATE;
 };
 
 #endif /* YRODEFAULTFILTER_H_ */

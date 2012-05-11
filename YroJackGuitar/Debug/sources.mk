@@ -26,6 +26,7 @@ SUBDIRS := \
 src/wx \
 src/utils \
 src/tests/effects \
+src/plugins/misc \
 src/plugins/filter \
 src/plugins/effect \
 src/plugins \

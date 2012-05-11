@@ -1,0 +1,7 @@
+StereoHarm
+StompBox
+Sustainer
+Synthfilter
+Valve
+Vibe
+Vocoder

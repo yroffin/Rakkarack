@@ -22,7 +22,7 @@ public:
 	YroJackGuitarEffectDistortion( wxWindow* parent );
 
 private:
-	std::YroDistortion *effect;
+	std::Distortion *effect;
 };
 
 #endif // __YroJackGuitarEffectDistortion__

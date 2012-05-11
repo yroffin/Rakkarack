@@ -13,8 +13,8 @@
 #include <jack/YroAudioSampleFactory.h>
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/YroEffectGenerator.h>
-#include <plugins/effect/YroDistortion.h>
-#include <plugins/effect/YroChorus.h>
+#include <plugins/effect/Distortion.h>
+#include <plugins/effect/Chorus.h>
 
 namespace std {
 

@@ -6,7 +6,7 @@
  */
 
 #include <jack/YroEffectFactory.h>
-#include <plugins/effect/YroDistortion.h>
+#include <plugins/effect/Distortion.h>
 
 namespace std {
 
@@ -33,8 +33,12 @@ YroEffectFactory::~YroEffectFactory() {
  */
 void YroEffectFactory::load(const char *config) {
 	if(loaded == 1) return;
+	// TODO
 	//addEffect("default#0",new YroEffectGenerator());
-	YroDistortion *eff = (YroDistortion *) addEffect("distortion#1",new YroDistortion());
+	//Distortion *eff = (Distortion *) addEffect("distortion#1",new Distortion());
+
+	Distortion *eff = 0;
+
 	eff->setPlrcross(0);
 	eff->setPdrive(127);
 	eff->setPlevel(76);

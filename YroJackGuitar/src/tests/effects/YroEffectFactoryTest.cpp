@@ -45,7 +45,7 @@ void YroEffectFactoryTest::testBasic() {
 	printf("Test: stress\n");
 	YroEffectFactory *factory = YroEffectFactory::instance();
 	YroParamHelper::instance()->setIntegerPeriod(16);
-	factory->addEffect("distortion#1",new std::YroDistortion());
+	factory->addEffect("distortion#1",new std::Distortion());
 
 	jack_nframes_t nframes = 16;
 	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
@@ -117,11 +117,11 @@ void YroEffectFactoryTest::compare(jack_nframes_t nframes,jack_default_audio_sam
 }
 
 void YroEffectFactoryTest::testDistortion() {
-	printf("Test: YroDistortion\n");
+	printf("Test: Distortion\n");
 	YroParamHelper::instance()->setIntegerPeriod(16);
 
 	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
-	YroDistortion *eff = (YroDistortion *) factory->addEffect("distortion#2",new YroDistortion());
+	Distortion *eff = (Distortion *) factory->addEffect("distortion#2",new Distortion());
 
 	/**
 	 * wet/dry    : -64 ... not used in Distortion ?
@@ -171,15 +171,15 @@ void YroEffectFactoryTest::testDistortion() {
 		CPPUNIT_ASSERT_EQUAL(1, c);
 	}
 
-	printf("Test: YroDistortion ended\n");
+	printf("Test: Distortion ended\n");
 }
 
 void YroEffectFactoryTest::testChorus() {
-	printf("Test: YroChorus\n");
+	printf("Test: Chorus\n");
 	YroParamHelper::instance()->setIntegerPeriod(16);
 
 	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
-	YroChorus *eff = (YroChorus *) factory->addEffect("chorus#2",new YroChorus());
+	Chorus *eff = (Chorus *) factory->addEffect("chorus#2",new Chorus());
 
 	eff->setPlrcross(0);
 	eff->setPpanning(0);
@@ -207,7 +207,7 @@ void YroEffectFactoryTest::testChorus() {
 	float verif2[16] = {-0.324965, -0.787524, -0.990300, -1.029034, -1.021163, -0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343, -0.428202, -0.043322, -0.006895, 0.017683, 0.033956};
 	compare(nframes, out2, verif2);
 
-	printf("Test: YroChorus ended\n");
+	printf("Test: Chorus ended\n");
 }
 
 } /* namespace test */

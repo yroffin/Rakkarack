@@ -306,5 +306,5 @@ Alienwah::getpar (int npar)
     default:
       return (0);
     };
-
+  return 0;
 };
