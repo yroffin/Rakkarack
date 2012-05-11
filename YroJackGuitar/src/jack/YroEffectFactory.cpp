@@ -35,21 +35,7 @@ void YroEffectFactory::load(const char *config) {
 	if(loaded == 1) return;
 	// TODO
 	//addEffect("default#0",new YroEffectGenerator());
-	//Distortion *eff = (Distortion *) addEffect("distortion#1",new Distortion());
-
-	Distortion *eff = 0;
-
-	eff->setPlrcross(0);
-	eff->setPdrive(127);
-	eff->setPlevel(76);
-	eff->setPtype(27);
-	eff->setPnegate(1);
-	eff->setPprefiltering(1);
-	eff->setPstereo(0);
-	eff->setPpanning(0);
-	eff->setPoctave(0);
-	eff->setPlpf(2982);
-	eff->setPhpf(645);
+	addEffect("distortion#1",new Distortion());
 }
 
 YroEffectPlugin *YroEffectFactory::addEffect(const char *instance,YroEffectPlugin *effect) {

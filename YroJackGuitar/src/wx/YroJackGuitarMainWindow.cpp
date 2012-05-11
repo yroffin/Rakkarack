@@ -1,4 +1,5 @@
-#include "YroJackGuitarMainWindow.h"
+#include <wx/YroJackGuitarMainWindow.h>
+#include <wx/YroJackGuitarEffectDistortion.h>
 
 using namespace std;
 
@@ -29,14 +30,15 @@ void YroJackGuitarMainWindow::OnJackNewAudioSample() {
 
 void YroJackGuitarMainWindow::OnJackConnect() {
 	/**
-	 * signal frame
+	 * Create resources
 	 */
 	mySignalFrame = new YroJackGuitarSignalFrame(this);
-	mySignalFrame->Show(true);
+	myDistortionFrame = new YroJackGuitarEffectDistortion(this, (Distortion *) YroEffectFactory::instance()->getEffect("distortion#1"));
+
 	/**
-	 * signal frame
+	 * Display them
 	 */
-	myDistortionFrame = new YroJackGuitarEffectDistortion(this);
+	mySignalFrame->Show(true);
 	myDistortionFrame->Show(true);
 }
 

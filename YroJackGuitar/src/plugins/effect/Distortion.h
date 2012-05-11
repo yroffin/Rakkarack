@@ -1,9 +1,25 @@
 /*
- * Distortion.h
- *
- *  Created on: 7 mai 2012
- *      Author: yannick
- */
+  ZynAddSubFX - a software synthesizer
+
+  Distorsion.h - Distorsion Effect
+  Copyright (C) 2002-2005 Nasca Octavian Paul
+  Author: Nasca Octavian Paul
+
+  Modified for rakarrack by Josep Andreu & Hernan Ordiales & Ryan Billing
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of version 2 of the GNU General Public License
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License (version 2) for more details.
+
+  You should have received a copy of the GNU General Public License (version 2)
+  along with this program; if not, write to the Free Software Foundation,
+  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+*/
 
 #ifndef DISTORTION_H_
 #define DISTORTION_H_
@@ -26,7 +42,17 @@ public:
 	void cleanup ();
 	void applyFilters();
 
-	int getPdrive() const;
+	enum functions {
+		preset,
+		drive
+	};
+
+	int  get0() {return getPreset();};
+	void set0(int value) {setPreset(value);};
+	int  get1() {return getPdrive();};
+	void set1(int value) {setPdrive(value);};
+
+	int getPdrive();
 	void setPdrive(int pdrive);
 	int getPreset() const;
 	void setPreset(int ppreset);

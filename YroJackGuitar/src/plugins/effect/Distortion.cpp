@@ -1,17 +1,32 @@
 /*
- * Distortion.cpp
- *
- *  Created on: 7 mai 2012
- *      Author: yannick
- */
+  ZynAddSubFX - a software synthesizer
 
-#include "Distortion.h"
+  Distorsion.C - Distorsion effect
+  Copyright (C) 2002-2005 Nasca Octavian Paul
+  Author: Nasca Octavian Paul
+
+  Modified for rakarrack by Josep Andreu & Ryan Billing
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of version 2 of the GNU General Public License
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License (version 2) for more details.
+
+  You should have received a copy of the GNU General Public License (version 2)
+  along with this program; if not, write to the Free Software Foundation,
+  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+*/
+
+#include <plugins/effect/Distortion.h>
 
 using namespace std;
 
 Distortion::Distortion() :
 		YroEffectPlugin("Distortion") {
-
 	/**
 	 * allocated during the first render
 	 */
@@ -202,12 +217,13 @@ void Distortion::setPlrcross(int value) {
 	lrcross = (float) Plrcross / 127.0f * 1.0f;
 }
 
-int Distortion::getPdrive() const {
+int Distortion::getPdrive() {
 	return Pdrive;
 }
 
 void Distortion::setPdrive(int pdrive) {
 	Pdrive = pdrive;
+	onChange(drive);
 }
 
 int Distortion::getPreset() const {
@@ -219,7 +235,7 @@ void Distortion::setPreset(int npreset) {
 	const int PRESET_SIZE = 11;
 	const int NUM_PRESETS = 6;
 	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Overdrive 1
+			//Overdrive 1
 			{ 84, 64, 35, 56, 40, 0, 0, 6703, 21, 0, 0 },
 			//Overdrive 2
 			{ 85, 64, 35, 29, 45, 1, 0, 25040, 21, 0, 0 },

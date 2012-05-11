@@ -3,22 +3,21 @@
 
 using namespace std;
 
-YroJackGuitarEffectDistortion::YroJackGuitarEffectDistortion(wxWindow* parent) :
+YroJackGuitarEffectDistortion::YroJackGuitarEffectDistortion(wxWindow* parent, Distortion * _effect) :
 		EffectDistortion(parent) {
-	effect = (std::Distortion *) YroEffectFactory::instance()->getEffect("distortion#1");
-	m_Pdrive->SetRange(0,100);
-	m_Pdrive->SetValue(effect->getPdrive());
-	m_Preset->SetSelection(effect->getPreset());
+	effect = _effect;
+	effect->subscribe(Distortion::preset, m_Preset);
+	effect->subscribe(Distortion::drive, m_Pdrive);
 }
 
 void YroJackGuitarEffectDistortion::OnSpinCtrl(wxSpinEvent& event) {
-	effect->setPdrive(m_Pdrive->GetValue());
+	effect->onChange(m_Pdrive);
 }
 
 void YroJackGuitarEffectDistortion::OnSpinCtrlText(wxCommandEvent& event) {
-	effect->setPdrive(m_Pdrive->GetValue());
+	effect->onChange(m_Pdrive);
 }
 
 void YroJackGuitarEffectDistortion::OnChoice(wxCommandEvent& event) {
-	effect->setPreset(m_Preset->GetSelection());
+	effect->onChange(m_Preset);
 }

@@ -7,7 +7,7 @@
 
 #include <plugins/YroEffectPlugin.h>
 
-namespace std {
+using namespace std;
 
 YroEffectPlugin::YroEffectPlugin(const char *_name) {
 	name = strdup(_name);
@@ -46,4 +46,70 @@ void YroEffectPlugin::setOutRight(float *value) {
 	efxoutr = value;
 }
 
-} /* namespace std */
+/**
+ * link this widget to this field
+ * using map for indexing one way, and the other
+ */
+void YroEffectPlugin::subscribe(int index, wxSpinCtrl *widget) {
+	mapSpinCtrlIndex[widget] = index;
+	mapIndexSpinCtrl[index] = widget;
+	widget->SetRange(0,65535);
+	widget->SetValue(this->getInt(index));
+}
+
+/**
+ * wxSpinCtrl advertise for change
+ */
+void YroEffectPlugin::onChange(wxSpinCtrl *widget) {
+	setInt(mapSpinCtrlIndex[widget],widget->GetValue());
+}
+
+/**
+ * link this widget to this field
+ * using map for indexing one way, and the other
+ */
+void YroEffectPlugin::subscribe(int index, wxChoice *widget) {
+	mapChoiceIndex[widget] = index;
+	mapIndexChoice[index] = widget;
+	widget->SetSelection(this->getInt(index));
+}
+
+/**
+ * wxSpinCtrl advertise for change
+ */
+void YroEffectPlugin::onChange(wxChoice *widget) {
+	setInt(mapChoiceIndex[widget],widget->GetSelection());
+}
+
+/**
+ * Effect advertise for change
+ */
+void YroEffectPlugin::onChange(int index) {
+	if(mapIndexSpinCtrl.find(index) != mapIndexSpinCtrl.end()) {
+		mapIndexSpinCtrl[index]->SetValue(getInt(index));
+		return;
+	}
+	if(mapIndexChoice.find(index) != mapIndexChoice.end()) {
+		mapIndexChoice[index]->SetSelection(getInt(index));
+		return;
+	}
+}
+
+/**
+ * generic getter
+ */
+int YroEffectPlugin::getInt(int index) {
+	switch(index) {
+		case 0: return get0();
+	}
+	return 0;
+}
+
+/**
+ * generic setter
+ */
+void YroEffectPlugin::setInt(int index, int value) {
+	switch(index) {
+		case 0: set0(value); break;
+	}
+}

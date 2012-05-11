@@ -100,7 +100,30 @@ public:
 	const char *getName() {
 		return name;
 	}
+	/**
+	 * Wx widget linker
+	 * - link link this field to this widget
+	 * - onChange advertise change on widget
+	 */
+	void subscribe(int index, wxSpinCtrl *widget);
+	void onChange(wxSpinCtrl *widget);
+	void subscribe(int index, wxChoice *widget);
+	void onChange(wxChoice *widget);
+	void onChange(int index);
+
+	int getInt(int index);
+	void setInt(int index, int value);
+
+	virtual int  get0() {return 0;};
+	virtual void set0(int) {};
+	virtual int  get1() {return 0;};
+	virtual void set1(int) {};
 protected:
+	map<wxSpinCtrl *, int> mapSpinCtrlIndex;
+	map<int, wxSpinCtrl *>  mapIndexSpinCtrl;
+	map<wxChoice *, int> mapChoiceIndex;
+	map<int, wxChoice *>  mapIndexChoice;
+
 	int preset;
 	float *efxoutl;
 	float *efxoutr;

@@ -245,6 +245,7 @@ MusicDelay::setdelay (int num, int Pdelay)
       break;
     case 3:
       this->Plrdelay = Pdelay;
+      break;
     }
 
   delay1 = lrintf ((ntem / (float)Pdelay1) * fSAMPLE_RATE);
