@@ -17,7 +17,19 @@ class YroJackGuitarEffectDistortion : public EffectDistortion
 {
 protected:
 	// Handlers for EffectDistortion events.
-	void OnChoice( wxCommandEvent& event );
+	void onChangePreset( wxCommandEvent& event );
+	void onChangeWetDry( wxScrollEvent& event );
+	void onChangeLRCross( wxScrollEvent& event );
+	void onChangeDrive( wxScrollEvent& event );
+	void onChangeLevel( wxScrollEvent& event );
+	void onChangeType( wxCommandEvent& event );
+	void onChangeNegate( wxCommandEvent& event );
+	void onChangePrefilter( wxCommandEvent& event );
+	void onChangeStereo( wxCommandEvent& event );
+	virtual void onChnagePanning( wxScrollEvent& event );
+	void onChangeSubOctave( wxScrollEvent& event );
+	void onChangeLpf( wxScrollEvent& event );
+	void onChangeHpf( wxScrollEvent& event );
 	
 public:
 	/** Constructor */

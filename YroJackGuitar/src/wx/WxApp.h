@@ -106,8 +106,19 @@ class EffectDistortion : public wxFrame
 		wxSlider* m_hpf;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnChoice( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onScrollChanged( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangePreset( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onChangeWetDry( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeLRCross( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeDrive( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeLevel( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeType( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onChangeNegate( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onChangePrefilter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onChangeStereo( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onChnagePanning( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeSubOctave( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeLpf( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeHpf( wxScrollEvent& event ) { event.Skip(); }
 		
 	
 	public:

@@ -166,19 +166,35 @@ EffectDistortion::EffectDistortion( wxWindow* parent, wxWindowID id, const wxStr
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_preset->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectDistortion::OnChoice ), NULL, this );
-	m_wetdry->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onScrollChanged ), NULL, this );
-	m_lrcross->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onScrollChanged ), NULL, this );
-	m_drive->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onScrollChanged ), NULL, this );
-	m_level->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onScrollChanged ), NULL, this );
+	m_preset->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectDistortion::onChangePreset ), NULL, this );
+	m_wetdry->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeWetDry ), NULL, this );
+	m_lrcross->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLRCross ), NULL, this );
+	m_drive->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeDrive ), NULL, this );
+	m_level->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLevel ), NULL, this );
+	m_type->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectDistortion::onChangeType ), NULL, this );
+	m_negate->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangeNegate ), NULL, this );
+	m_prefilter->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangePrefilter ), NULL, this );
+	m_stereo->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangeStereo ), NULL, this );
+	m_panning->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChnagePanning ), NULL, this );
+	m_suboctave->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeSubOctave ), NULL, this );
+	m_lpf->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLpf ), NULL, this );
+	m_hpf->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeHpf ), NULL, this );
 }
 
 EffectDistortion::~EffectDistortion()
 {
 	// Disconnect Events
-	m_preset->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectDistortion::OnChoice ), NULL, this );
-	m_wetdry->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onScrollChanged ), NULL, this );
-	m_lrcross->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onScrollChanged ), NULL, this );
-	m_drive->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onScrollChanged ), NULL, this );
-	m_level->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onScrollChanged ), NULL, this );
+	m_preset->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectDistortion::onChangePreset ), NULL, this );
+	m_wetdry->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeWetDry ), NULL, this );
+	m_lrcross->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLRCross ), NULL, this );
+	m_drive->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeDrive ), NULL, this );
+	m_level->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLevel ), NULL, this );
+	m_type->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectDistortion::onChangeType ), NULL, this );
+	m_negate->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangeNegate ), NULL, this );
+	m_prefilter->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangePrefilter ), NULL, this );
+	m_stereo->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangeStereo ), NULL, this );
+	m_panning->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChnagePanning ), NULL, this );
+	m_suboctave->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeSubOctave ), NULL, this );
+	m_lpf->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLpf ), NULL, this );
+	m_hpf->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeHpf ), NULL, this );
 }

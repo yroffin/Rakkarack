@@ -31,5 +31,6 @@ void YroJackGuitarSignalFrame::OnPaint(wxPaintEvent& event) {
  * produced when new bulk of data is transformed
  */
 void std::YroJackGuitarSignalFrame::OnJackNewAudioSample() {
+	return;
 	this->Refresh(true,0);
 }

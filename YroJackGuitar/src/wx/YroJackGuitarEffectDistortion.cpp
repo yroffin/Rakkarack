@@ -20,6 +20,55 @@ YroJackGuitarEffectDistortion::YroJackGuitarEffectDistortion(wxWindow* parent, D
 	effect->subscribe(Distortion::_hpf, m_hpf);
 }
 
-void YroJackGuitarEffectDistortion::OnChoice(wxCommandEvent& event) {
+void YroJackGuitarEffectDistortion::onChangePreset(wxCommandEvent& event) {
 	effect->onChange(m_preset);
 }
+
+void YroJackGuitarEffectDistortion::onChangeWetDry(wxScrollEvent& event) {
+	effect->onChange(m_wetdry);
+}
+
+void YroJackGuitarEffectDistortion::onChangeLRCross(wxScrollEvent& event) {
+	effect->onChange(m_lrcross);
+}
+
+void YroJackGuitarEffectDistortion::onChangeDrive(wxScrollEvent& event) {
+	effect->onChange(m_drive);
+}
+
+void YroJackGuitarEffectDistortion::onChangeLevel(wxScrollEvent& event) {
+	effect->onChange(m_level);
+}
+
+void YroJackGuitarEffectDistortion::onChangeType(wxCommandEvent& event) {
+	effect->onChange(m_type);
+}
+
+void YroJackGuitarEffectDistortion::onChangeNegate(wxCommandEvent& event) {
+	effect->onChange(m_negate);
+}
+
+void YroJackGuitarEffectDistortion::onChangePrefilter(wxCommandEvent& event) {
+	effect->onChange(m_prefilter);
+}
+
+void YroJackGuitarEffectDistortion::onChangeStereo(wxCommandEvent& event) {
+	effect->onChange(m_stereo);
+}
+
+void YroJackGuitarEffectDistortion::onChnagePanning(wxScrollEvent& event) {
+	effect->onChange(m_panning);
+}
+
+void YroJackGuitarEffectDistortion::onChangeSubOctave(wxScrollEvent& event) {
+	effect->onChange(m_suboctave);
+}
+
+void YroJackGuitarEffectDistortion::onChangeLpf(wxScrollEvent& event) {
+	effect->onChange(m_lpf);
+}
+
+void YroJackGuitarEffectDistortion::onChangeHpf(wxScrollEvent& event) {
+	effect->onChange(m_hpf);
+}
+

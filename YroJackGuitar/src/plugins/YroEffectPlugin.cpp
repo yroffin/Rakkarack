@@ -141,6 +141,7 @@ void YroEffectPlugin::onChange(int index) {
  * generic getter
  */
 int YroEffectPlugin::getInt(int index) {
+	LOG->info("Fixing field %d on effect %s", index, name);
 	switch(index) {
 		case  0: return get0();
 		case  1: return get1();
