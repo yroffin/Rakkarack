@@ -18,10 +18,12 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/frame.h>
+#include <wx/spinctrl.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
-#include <wx/spinctrl.h>
 #include <wx/choice.h>
+#include <wx/slider.h>
+#include <wx/checkbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -57,6 +59,7 @@ class SignalFrame : public wxFrame
 	private:
 	
 	protected:
+		wxSpinCtrl* m_spinCtrl1;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPaint( wxPaintEvent& event ) { event.Skip(); }
@@ -77,20 +80,39 @@ class EffectDistortion : public wxFrame
 	private:
 	
 	protected:
-		wxStaticText* m_staticText1;
-		wxSpinCtrl* m_Pdrive;
 		wxStaticText* m_staticText2;
-		wxChoice* m_Preset;
+		wxChoice* m_preset;
+		wxStaticText* m_staticText1;
+		wxSlider* m_wetdry;
+		wxStaticText* m_staticText3;
+		wxSlider* m_lrcross;
+		wxStaticText* m_staticText11;
+		wxSlider* m_drive;
+		wxStaticText* m_staticText21;
+		wxSlider* m_level;
+		wxStaticText* m_staticText211;
+		wxChoice* m_type;
+		wxCheckBox* m_negate;
+		wxCheckBox* m_prefilter;
+		wxCheckBox* m_stereo;
+		
+		wxStaticText* m_staticText2111;
+		wxSlider* m_panning;
+		wxStaticText* m_staticText21111;
+		wxSlider* m_suboctave;
+		wxStaticText* m_staticText21112;
+		wxSlider* m_lpf;
+		wxStaticText* m_staticText21113;
+		wxSlider* m_hpf;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnSpinCtrl( wxSpinEvent& event ) { event.Skip(); }
-		virtual void OnSpinCtrlText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onScrollChanged( wxScrollEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		EffectDistortion( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Distortion"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		EffectDistortion( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Distortion"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~EffectDistortion();
 	
 };

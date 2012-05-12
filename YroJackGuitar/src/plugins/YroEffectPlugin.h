@@ -109,20 +109,44 @@ public:
 	void onChange(wxSpinCtrl *widget);
 	void subscribe(int index, wxChoice *widget);
 	void onChange(wxChoice *widget);
+	void subscribe(int index, wxSlider *widget);
+	void onChange(wxSlider *widget);
+	void subscribe(int index, wxCheckBox *widget);
+	void onChange(wxCheckBox *widget);
 	void onChange(int index);
 
 	int getInt(int index);
 	void setInt(int index, int value);
 
-	virtual int  get0() {return 0;};
-	virtual void set0(int) {};
-	virtual int  get1() {return 0;};
-	virtual void set1(int) {};
+	virtual int  get0() {return 0;}; virtual void set0(int) {};
+	virtual int  get1() {return 0;}; virtual void set1(int) {};
+	virtual int  get2() {return 0;}; virtual void set2(int) {};
+	virtual int  get3() {return 0;}; virtual void set3(int) {};
+	virtual int  get4() {return 0;}; virtual void set4(int) {};
+	virtual int  get5() {return 0;}; virtual void set5(int) {};
+	virtual int  get6() {return 0;}; virtual void set6(int) {};
+	virtual int  get7() {return 0;}; virtual void set7(int) {};
+	virtual int  get8() {return 0;}; virtual void set8(int) {};
+	virtual int  get9() {return 0;}; virtual void set9(int) {};
+	virtual int  get10() {return 0;}; virtual void set10(int) {};
+	virtual int  get11() {return 0;}; virtual void set11(int) {};
+	virtual int  get12() {return 0;}; virtual void set12(int) {};
+	virtual int  get13() {return 0;}; virtual void set13(int) {};
+	virtual int  get14() {return 0;}; virtual void set14(int) {};
+	virtual int  get15() {return 0;}; virtual void set15(int) {};
+	virtual int  get16() {return 0;}; virtual void set16(int) {};
+	virtual int  get17() {return 0;}; virtual void set17(int) {};
+	virtual int  get18() {return 0;}; virtual void set18(int) {};
+	virtual int  get19() {return 0;}; virtual void set19(int) {};
 protected:
 	map<wxSpinCtrl *, int> mapSpinCtrlIndex;
 	map<int, wxSpinCtrl *>  mapIndexSpinCtrl;
 	map<wxChoice *, int> mapChoiceIndex;
 	map<int, wxChoice *>  mapIndexChoice;
+	map<wxSlider *, int> mapSliderIndex;
+	map<int, wxSlider *>  mapIndexSlider;
+	map<wxCheckBox *, int> mapCheckBoxIndex;
+	map<int, wxCheckBox *>  mapIndexCheckBox;
 
 	int preset;
 	float *efxoutl;

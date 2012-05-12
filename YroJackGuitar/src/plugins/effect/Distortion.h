@@ -43,14 +43,45 @@ public:
 	void applyFilters();
 
 	enum functions {
-		preset,
-		drive
+		_preset,
+		_volume,
+		_type,
+		_lrcross,
+		_drive,
+		_level,
+		_negate,
+		_prefiltering,
+		_stereo,
+		_panning,
+		_octave,
+		_lpf,
+		_hpf
 	};
 
 	int  get0() {return getPreset();};
 	void set0(int value) {setPreset(value);};
-	int  get1() {return getPdrive();};
-	void set1(int value) {setPdrive(value);};
+	int  get2() {return getPtype();};
+	void set2(int value) {setPtype(value);};
+	int  get3() {return getPlrcross();};
+	void set3(int value) {setPlrcross(value);};
+	int  get4() {return getPdrive();};
+	void set4(int value) {setPdrive(value);};
+	int  get5() {return getPlevel();};
+	void set5(int value) {setPlevel(value);};
+	int  get6() {return getPnegate();};
+	void set6(int value) {setPnegate(value);};
+	int  get7() {return getPprefiltering();};
+	void set7(int value) {setPprefiltering(value);};
+	int  get8() {return getPstereo();};
+	void set8(int value) {setPstereo(value);};
+	int  get9() {return getPpanning();};
+	void set9(int value) {setPpanning(value);};
+	int  get10() {return getPoctave();};
+	void set10(int value) {setPoctave(value);};
+	int  get11() {return getPlpf();};
+	void set11(int value) {setPlpf(value);};
+	int  get12() {return getPhpf();};
+	void set12(int value) {setPhpf(value);};
 
 	int getPdrive();
 	void setPdrive(int pdrive);

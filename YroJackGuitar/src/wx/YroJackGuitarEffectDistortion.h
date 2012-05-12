@@ -17,8 +17,6 @@ class YroJackGuitarEffectDistortion : public EffectDistortion
 {
 protected:
 	// Handlers for EffectDistortion events.
-	void OnSpinCtrl( wxSpinEvent& event );
-	void OnSpinCtrlText( wxCommandEvent& event );
 	void OnChoice( wxCommandEvent& event );
 	
 public:

@@ -82,6 +82,40 @@ void YroEffectPlugin::onChange(wxChoice *widget) {
 }
 
 /**
+ * link this widget to this field
+ * using map for indexing one way, and the other
+ */
+void YroEffectPlugin::subscribe(int index, wxSlider *widget) {
+	mapSliderIndex[widget] = index;
+	mapIndexSlider[index] = widget;
+	widget->SetValue(this->getInt(index));
+}
+
+/**
+ * wxSpinCtrl advertise for change
+ */
+void YroEffectPlugin::onChange(wxSlider *widget) {
+	setInt(mapSliderIndex[widget],widget->GetValue());
+}
+
+/**
+ * link this widget to this field
+ * using map for indexing one way, and the other
+ */
+void YroEffectPlugin::subscribe(int index, wxCheckBox *widget) {
+	mapCheckBoxIndex[widget] = index;
+	mapIndexCheckBox[index] = widget;
+	widget->SetValue(this->getInt(index));
+}
+
+/**
+ * wxSpinCtrl advertise for change
+ */
+void YroEffectPlugin::onChange(wxCheckBox *widget) {
+	setInt(mapCheckBoxIndex[widget],widget->GetValue());
+}
+
+/**
  * Effect advertise for change
  */
 void YroEffectPlugin::onChange(int index) {
@@ -93,6 +127,14 @@ void YroEffectPlugin::onChange(int index) {
 		mapIndexChoice[index]->SetSelection(getInt(index));
 		return;
 	}
+	if(mapIndexSlider.find(index) != mapIndexSlider.end()) {
+		mapIndexSlider[index]->SetValue(getInt(index));
+		return;
+	}
+	if(mapIndexCheckBox.find(index) != mapIndexCheckBox.end()) {
+		mapIndexCheckBox[index]->SetValue(getInt(index));
+		return;
+	}
 }
 
 /**
@@ -100,7 +142,26 @@ void YroEffectPlugin::onChange(int index) {
  */
 int YroEffectPlugin::getInt(int index) {
 	switch(index) {
-		case 0: return get0();
+		case  0: return get0();
+		case  1: return get1();
+		case  2: return get2();
+		case  3: return get3();
+		case  4: return get4();
+		case  5: return get5();
+		case  6: return get6();
+		case  7: return get7();
+		case  8: return get8();
+		case  9: return get9();
+		case 10: return get10();
+		case 11: return get11();
+		case 12: return get12();
+		case 13: return get13();
+		case 14: return get14();
+		case 15: return get15();
+		case 16: return get16();
+		case 17: return get17();
+		case 18: return get18();
+		case 19: return get19();
 	}
 	return 0;
 }

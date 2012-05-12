@@ -215,6 +215,7 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 void Distortion::setPlrcross(int value) {
 	this->Plrcross = value;
 	lrcross = (float) Plrcross / 127.0f * 1.0f;
+	onChange(_lrcross);
 }
 
 int Distortion::getPdrive() {
@@ -223,7 +224,7 @@ int Distortion::getPdrive() {
 
 void Distortion::setPdrive(int pdrive) {
 	Pdrive = pdrive;
-	onChange(drive);
+	onChange(_drive);
 }
 
 int Distortion::getPreset() const {
@@ -285,6 +286,7 @@ int Distortion::getPlevel() const {
 
 void Distortion::setPlevel(int plevel) {
 	Plevel = plevel;
+	onChange(_level);
 }
 
 int Distortion::getPlpf() const {
@@ -296,6 +298,7 @@ void Distortion::setPlpf(int value) {
 	float fr = (float) Plpf;
 	lpfl->setfreq(fr);
 	lpfr->setfreq(fr);
+	onChange(_lpf);
 }
 
 int Distortion::getPoctave() const {
@@ -305,6 +308,7 @@ int Distortion::getPoctave() const {
 void Distortion::setPoctave(int poctave) {
 	this->Poctave = poctave;
 	octmix = (float) (Poctave) / 127.0f;
+	onChange(_octave);
 }
 
 int Distortion::getPpanning() const {
@@ -314,6 +318,7 @@ int Distortion::getPpanning() const {
 void Distortion::setPpanning(int ppanning) {
 	this->Ppanning = ppanning;
 	panning = ((float) Ppanning + 0.5f) / 127.0f;
+	onChange(_panning);
 }
 
 int Distortion::getPvolume() const {
@@ -326,6 +331,7 @@ void Distortion::setPvolume(int pvolume) {
 	outvolume = (float) Pvolume / 127.0f;
 	if (Pvolume == 0)
 		cleanup();
+	onChange(_volume);
 }
 
 int Distortion::getPlrcross() const {
@@ -338,6 +344,7 @@ int Distortion::getPtype() const {
 
 void Distortion::setPtype(int ptype) {
 	Ptype = ptype;
+	onChange(_type);
 }
 
 int Distortion::getPnegate() const {
@@ -348,6 +355,7 @@ void Distortion::setPnegate(int value) {
 	if (value > 1)
 		value = 1;
 	Pnegate = value;
+	onChange(_negate);
 }
 
 int Distortion::getPstereo() const {
@@ -358,6 +366,7 @@ void Distortion::setPstereo(int value) {
 	if (value > 1)
 		value = 1;
 	Pstereo = value;
+	onChange(_stereo);
 }
 
 int Distortion::getPprefiltering() const {
@@ -366,5 +375,6 @@ int Distortion::getPprefiltering() const {
 
 void Distortion::setPprefiltering(int pprefiltering) {
 	Pprefiltering = pprefiltering;
+	onChange(_prefiltering);
 }
 
