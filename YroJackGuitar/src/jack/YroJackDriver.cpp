@@ -69,16 +69,12 @@ void _jackShutdown(void *arg) {
  * jack_nframes_t nframes is the size of this new chunk of data to produce
  */
 int YroJackDriver::process(jack_nframes_t nframes) {
-	LOG->debug((const char *) "processing frames %d",nframes);
-
 	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
 
 	in1 = (jack_default_audio_sample_t*) jack_port_get_buffer(input_port1, nframes);
 	in2 = (jack_default_audio_sample_t*) jack_port_get_buffer(input_port2, nframes);
 	out1 = (jack_default_audio_sample_t*) jack_port_get_buffer(output_port1, nframes);
 	out2 = (jack_default_audio_sample_t*) jack_port_get_buffer(output_port2, nframes);
-
-	LOG->debug((const char *) "jack_port_get_buffer %08x,%08x,%08x,%08x",in1,in2,out1,out2);
 
 	/**
 	 * process event

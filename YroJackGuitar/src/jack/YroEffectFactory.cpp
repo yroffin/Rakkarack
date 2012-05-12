@@ -91,7 +91,6 @@ int YroEffectFactory::render(
 	/**
 	 * allocate buffers, only once
 	 */
-	LOG->debug((const char *) "check allocation for frames %d",nframes);
 	allocate(nframes, in1, in2, out1, out2);
 
 	jack_default_audio_sample_t *toProcess1 = audioSampleFactory->get("effects:inp1");
@@ -123,7 +122,6 @@ int YroEffectFactory::render(
 	/**
 	 * switch
 	 */
-	LOG->debug("switch data");
 	switchIt = toProcess1;
 	toProcess1 = processed1;
 	processed1 = switchIt;

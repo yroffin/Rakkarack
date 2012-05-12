@@ -86,28 +86,28 @@ EffectDistortion::EffectDistortion( wxWindow* parent, wxWindowID id, const wxStr
 	m_staticText1->Wrap( -1 );
 	fgSizer3->Add( m_staticText1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_wetdry = new wxSlider( this, wxID_ANY, 100, -65536, 65536, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_wetdry = new wxSlider( this, wxID_ANY, 0, -64, 63, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer3->Add( m_wetdry, 0, wxALL, 0 );
 	
 	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("L/R cross"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
 	fgSizer3->Add( m_staticText3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_lrcross = new wxSlider( this, wxID_ANY, 100, -65536, 65536, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_lrcross = new wxSlider( this, wxID_ANY, 0, -64, 63, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer3->Add( m_lrcross, 0, wxALL, 5 );
 	
 	m_staticText11 = new wxStaticText( this, wxID_ANY, wxT("Drive"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
 	fgSizer3->Add( m_staticText11, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_drive = new wxSlider( this, wxID_ANY, 100, -65536, 65536, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_drive = new wxSlider( this, wxID_ANY, 0, 0, 127, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer3->Add( m_drive, 0, wxALL, 5 );
 	
 	m_staticText21 = new wxStaticText( this, wxID_ANY, wxT("Level"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
 	fgSizer3->Add( m_staticText21, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_level = new wxSlider( this, wxID_ANY, 100, -65536, 65536, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_level = new wxSlider( this, wxID_ANY, 0, 0, 127, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer3->Add( m_level, 0, wxALL, 5 );
 	
 	m_staticText211 = new wxStaticText( this, wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -136,28 +136,28 @@ EffectDistortion::EffectDistortion( wxWindow* parent, wxWindowID id, const wxStr
 	m_staticText2111->Wrap( -1 );
 	fgSizer3->Add( m_staticText2111, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_panning = new wxSlider( this, wxID_ANY, 100, -65536, 65536, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_panning = new wxSlider( this, wxID_ANY, 0, -64, 63, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer3->Add( m_panning, 0, wxALL, 5 );
 	
 	m_staticText21111 = new wxStaticText( this, wxID_ANY, wxT("Sub octave"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21111->Wrap( -1 );
 	fgSizer3->Add( m_staticText21111, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_suboctave = new wxSlider( this, wxID_ANY, 100, -65536, 65536, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_suboctave = new wxSlider( this, wxID_ANY, 0, 0, 127, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer3->Add( m_suboctave, 0, wxALL, 5 );
 	
 	m_staticText21112 = new wxStaticText( this, wxID_ANY, wxT("LPF"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21112->Wrap( -1 );
 	fgSizer3->Add( m_staticText21112, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_lpf = new wxSlider( this, wxID_ANY, 100, -65536, 65536, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_lpf = new wxSlider( this, wxID_ANY, 20, 20, 26000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer3->Add( m_lpf, 0, wxALL, 5 );
 	
 	m_staticText21113 = new wxStaticText( this, wxID_ANY, wxT("HPF"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21113->Wrap( -1 );
 	fgSizer3->Add( m_staticText21113, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_hpf = new wxSlider( this, wxID_ANY, 100, -65536, 65536, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_hpf = new wxSlider( this, wxID_ANY, 20, 20, 20000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer3->Add( m_hpf, 0, wxALL, 5 );
 	
 	this->SetSizer( fgSizer3 );

@@ -512,9 +512,9 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maxValue">65536</property>
+                        <property name="maxValue">63</property>
                         <property name="maximum_size"></property>
-                        <property name="minValue">-65536</property>
+                        <property name="minValue">-64</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_wetdry</property>
                         <property name="permission">protected</property>
@@ -527,7 +527,7 @@
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
-                        <property name="value">100</property>
+                        <property name="value">0</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
@@ -643,9 +643,9 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maxValue">65536</property>
+                        <property name="maxValue">63</property>
                         <property name="maximum_size"></property>
-                        <property name="minValue">-65536</property>
+                        <property name="minValue">-64</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_lrcross</property>
                         <property name="permission">protected</property>
@@ -658,7 +658,7 @@
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
-                        <property name="value">100</property>
+                        <property name="value">0</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
@@ -774,9 +774,9 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maxValue">65536</property>
+                        <property name="maxValue">127</property>
                         <property name="maximum_size"></property>
-                        <property name="minValue">-65536</property>
+                        <property name="minValue">0</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_drive</property>
                         <property name="permission">protected</property>
@@ -789,7 +789,7 @@
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
-                        <property name="value">100</property>
+                        <property name="value">0</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
@@ -905,9 +905,9 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maxValue">65536</property>
+                        <property name="maxValue">127</property>
                         <property name="maximum_size"></property>
-                        <property name="minValue">-65536</property>
+                        <property name="minValue">0</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_level</property>
                         <property name="permission">protected</property>
@@ -920,7 +920,7 @@
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
-                        <property name="value">100</property>
+                        <property name="value">0</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
@@ -1324,9 +1324,9 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maxValue">65536</property>
+                        <property name="maxValue">63</property>
                         <property name="maximum_size"></property>
-                        <property name="minValue">-65536</property>
+                        <property name="minValue">-64</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_panning</property>
                         <property name="permission">protected</property>
@@ -1339,7 +1339,7 @@
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
-                        <property name="value">100</property>
+                        <property name="value">0</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
@@ -1455,9 +1455,9 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maxValue">65536</property>
+                        <property name="maxValue">127</property>
                         <property name="maximum_size"></property>
-                        <property name="minValue">-65536</property>
+                        <property name="minValue">0</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_suboctave</property>
                         <property name="permission">protected</property>
@@ -1470,7 +1470,7 @@
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
-                        <property name="value">100</property>
+                        <property name="value">0</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
@@ -1586,9 +1586,9 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maxValue">65536</property>
+                        <property name="maxValue">26000</property>
                         <property name="maximum_size"></property>
-                        <property name="minValue">-65536</property>
+                        <property name="minValue">20</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_lpf</property>
                         <property name="permission">protected</property>
@@ -1601,7 +1601,7 @@
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
-                        <property name="value">100</property>
+                        <property name="value">20</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
@@ -1717,9 +1717,9 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maxValue">65536</property>
+                        <property name="maxValue">20000</property>
                         <property name="maximum_size"></property>
-                        <property name="minValue">-65536</property>
+                        <property name="minValue">20</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_hpf</property>
                         <property name="permission">protected</property>
@@ -1732,7 +1732,7 @@
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
-                        <property name="value">100</property>
+                        <property name="value">20</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>

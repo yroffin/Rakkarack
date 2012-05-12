@@ -7,6 +7,8 @@ YroJackGuitarMainWindow *YroJackGuitarMainWindow::__instance = 0;
 
 YroJackGuitarMainWindow::YroJackGuitarMainWindow(wxWindow* parent) :
 		MainWindow(parent) {
+	mySignalFrame = 0;
+	myDistortionFrame = 0;
 }
 
 YroJackGuitarMainWindow::~YroJackGuitarMainWindow() {
