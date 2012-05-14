@@ -25,7 +25,6 @@ void YroJackGuitarEffectDistortion::onChangePreset(wxCommandEvent& event) {
 }
 
 void YroJackGuitarEffectDistortion::onChangeWetDry(wxScrollEvent& event) {
-	effect->onChange(m_wetdry);
 }
 
 void YroJackGuitarEffectDistortion::onChangeLRCross(wxScrollEvent& event) {
@@ -56,7 +55,7 @@ void YroJackGuitarEffectDistortion::onChangeStereo(wxCommandEvent& event) {
 	effect->onChange(m_stereo);
 }
 
-void YroJackGuitarEffectDistortion::onChnagePanning(wxScrollEvent& event) {
+void YroJackGuitarEffectDistortion::onChangePanning(wxScrollEvent& event) {
 	effect->onChange(m_panning);
 }
 

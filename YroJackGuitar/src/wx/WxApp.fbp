@@ -1375,7 +1375,7 @@
                         <event name="OnRightUp"></event>
                         <event name="OnScroll"></event>
                         <event name="OnScrollBottom"></event>
-                        <event name="OnScrollChanged">onChnagePanning</event>
+                        <event name="OnScrollChanged">onChangePanning</event>
                         <event name="OnScrollLineDown"></event>
                         <event name="OnScrollLineUp"></event>
                         <event name="OnScrollPageDown"></event>

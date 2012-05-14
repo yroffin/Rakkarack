@@ -115,7 +115,7 @@ class EffectDistortion : public wxFrame
 		virtual void onChangeNegate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangePrefilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangeStereo( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onChnagePanning( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangePanning( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeSubOctave( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeLpf( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeHpf( wxScrollEvent& event ) { event.Skip(); }

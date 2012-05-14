@@ -11,9 +11,9 @@
 #include <utils/YroLogger.h>
 #include <jack/YroJackDriver.h>
 #include <jack/YroEffectFactory.h>
+#include <wx/WxMainTimer.h>
 #include <wx/YroJackGuitarSignalFrame.h>
 #include <wx/YroJackGuitarEffectDistortion.h>
-#include <wx/WxMainTimer.h>
 
 namespace std {
 

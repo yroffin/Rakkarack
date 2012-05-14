@@ -26,7 +26,7 @@ protected:
 	void onChangeNegate( wxCommandEvent& event );
 	void onChangePrefilter( wxCommandEvent& event );
 	void onChangeStereo( wxCommandEvent& event );
-	virtual void onChnagePanning( wxScrollEvent& event );
+	void onChangePanning( wxScrollEvent& event );
 	void onChangeSubOctave( wxScrollEvent& event );
 	void onChangeLpf( wxScrollEvent& event );
 	void onChangeHpf( wxScrollEvent& event );

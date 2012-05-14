@@ -175,7 +175,7 @@ EffectDistortion::EffectDistortion( wxWindow* parent, wxWindowID id, const wxStr
 	m_negate->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangeNegate ), NULL, this );
 	m_prefilter->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangePrefilter ), NULL, this );
 	m_stereo->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangeStereo ), NULL, this );
-	m_panning->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChnagePanning ), NULL, this );
+	m_panning->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangePanning ), NULL, this );
 	m_suboctave->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeSubOctave ), NULL, this );
 	m_lpf->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLpf ), NULL, this );
 	m_hpf->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeHpf ), NULL, this );
@@ -193,7 +193,7 @@ EffectDistortion::~EffectDistortion()
 	m_negate->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangeNegate ), NULL, this );
 	m_prefilter->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangePrefilter ), NULL, this );
 	m_stereo->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectDistortion::onChangeStereo ), NULL, this );
-	m_panning->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChnagePanning ), NULL, this );
+	m_panning->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangePanning ), NULL, this );
 	m_suboctave->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeSubOctave ), NULL, this );
 	m_lpf->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLpf ), NULL, this );
 	m_hpf->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeHpf ), NULL, this );

@@ -37,7 +37,7 @@ void YroJackGuitarMainWindow::OnJackConnect() {
 	mySignalFrame = new YroJackGuitarSignalFrame(this);
 	myDistortionFrame = new YroJackGuitarEffectDistortion(this, (Distortion *) YroEffectFactory::instance()->getEffect("distortion#1"));
 
-	timer.setNotified(mySignalFrame);
+	timer.setNotified(this);
 	timer.Start(100);
 
 	/**
