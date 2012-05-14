@@ -20,6 +20,9 @@ YroAudioSampleFactory::YroAudioSampleFactory() {
 }
 
 YroAudioSampleFactory::~YroAudioSampleFactory() {
+	/**
+	 * TODO release all samples
+	 */
 }
 
 /**
@@ -28,10 +31,16 @@ YroAudioSampleFactory::~YroAudioSampleFactory() {
 void YroAudioSampleFactory::release(const char *name) {
 	delete audioSamples[name];
 	audioSamples.erase(name);
+	allocatedSamples.erase(name);
 }
 
 /**
  * allocate a named audio sample
+ * check with current allocated memory to change or not
+ * this allocation
+ * @param jack_nframes_t nframes the current requested size
+ * @param jack_default_audio_sample_t *origin the initial copied values on this allocated memory
+ * @param const char *target the logicial name of this sampe
  */
 jack_default_audio_sample_t *YroAudioSampleFactory::allocate(jack_nframes_t nframes, const jack_default_audio_sample_t *origin, const char *target) {
 	/**
@@ -41,9 +50,17 @@ jack_default_audio_sample_t *YroAudioSampleFactory::allocate(jack_nframes_t nfra
 	if(audioSamples.find(target) !=  audioSamples.end()) {
 		/**
 		 * this sample is already allocated
+		 * reallocate it if size change
 		 */
-		LOG->debug("release target %s", target);
+		if(allocatedSamples[target] != nframes) {
+			LOG->info("release target [%s] for reallocate to %d (now it's %d)", target, nframes, allocatedSamples[target]);
+			release(target);
+		} else {
+			return audioSamples[target];
+		}
 	}
+	LOG->info("allocate target [%s] with 0x%08x (size %d)", target, origin, nframes);
+	allocatedSamples[target] = nframes;
 	audioSamples[target] = new jack_default_audio_sample_t[nframes];
 	return copy(nframes, origin, target);
 }
@@ -53,7 +70,20 @@ jack_default_audio_sample_t *YroAudioSampleFactory::allocate(jack_nframes_t nfra
  * on this name target audio sample
  */
 jack_default_audio_sample_t *YroAudioSampleFactory::copy(jack_nframes_t nframes, const jack_default_audio_sample_t *origin, const char *target) {
-	memcpy(get(target), origin, nframes * sizeof(jack_default_audio_sample_t));
+	/**
+	 * size check
+	 */
+	if(allocatedSamples[target] != nframes) {
+		/**
+		 * critic problem with size of memory
+		 */
+		throw new YroInternalException("Internal error, size %d doesn't match %d", allocatedSamples[target], nframes);
+	}
+	if(origin == 0) {
+		memset(get(target), 0, nframes * sizeof(jack_default_audio_sample_t));
+	} else {
+		memcpy(get(target), origin, nframes * sizeof(jack_default_audio_sample_t));
+	}
 	return audioSamples[target];
 }
 
@@ -74,7 +104,7 @@ jack_default_audio_sample_t* YroAudioSampleFactory::get(const char* target) {
 		 * this sample is already allocated
 		 */
 		LOG->error("sample %s requested, but not found", target);
-		return 0;
+		throw new YroInternalException("sample %s requested, but not found", target);
 	}
 	return audioSamples[target];
 }

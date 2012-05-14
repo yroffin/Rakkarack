@@ -58,7 +58,6 @@ void YroEffectFactory::allocate(
 		jack_default_audio_sample_t *out1,
 		jack_default_audio_sample_t *out2) {
 	if(allocatedFrames == 0 || allocatedFrames != nframes) {
-		LOG->info((const char *) "allocation (or reallocation for %d) for frame size %d", allocatedFrames, nframes);
 		bufferIn1 = audioSampleFactory->allocate(nframes,in1,"effects:inp1");
 		bufferIn2 = audioSampleFactory->allocate(nframes,in2, "effects:inp2");
 		bufferOut1 = audioSampleFactory->allocate(nframes,out1, "effects:out1");
@@ -93,10 +92,10 @@ int YroEffectFactory::render(
 	 */
 	allocate(nframes, in1, in2, out1, out2);
 
-	jack_default_audio_sample_t *toProcess1 = audioSampleFactory->get("effects:inp1");
-	jack_default_audio_sample_t *toProcess2 = audioSampleFactory->get("effects:inp2");
-	jack_default_audio_sample_t *processed1 = audioSampleFactory->get("effects:out1");
-	jack_default_audio_sample_t *processed2 = audioSampleFactory->get("effects:out2");
+	jack_default_audio_sample_t *toProcess1 = audioSampleFactory->allocate(nframes, 0, "effects:inp1");
+	jack_default_audio_sample_t *toProcess2 = audioSampleFactory->allocate(nframes, 0, "effects:inp2");
+	jack_default_audio_sample_t *processed1 = audioSampleFactory->allocate(nframes, 0, "effects:out1");
+	jack_default_audio_sample_t *processed2 = audioSampleFactory->allocate(nframes, 0, "effects:out2");
 	jack_default_audio_sample_t *switchIt = 0;
 
 	map<const char *,YroEffectPlugin *>::iterator effect;

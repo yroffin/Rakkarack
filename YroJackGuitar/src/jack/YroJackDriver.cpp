@@ -54,7 +54,12 @@ YroJackDriver::~YroJackDriver() {
  * callback
  */
 int _process(jack_nframes_t nframes, void *arg) {
-	return ((YroJackDriver *) arg)->process(nframes);
+	try {
+		return ((YroJackDriver *) arg)->process(nframes);
+	} catch(YroInternalException &e) {
+		((YroJackDriver *) arg)->getLogger()->error(e.what());
+	}
+	return -1;
 }
 
 /**
@@ -84,7 +89,7 @@ int YroJackDriver::process(jack_nframes_t nframes) {
 	/**
 	 * advertise GUI system
 	 */
-	YroJackGuitarMainWindow::instance()->OnJackNewAudioSample();
+	//YroJackGuitarMainWindow::instance()->OnJackNewAudioSample();
 
 	return result;
 }
@@ -187,6 +192,8 @@ int YroJackDriver::initialize() {
 	effectFactory = YroEffectFactory::instance();
 	effectFactory->load(0);
 	audioSampleFactory = YroAudioSampleFactory::instance();
+	audioSampleFactory->allocate(jack_get_buffer_size (client), 0, "extern:left");
+	audioSampleFactory->allocate(jack_get_buffer_size (client), 0, "extern:right");
 
 	/* Tell the JACK server that we are ready to roll.  Our
 	 * process() callback will start running now. */

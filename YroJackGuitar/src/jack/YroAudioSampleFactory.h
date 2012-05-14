@@ -27,16 +27,17 @@ public:
 	jack_default_audio_sample_t *allocate(jack_nframes_t nframes, const jack_default_audio_sample_t *value, const char *target);
 	jack_default_audio_sample_t *copy(jack_nframes_t nframes, const jack_default_audio_sample_t *origin, const char *target);
 	jack_default_audio_sample_t *copy(jack_nframes_t nframes, const jack_default_audio_sample_t *origin, jack_default_audio_sample_t *target);
-	jack_default_audio_sample_t *get(const char *target);
 private:
 	YroAudioSampleFactory();
 	static YroAudioSampleFactory *__instance;
 	void release(const char *name);
+	jack_default_audio_sample_t *get(const char *target);
 	/**
 	 * all sample in system are stored
 	 * into this map, each on is named and could be used every where
 	 */
 	map<const char *, jack_default_audio_sample_t *, cmp_str> audioSamples;
+	map<const char *, jack_nframes_t, cmp_str> allocatedSamples;
 };
 
 } /* namespace std */
