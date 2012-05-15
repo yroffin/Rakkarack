@@ -34,8 +34,24 @@ YroEffectFactory::~YroEffectFactory() {
 void YroEffectFactory::load(const char *config) {
 	if(loaded == 1) return;
 	// TODO
-	//addEffect("default#0",new YroEffectGenerator());
+	addEffect("default#1",new YroEffectGenerator());
 	addEffect("distortion#1",new Distortion());
+	addEffect("scope#1",new YroScope());
+}
+
+/**
+ * unload effect
+ */
+void YroEffectFactory::unload(const char *name) {
+	/**
+	 * TODO delete effect named "name"
+	 */
+	map<const char *,YroEffectPlugin *>::iterator effect;
+	for(effect=effects.begin(); effect!=effects.end(); effect++) {
+		YroEffectPlugin *data = effect->second;
+		delete data;
+	}
+	effects.clear();
 }
 
 YroEffectPlugin *YroEffectFactory::addEffect(const char *instance,YroEffectPlugin *effect) {
@@ -50,52 +66,50 @@ YroEffectPlugin *YroEffectFactory::getEffect(const char *name) {
 /**
  * initialize first step
  * allocate, or initialize the elements to be processed
+ * used global currentFrames variable
  */
 void YroEffectFactory::allocate(
-		jack_nframes_t nframes,
 		jack_default_audio_sample_t *in1,
 		jack_default_audio_sample_t *in2,
 		jack_default_audio_sample_t *out1,
 		jack_default_audio_sample_t *out2) {
-	if(allocatedFrames == 0 || allocatedFrames != nframes) {
-		bufferIn1 = audioSampleFactory->allocate(nframes,in1,"effects:inp1");
-		bufferIn2 = audioSampleFactory->allocate(nframes,in2, "effects:inp2");
-		bufferOut1 = audioSampleFactory->allocate(nframes,out1, "effects:out1");
-		bufferOut2 = audioSampleFactory->allocate(nframes,out2, "effects:out2");
-		audioSampleFactory->allocate(nframes,in1, "extern:left");
-		audioSampleFactory->allocate(nframes,in2, "extern:right");
-		allocatedFrames = nframes;
+	if(allocatedFrames == 0 || allocatedFrames != currentFrames) {
+		bufferIn1 = audioSampleFactory->allocate(currentFrames,in1,"effects:inp1");
+		bufferIn2 = audioSampleFactory->allocate(currentFrames,in2, "effects:inp2");
+		bufferOut1 = audioSampleFactory->allocate(currentFrames,out1, "effects:out1");
+		bufferOut2 = audioSampleFactory->allocate(currentFrames,out2, "effects:out2");
+		allocatedFrames = currentFrames;
 		return;
 	}
 	/**
 	 * allocation is ok
 	 * simple copy
 	 */
-	audioSampleFactory->copy(nframes,in1,"effects:inp1");
-	audioSampleFactory->copy(nframes,in2,"effects:inp2");
-	audioSampleFactory->copy(nframes,out1,"effects:out1");
-	audioSampleFactory->copy(nframes,out2,"effects:out2");
+	audioSampleFactory->copy(currentFrames,in1,"effects:inp1");
+	audioSampleFactory->copy(currentFrames,in2,"effects:inp2");
+	audioSampleFactory->copy(currentFrames,out1,"effects:out1");
+	audioSampleFactory->copy(currentFrames,out2,"effects:out2");
 }
 
 /**
  * apply all effects
  */
 int YroEffectFactory::render(
-		jack_nframes_t nframes,
 		jack_default_audio_sample_t *in1,
 		jack_default_audio_sample_t *in2,
 		jack_default_audio_sample_t *out1,
 		jack_default_audio_sample_t *out2) {
+	currentFrames = YroParamHelper::instance()->getIntegerPeriod();
 
 	/**
 	 * allocate buffers, only once
 	 */
-	allocate(nframes, in1, in2, out1, out2);
+	allocate(in1, in2, out1, out2);
 
-	jack_default_audio_sample_t *toProcess1 = audioSampleFactory->allocate(nframes, 0, "effects:inp1");
-	jack_default_audio_sample_t *toProcess2 = audioSampleFactory->allocate(nframes, 0, "effects:inp2");
-	jack_default_audio_sample_t *processed1 = audioSampleFactory->allocate(nframes, 0, "effects:out1");
-	jack_default_audio_sample_t *processed2 = audioSampleFactory->allocate(nframes, 0, "effects:out2");
+	jack_default_audio_sample_t *toProcess1 = audioSampleFactory->allocate(currentFrames, 0, "effects:inp1");
+	jack_default_audio_sample_t *toProcess2 = audioSampleFactory->allocate(currentFrames, 0, "effects:inp2");
+	jack_default_audio_sample_t *processed1 = audioSampleFactory->allocate(currentFrames, 0, "effects:out1");
+	jack_default_audio_sample_t *processed2 = audioSampleFactory->allocate(currentFrames, 0, "effects:out2");
 	jack_default_audio_sample_t *switchIt = 0;
 
 	map<const char *,YroEffectPlugin *>::iterator effect;
@@ -106,7 +120,7 @@ int YroEffectFactory::render(
 		 */
 		data->setOutLeft(processed1);
 		data->setOutRight(processed2);
-		data->render(nframes, toProcess1, toProcess2);
+		data->render(toProcess1, toProcess2);
 		/**
 		 * switch
 		 */
@@ -129,17 +143,11 @@ int YroEffectFactory::render(
 	processed2 = switchIt;
 
 	/**
-	 * validate tranformation
+	 * validate tranformation on
+	 * output
 	 */
-	processed1 = audioSampleFactory->copy(nframes,processed1,out1);
-	processed2 = audioSampleFactory->copy(nframes,processed2,out2);
-
-	/**
-	 * produce output audio sample
-	 * and advertise the window system
-	 */
-	audioSampleFactory->copy(nframes,processed1,"extern:left");
-	audioSampleFactory->copy(nframes,processed2,"extern:right");
+	processed1 = audioSampleFactory->copy(currentFrames,processed1,out1);
+	processed2 = audioSampleFactory->copy(currentFrames,processed2,out2);
 
 	return 0;
 }

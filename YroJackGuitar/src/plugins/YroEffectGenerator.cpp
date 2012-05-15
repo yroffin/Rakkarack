@@ -23,13 +23,6 @@ YroEffectGenerator::~YroEffectGenerator() {
 }
 
 void YroEffectGenerator::render(jack_nframes_t nframes, float *inLeft, float *inRight) {
-	LOG->debug("render %d frames with [%s] - %08x/%08x/%08x/%08x",
-			nframes,
-			getName(),
-			inLeft,
-			inRight,
-			efxoutl,
-			efxoutr);
 	for (jack_nframes_t i = 0; i < nframes; i++) {
 		efxoutl[i] = sine[left_phase]; /* left */
 		efxoutr[i] = sine[right_phase]; /* right */

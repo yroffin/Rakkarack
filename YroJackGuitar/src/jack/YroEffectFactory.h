@@ -15,6 +15,7 @@
 #include <plugins/YroEffectGenerator.h>
 #include <plugins/effect/Distortion.h>
 #include <plugins/effect/Chorus.h>
+#include <plugins/analyze/YroScope.h>
 
 namespace std {
 
@@ -31,10 +32,11 @@ public:
 	 * render all effects
 	 */
 	void load(const char *config);
-	int render(jack_nframes_t nframes, jack_default_audio_sample_t *int1,
+	void unload(const char *name);
+	int render(jack_default_audio_sample_t *int1,
 			jack_default_audio_sample_t *in2, jack_default_audio_sample_t *out1,
 			jack_default_audio_sample_t *out2);
-	void allocate(jack_nframes_t nframes, jack_default_audio_sample_t *in1,
+	void allocate(jack_default_audio_sample_t *in1,
 			jack_default_audio_sample_t *in2, jack_default_audio_sample_t *out1,
 			jack_default_audio_sample_t *out2);
 	YroEffectPlugin *addEffect(const char *instance,YroEffectPlugin *effect);
@@ -45,6 +47,7 @@ private:
 	int loaded;
 	map<const char *,YroEffectPlugin *, cmp_str> effects;
 	YroAudioSampleFactory *audioSampleFactory;
+	jack_nframes_t currentFrames;
 	jack_nframes_t allocatedFrames;
 	jack_default_audio_sample_t *bufferIn1;
 	jack_default_audio_sample_t *bufferIn2;

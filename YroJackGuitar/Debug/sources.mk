@@ -29,6 +29,7 @@ src/tests/effects \
 src/plugins/misc \
 src/plugins/filter \
 src/plugins/effect \
+src/plugins/analyze \
 src/plugins \
 src/jack \
 src/core \

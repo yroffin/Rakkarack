@@ -7,6 +7,7 @@
 
 #include <core/YroObject.h>
 #include <jack/jack.h>
+#include <jack/YroAudioSampleFactory.h>
 
 #ifndef YROEFFECTPLUGIN_H_
 #define YROEFFECTPLUGIN_H_
@@ -85,6 +86,9 @@ public:
 	 */
 	virtual void render(jack_nframes_t nframes, float *inLeft, float *inRight) {
 	}
+	virtual void render(float *inLeft, float *inRight) {
+		render(iPERIOD,inLeft,inRight);
+	}
 	virtual void setPreset(int npreset);
 
 	/**
@@ -158,6 +162,7 @@ protected:
 	float fPERIOD;
 	float fSAMPLE_RATE;
 	float cSAMPLE_RATE;
+	YroAudioSampleFactory *audioSampleFactory;
 };
 
 } /* namespace std */

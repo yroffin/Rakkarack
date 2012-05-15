@@ -83,13 +83,10 @@ int YroJackDriver::process(jack_nframes_t nframes) {
 
 	/**
 	 * process event
+	 * array size is based on Period size defined
+	 * in global YroParam
 	 */
-	int result = effectFactory->render(nframes,in1,in2,out1,out2);
-
-	/**
-	 * advertise GUI system
-	 */
-	//YroJackGuitarMainWindow::instance()->OnJackNewAudioSample();
+	int result = effectFactory->render(in1,in2,out1,out2);
 
 	return result;
 }
@@ -192,8 +189,6 @@ int YroJackDriver::initialize() {
 	effectFactory = YroEffectFactory::instance();
 	effectFactory->load(0);
 	audioSampleFactory = YroAudioSampleFactory::instance();
-	audioSampleFactory->allocate(jack_get_buffer_size (client), 0, "extern:left");
-	audioSampleFactory->allocate(jack_get_buffer_size (client), 0, "extern:right");
 
 	/* Tell the JACK server that we are ready to roll.  Our
 	 * process() callback will start running now. */

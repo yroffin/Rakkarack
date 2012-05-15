@@ -10,21 +10,32 @@ YroJackGuitarSignalFrame::YroJackGuitarSignalFrame(wxWindow* parent) :
 
 void YroJackGuitarSignalFrame::OnPaint(wxPaintEvent& event) {
 	wxPaintDC dc(this);
-	dc.DrawText(wxT("min:"), 40, 60);
-	dc.DrawText(wxT("max:"), 40, 80);
 
-	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerPeriod();
+	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerSampleRate();
 	jack_default_audio_sample_t *left = audioSampleFactory->allocate(nframes,0,"extern:left");
 
+	float minl = 0.;
+	float maxl = 0.;
 	if(left != 0) {
 		wxCoord y = 0;
 		wxSize size = this->GetSize();
 
-		for (wxCoord x = 0; x < (wxCoord) nframes; x++) {
-			dc.DrawPoint(x % size.x, 1 % size.y);
-			dc.DrawPoint(x % size.x, ((wxCoord) (left[y]*150)) % size.y + size.y / 2);
+		int ratio = nframes / size.x;
+
+		for (wxCoord x = 0; x < size.x; x++) {
+			if(left[y]<minl) minl = left[y];
+			if(left[y]>maxl) maxl = left[y];
+			dc.DrawPoint(x, ((wxCoord) (left[x*ratio]*850)) + size.y / 2);
 		}
 	}
+
+	char buffer[128];
+	sprintf(buffer,"min: %f",minl);
+	wxString s = wxString::FromAscii(buffer);
+	dc.DrawText(s, 40, 60);
+	sprintf(buffer,"max: %f",maxl);
+	s = wxString::FromAscii(buffer);
+	dc.DrawText(s, 40, 80);
 }
 
 /**

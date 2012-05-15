@@ -17,6 +17,7 @@ YroEffectPlugin::YroEffectPlugin(const char *_name) {
 	fSAMPLE_RATE = helper->getFloatPeriod();
 	cSAMPLE_RATE = 1.0f / fSAMPLE_RATE;
 	preset = 0;
+	audioSampleFactory = YroAudioSampleFactory::instance();
 }
 
 YroEffectPlugin::~YroEffectPlugin() {

@@ -14,6 +14,7 @@ RM := rm -rf
 -include src/plugins/misc/subdir.mk
 -include src/plugins/filter/subdir.mk
 -include src/plugins/effect/subdir.mk
+-include src/plugins/analyze/subdir.mk
 -include src/plugins/subdir.mk
 -include src/jack/subdir.mk
 -include src/core/subdir.mk

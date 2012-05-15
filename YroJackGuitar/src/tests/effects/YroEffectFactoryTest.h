@@ -26,6 +26,7 @@ class YroEffectFactoryTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST( testBasic );
 	CPPUNIT_TEST( testDistortion );
 	CPPUNIT_TEST( testChorus );
+	CPPUNIT_TEST( testYroScope );
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -35,10 +36,11 @@ public:
 	void testBasic();
 	void testDistortion();
 	void testChorus();
+	void testYroScope();
 
 private:
 	void init(jack_nframes_t nframes, jack_default_audio_sample_t *out1, jack_default_audio_sample_t *out2);
-	void dump(jack_nframes_t nframes,jack_default_audio_sample_t *in1, jack_default_audio_sample_t *in2, jack_default_audio_sample_t *out1, jack_default_audio_sample_t *out2);
+	void dump(const char *name, jack_nframes_t nframes,jack_default_audio_sample_t *in1);
 	void compare(jack_nframes_t nframes,jack_default_audio_sample_t *out1, jack_default_audio_sample_t *out2);
 
 	float sine[TABLE_SIZE];
