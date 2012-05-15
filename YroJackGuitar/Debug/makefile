@@ -11,6 +11,7 @@ RM := rm -rf
 -include src/wx/subdir.mk
 -include src/utils/subdir.mk
 -include src/tests/effects/subdir.mk
+-include src/plugins/noisegate/subdir.mk
 -include src/plugins/misc/subdir.mk
 -include src/plugins/filter/subdir.mk
 -include src/plugins/effect/subdir.mk

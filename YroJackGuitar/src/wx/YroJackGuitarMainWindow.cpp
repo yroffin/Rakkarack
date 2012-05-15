@@ -9,6 +9,7 @@ YroJackGuitarMainWindow::YroJackGuitarMainWindow(wxWindow* parent) :
 		MainWindow(parent) {
 	mySignalFrame = 0;
 	myDistortionFrame = 0;
+	myExpanderFrame = 0;
 }
 
 YroJackGuitarMainWindow::~YroJackGuitarMainWindow() {
@@ -36,6 +37,7 @@ void YroJackGuitarMainWindow::OnJackConnect() {
 	 */
 	mySignalFrame = new YroJackGuitarSignalFrame(this);
 	myDistortionFrame = new YroJackGuitarEffectDistortion(this, (Distortion *) YroEffectFactory::instance()->getEffect("distortion#1"));
+	myExpanderFrame = new YroJackGuitarEffectExpander(this, (Expander *) YroEffectFactory::instance()->getEffect("expander#1"));
 
 	timer.setNotified(this);
 	timer.Start(100);
@@ -45,5 +47,6 @@ void YroJackGuitarMainWindow::OnJackConnect() {
 	 */
 	mySignalFrame->Show(true);
 	myDistortionFrame->Show(true);
+	myExpanderFrame->Show(true);
 }
 

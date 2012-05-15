@@ -90,6 +90,9 @@ public:
 		render(iPERIOD,inLeft,inRight);
 	}
 	virtual void setPreset(int npreset);
+	int getPreset() const {
+		return preset;
+	}
 
 	/**
 	 * getter

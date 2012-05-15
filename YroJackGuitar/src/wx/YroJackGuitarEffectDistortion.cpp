@@ -1,5 +1,5 @@
 #include <jack/YroEffectFactory.h>
-#include "YroJackGuitarEffectDistortion.h"
+#include <wx/YroJackGuitarEffectDistortion.h>
 
 using namespace std;
 

@@ -14,6 +14,7 @@
 #include <wx/WxMainTimer.h>
 #include <wx/YroJackGuitarSignalFrame.h>
 #include <wx/YroJackGuitarEffectDistortion.h>
+#include <wx/YroJackGuitarEffectExpander.h>
 
 namespace std {
 
@@ -39,6 +40,7 @@ private:
 	static YroJackGuitarMainWindow *__instance;
 	YroJackGuitarSignalFrame *mySignalFrame;
 	YroJackGuitarEffectDistortion *myDistortionFrame;
+	YroJackGuitarEffectExpander *myExpanderFrame;
 	WxMainTimer timer;
 };
 

@@ -85,7 +85,6 @@ public:
 
 	int getPdrive();
 	void setPdrive(int pdrive);
-	int getPreset() const;
 	void setPreset(int ppreset);
 	int getPhpf() const;
 	void setPhpf(int phpf);
@@ -114,7 +113,6 @@ private:
 	float outvolume;
 	float *octoutl;
 	float *octoutr;
-	int Ppreset;
 	int Pvolume;	//Volumul or E/R
 	int Ppanning;	//Panning
 	int Plrcross;	// L/R Mixing

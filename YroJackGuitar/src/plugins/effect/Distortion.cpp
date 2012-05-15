@@ -50,7 +50,7 @@ Distortion::Distortion() :
 	dwshaper = new WaveShaper();
 
 	//default values
-	Ppreset = 0;
+	preset = 0;
 	Pvolume = 50;
 	Plrcross = 40;
 	Pdrive = 90;
@@ -68,8 +68,7 @@ Distortion::Distortion() :
 	octave_memoryr = -1.0;
 	octmix = 0.0;
 
-	setPreset(Ppreset);
-	cleanup();
+	setPreset(0);
 }
 
 Distortion::~Distortion() {
@@ -227,12 +226,7 @@ void Distortion::setPdrive(int pdrive) {
 	onChange(_drive);
 }
 
-int Distortion::getPreset() const {
-	return Ppreset;
-}
-
 void Distortion::setPreset(int npreset) {
-	Ppreset = npreset;
 	const int PRESET_SIZE = 11;
 	const int NUM_PRESETS = 6;
 	int presets[NUM_PRESETS][PRESET_SIZE] = {
@@ -252,19 +246,22 @@ void Distortion::setPreset(int npreset) {
 	/**
 	 * adjust preset
 	 */
-	setPvolume(presets[npreset][0]);
-	setPpanning(presets[npreset][1]);
-	setPlrcross(presets[npreset][2]);
-	setPdrive(presets[npreset][3]);
-	setPlevel(presets[npreset][4]);
-	setPtype(presets[npreset][5]);
-	setPnegate(presets[npreset][6]);
-	setPlpf(presets[npreset][7]);
-	setPhpf(presets[npreset][8]);
-	setPstereo(presets[npreset][9]);
-	setPprefiltering(presets[npreset][10]);
-	setPoctave(presets[npreset][12]);
-	cleanup();
+	if(npreset<NUM_PRESETS) {
+		setPvolume(presets[npreset][0]);
+		setPpanning(presets[npreset][1]);
+		setPlrcross(presets[npreset][2]);
+		setPdrive(presets[npreset][3]);
+		setPlevel(presets[npreset][4]);
+		setPtype(presets[npreset][5]);
+		setPnegate(presets[npreset][6]);
+		setPlpf(presets[npreset][7]);
+		setPhpf(presets[npreset][8]);
+		setPstereo(presets[npreset][9]);
+		setPprefiltering(presets[npreset][10]);
+		setPoctave(presets[npreset][12]);
+		cleanup();
+		preset = npreset;
+	}
 }
 
 int Distortion::getPhpf() const {

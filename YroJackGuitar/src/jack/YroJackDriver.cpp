@@ -1,8 +1,22 @@
 /*
- * YroJackDriver.cpp
- *
- *  Created on: 4 mai 2012
- *      Author: yannick
+ YroJackGuitar - a software synthesizer based on excelent work
+ of Rakkarack team
+
+ Copyright (C) 2002-2005 Yannick Roffin
+ Author: Yannick Roffin
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of version 2 of the GNU General Public License
+ as published by the Free Software Foundation.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License (version 2) for more details.
+
+ You should have received a copy of the GNU General Public License (version 2)
+ along with this program; if not, write to the Free Software Foundation,
+ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  */
 
 #include <stdio.h>
@@ -19,7 +33,7 @@
 #include <plugins/YroEffectGenerator.h>
 #include <wx/YroJackGuitarMainWindow.h>
 
-namespace std {
+using namespace std;
 
 YroJackDriver *YroJackDriver::__instance = 0;
 
@@ -52,21 +66,23 @@ YroJackDriver::~YroJackDriver() {
 
 /**
  * callback
+ * async method called by jack driver thread
  */
 int _process(jack_nframes_t nframes, void *arg) {
 	try {
-		return ((YroJackDriver *) arg)->process(nframes);
+		return (((YroJackDriver *) arg)->process(nframes));
 	} catch(YroInternalException &e) {
 		((YroJackDriver *) arg)->getLogger()->error(e.what());
 	}
-	return -1;
+	return (-1);
 }
 
 /**
  * callback
+ * async method called by jack driver thread
  */
 void _jackShutdown(void *arg) {
-	return ((YroJackDriver *) arg)->jackShutdown();
+	return (((YroJackDriver *) arg)->jackShutdown());
 }
 
 /**
@@ -88,12 +104,13 @@ int YroJackDriver::process(jack_nframes_t nframes) {
 	 */
 	int result = effectFactory->render(in1,in2,out1,out2);
 
-	return result;
+	return (result);
 }
 
 /**
  * JACK calls this shutdown_callback if the server ever shuts down or
  * decides to disconnect the client.
+ * async method called by jack driver thread
  */
 void YroJackDriver::jackShutdown() {
 	LOG->info((const char *) "JACK server stopped", 0);
@@ -101,6 +118,7 @@ void YroJackDriver::jackShutdown() {
 
 /**
  * initialize jack driver
+ * @return -1 unable to connect to jack system
  */
 int YroJackDriver::initialize() {
 	const char **ports;
@@ -118,7 +136,7 @@ int YroJackDriver::initialize() {
 		if (status & JackServerFailed) {
 			LOG->error("Unable to connect to JACK server");
 		}
-		return -1;
+		return (-1);
 	}
 	if (status & JackServerStarted) {
 		LOG->info("JACK server started");
@@ -155,7 +173,7 @@ int YroJackDriver::initialize() {
 
 	if ((input_port1 == NULL) || (input_port2 == NULL)) {
 		LOG->error("no more JACK ports available for input");
-		return -2;
+		return (-2);
 	}
 	LOG->info("input JACK ports available now");
 
@@ -171,7 +189,7 @@ int YroJackDriver::initialize() {
 
 	if ((output_port1 == NULL) || (output_port2 == NULL)) {
 		LOG->error("no more JACK ports available");
-		return -2;
+		return (-3);
 	}
 	LOG->info("output JACK ports available now");
 
@@ -195,7 +213,7 @@ int YroJackDriver::initialize() {
 
 	if (jack_activate(client)) {
 		LOG->error("cannot activate client");
-		return -3;
+		return (-4);
 	}
 
 	/*
@@ -211,7 +229,7 @@ int YroJackDriver::initialize() {
 			JackPortIsPhysical | JackPortIsInput);
 	if (ports == NULL) {
 		LOG->error("no physical playback ports");
-		return -4;
+		return (-5);
 	}
 
 	if (jack_connect(client, jack_port_name(output_port1), ports[0])) {
@@ -230,7 +248,7 @@ int YroJackDriver::initialize() {
 			JackPortIsPhysical | JackPortIsOutput);
 	if (ports == NULL) {
 		LOG->error("no physical capture ports");
-		return -4;
+		return (-6);
 	}
 
 	if (jack_connect(client, ports[0], jack_port_name(input_port1))) {
@@ -244,7 +262,6 @@ int YroJackDriver::initialize() {
 	LOG->info("connect input port %s to %s", jack_port_name(input_port2), ports[1]);
 
 	free(ports);
-	return 0;
+	return (0);
 }
 
-} /* namespace std */

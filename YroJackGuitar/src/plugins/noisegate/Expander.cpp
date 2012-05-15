@@ -23,7 +23,7 @@
 
  */
 
-#include <plugins/effect/Expander.h>
+#include <plugins/noisegate/Expander.h>
 
 using namespace std;
 
@@ -38,10 +38,7 @@ Expander::Expander() :
 	env = 0.0;
 	oldgain = 0.0;
 	efollower = 0;
-	fs = fSAMPLE_RATE;
-
-	Expander_Change_Preset(0);
-
+	setPreset(0);
 }
 
 Expander::~Expander() {
@@ -56,99 +53,95 @@ void Expander::cleanup() {
 
 }
 
-void Expander::setlpf(int value) {
-	Plpf = value;
-	float fr = (float) Plpf;
-	lpfl->setfreq(fr);
-	lpfr->setfreq(fr);
+int Expander::getEfollower() const {
+	return efollower;
 }
-;
 
-void Expander::sethpf(int value) {
+void Expander::setEfollower(int efollower) {
+	this->efollower = efollower;
+}
+
+int Expander::getPattack() const {
+	return Pattack;
+}
+
+void Expander::setPattack(int value) {
+	Pattack = value;
+	a_rate = 1000.0f / ((float) Pattack * fSAMPLE_RATE);
+	onChange(_attack);
+}
+
+int Expander::getPdecay() const {
+	return Pdecay;
+}
+
+void Expander::setPdecay(int value) {
+	Pdecay = value;
+	d_rate = 1000.0f / ((float) Pdecay * fSAMPLE_RATE);
+	onChange(_decay);
+}
+
+int Expander::getPhpf() const {
+	return Phpf;
+}
+
+void Expander::setPhpf(int value) {
 	Phpf = value;
 	float fr = (float) Phpf;
 	hpfl->setfreq(fr);
 	hpfr->setfreq(fr);
-}
-;
-
-void Expander::Expander_Change(int np, int value) {
-
-	switch (np) {
-
-	case 1:
-		Pthreshold = value;
-		tfactor = dB2rap (-((float) Pthreshold));
-		tlevel = 1.0f / tfactor;
-		break;
-	case 2:
-		Pshape = value;
-		sfactor = dB2rap ((float)Pshape/2);
-		sgain = expf(-sfactor);
-		break;
-	case 3:
-		Pattack = value;
-		a_rate = 1000.0f / ((float) Pattack * fs);
-		break;
-	case 4:
-		Pdecay = value;
-		d_rate = 1000.0f / ((float) Pdecay * fs);
-		break;
-	case 5:
-		setlpf(value);
-		break;
-	case 6:
-		sethpf(value);
-		break;
-	case 7:
-		Plevel = value;
-		level = dB2rap((float) value/6.0f);
-		break;
-
-	}
-
+	onChange(_hpf);
 }
 
-int Expander::getpar(int np) {
-
-	switch (np)
-
-	{
-	case 1:
-		return (Pthreshold);
-		break;
-	case 2:
-		return (Pshape);
-		break;
-	case 3:
-		return (Pattack);
-		break;
-	case 4:
-		return (Pdecay);
-		break;
-	case 5:
-		return (Plpf);
-		break;
-	case 6:
-		return (Phpf);
-		break;
-	case 7:
-		return (Plevel);
-		break;
-	}
-
-	return (0);
-
+int Expander::getPlevel() const {
+	return Plevel;
 }
 
-void
-Expander::Expander_Change_Preset (int npreset)
-{
+void Expander::setPlevel(int value) {
+	Plevel = value;
+	level = dB2rap((float) value/6.0f);
+	onChange(_level);
+}
+
+int Expander::getPlpf() const {
+	return Plpf;
+}
+
+void Expander::setPlpf(int value) {
+	Plpf = value;
+	float fr = (float) Plpf;
+	lpfl->setfreq(fr);
+	lpfr->setfreq(fr);
+	onChange(_lpf);
+}
+
+int Expander::getPshape() const {
+	return Pshape;
+}
+
+void Expander::setPshape(int value) {
+	Pshape = value;
+	sfactor = dB2rap ((float)Pshape/2);
+	sgain = expf(-sfactor);
+	onChange(_shape);
+}
+
+int Expander::getPthreshold() const {
+	return Pthreshold;
+}
+
+void Expander::setPthreshold(int value) {
+	Pthreshold = value;
+	tfactor = dB2rap (-((float) Pthreshold));
+	tlevel = 1.0f / tfactor;
+	onChange(_threshold);
+}
+
+void Expander::setPreset(int npreset) {
 	const int PRESET_SIZE = 7;
 	const int NUM_PRESETS = 3;
 	int presets[NUM_PRESETS][PRESET_SIZE] = {
-
-	//Noise Gate
+			//Noise Gate
 			{ -50, 20, 50, 50, 3134, 76, 0 },
 			//Boost Gate
 			{ -55, 30, 50, 50, 1441, 157, 50 },
@@ -156,22 +149,31 @@ Expander::Expander_Change_Preset (int npreset)
 			{ -30, 9, 950, 25, 6703, 526, 90 } };
 
 	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++)
-			Expander_Change(n + 1, presets[npreset][n]);
+		setPthreshold(presets[npreset][0]);
+		setPshape(presets[npreset][1]);
+		setPattack(presets[npreset][2]);
+		setPdecay(presets[npreset][3]);
+		setPlpf(presets[npreset][4]);
+		setPhpf(presets[npreset][5]);
+		setPlevel(presets[npreset][6]);
+		preset = npreset;
 	}
 
 }
 
-void Expander::render(jack_nframes_t nframes, float *efxoutl, float *efxoutr) {
+/**
+ * render the effect
+ */
+void Expander::render(float *smpl, float *smpr) {
 
 	int i;
 	float delta = 0.0f;
 	float expenv = 0.0f;
 
-	lpfl->filterout(iPERIOD,fPERIOD,efxoutl);
-	hpfl->filterout(iPERIOD,fPERIOD,efxoutl);
-	lpfr->filterout(iPERIOD,fPERIOD,efxoutr);
-	hpfr->filterout(iPERIOD,fPERIOD,efxoutr);
+	lpfl->filterout(iPERIOD, fPERIOD, efxoutl);
+	hpfl->filterout(iPERIOD, fPERIOD, efxoutl);
+	lpfr->filterout(iPERIOD, fPERIOD, efxoutr);
+	hpfr->filterout(iPERIOD, fPERIOD, efxoutr);
 
 	for (i = 0; i < iPERIOD; i++) {
 
@@ -199,6 +201,4 @@ void Expander::render(jack_nframes_t nframes, float *efxoutl, float *efxoutr) {
 		}
 
 	}
-
 }
-;

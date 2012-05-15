@@ -20,6 +20,7 @@
 #include <wx/frame.h>
 #include <wx/spinctrl.h>
 #include <wx/sizer.h>
+#include <wx/tglbtn.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/slider.h>
@@ -80,28 +81,36 @@ class EffectDistortion : public wxFrame
 	private:
 	
 	protected:
+		wxToggleButton* m_toggleBtn1;
 		wxStaticText* m_staticText2;
 		wxChoice* m_preset;
 		wxStaticText* m_staticText1;
 		wxSlider* m_wetdry;
+		
 		wxStaticText* m_staticText3;
 		wxSlider* m_lrcross;
+		
 		wxStaticText* m_staticText11;
 		wxSlider* m_drive;
+		
 		wxStaticText* m_staticText21;
 		wxSlider* m_level;
+		
 		wxStaticText* m_staticText211;
 		wxChoice* m_type;
+		
 		wxCheckBox* m_negate;
 		wxCheckBox* m_prefilter;
 		wxCheckBox* m_stereo;
-		
 		wxStaticText* m_staticText2111;
 		wxSlider* m_panning;
+		
 		wxStaticText* m_staticText21111;
 		wxSlider* m_suboctave;
+		
 		wxStaticText* m_staticText21112;
 		wxSlider* m_lpf;
+		
 		wxStaticText* m_staticText21113;
 		wxSlider* m_hpf;
 		
@@ -125,6 +134,56 @@ class EffectDistortion : public wxFrame
 		
 		EffectDistortion( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Distortion"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~EffectDistortion();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class EffectExpander
+///////////////////////////////////////////////////////////////////////////////
+class EffectExpander : public wxFrame 
+{
+	private:
+	
+	protected:
+		wxToggleButton* m_toggleBtn1;
+		wxStaticText* m_staticText2;
+		wxChoice* m_preset;
+		wxStaticText* m_staticText1;
+		wxSlider* m_atime;
+		
+		wxStaticText* m_staticText3;
+		wxSlider* m_rtime;
+		
+		wxStaticText* m_staticText11;
+		wxSlider* m_shape;
+		
+		wxStaticText* m_staticText21;
+		wxSlider* m_thrhold;
+		
+		wxStaticText* m_staticText2111;
+		wxSlider* m_level;
+		
+		wxStaticText* m_staticText21112;
+		wxSlider* m_lpf;
+		
+		wxStaticText* m_staticText21113;
+		wxSlider* m_hpf;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void onChangePreset( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onChangeAttack( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeRelease( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeShape( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeThreshold( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeLevel( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeLpf( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeHpf( wxScrollEvent& event ) { event.Skip(); }
+		
+	
+	public:
+		
+		EffectExpander( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Expander"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		~EffectExpander();
 	
 };
 

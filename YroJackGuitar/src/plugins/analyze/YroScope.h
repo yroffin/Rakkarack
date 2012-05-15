@@ -1,14 +1,12 @@
 /*
- ZynAddSubFX - a software synthesizer
- 
- Copyright (C) 2002-2005 Nasca Octavian Paul
- Author: Nasca Octavian Paul
+ YroJackGuitar - a software synthesizer based on excelent work
+ of Rakkarack team
 
- Modified for rakarrack by Josep Andreu
- Modified for YroJackGuitar by Yannick Roffin
+ Copyright (C) 2002-2005 Yannick Roffin
+ Author: Yannick Roffin
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of version 2 of the GNU General Public License 
+ it under the terms of version 2 of the GNU General Public License
  as published by the Free Software Foundation.
 
  This program is distributed in the hope that it will be useful,
@@ -19,8 +17,6 @@
  You should have received a copy of the GNU General Public License (version 2)
  along with this program; if not, write to the Free Software Foundation,
  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
- 
- YroScope.h
  */
 
 #ifndef YROSCOPE_H_
@@ -35,6 +31,13 @@ public:
 	YroScope();
 	virtual ~YroScope();
 	void render(float *inpl, float *inpr);
+	jack_default_audio_sample_t* getLeft() const;
+	void setLeft(jack_default_audio_sample_t* left);
+	jack_default_audio_sample_t* getRight() const;
+	void setRight(jack_default_audio_sample_t* right);
+private:
+	jack_default_audio_sample_t *left;
+	jack_default_audio_sample_t *right;
 };
 
 } /* namespace std */
