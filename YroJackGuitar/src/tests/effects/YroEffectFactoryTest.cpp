@@ -254,4 +254,42 @@ void YroEffectFactoryTest::testYroScope() {
 	compare(nframes, out2, verif2);
 }
 
+void YroEffectFactoryTest::testExpander() {
+	YroParamHelper::instance()->setIntegerPeriod(3);
+	YroParamHelper::instance()->setIntegerSampleRate(9);
+
+	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
+	factory->unload(0);
+	factory->addEffect("Expander#2",new Expander());
+
+	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
+
+	/**
+	 * first render simulation
+	 */
+	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerPeriod();
+	in1  = new jack_default_audio_sample_t[nframes];
+	in2  = new jack_default_audio_sample_t[nframes];
+	out1 = new jack_default_audio_sample_t[nframes];
+	out2 = new jack_default_audio_sample_t[nframes];
+
+	init(nframes, in1, in2);
+	init(nframes, out1, out2);
+
+	dump("left:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:left"));
+	dump("right:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:right"));
+
+	factory->render(in1, in2, out1, out2);
+
+	dump("in1:", nframes, in1);
+	dump("in2:", nframes, in2);
+	dump("out1:", nframes, out1);
+	dump("out2:", nframes, out2);
+
+	float verif1[16] = {-0.001284, -0.003113, -0.003914, -0.004067, -0.004036, -0.003816, -0.003551, -0.003246, -0.002938, -0.002620, -0.002223, -0.001692, -0.000171, -0.000027, 0.000070, 0.000134};
+	compare(nframes, out1, verif1);
+	float verif2[16] = {-0.324965, -0.787524, -0.990300, -1.029034, -1.021163, -0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343, -0.428202, -0.043322, -0.006895, 0.017683, 0.033956};
+	compare(nframes, out2, verif2);
+}
+
 } /* namespace test */

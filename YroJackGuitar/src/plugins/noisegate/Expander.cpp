@@ -28,7 +28,11 @@
 using namespace std;
 
 Expander::Expander() :
-		YroEffectPlugin("Expander") {
+		YroEffectPlugin(
+				"Expander",
+				"Boost Gate: -55, 30, 50, 50, 1441, 157, 50;"
+				"Noise Gate: -50, 20, 50, 50, 3134, 76, 0;"
+				"Treble swell: -30, 9, 950, 25, 6703, 526, 90;") {
 
 	lpfl = new AnalogFilter(2, 22000, 1, 0);
 	lpfr = new AnalogFilter(2, 22000, 1, 0);
@@ -135,30 +139,6 @@ void Expander::setPthreshold(int value) {
 	tfactor = dB2rap (-((float) Pthreshold));
 	tlevel = 1.0f / tfactor;
 	onChange(_threshold);
-}
-
-void Expander::setPreset(int npreset) {
-	const int PRESET_SIZE = 7;
-	const int NUM_PRESETS = 3;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-			//Noise Gate
-			{ -50, 20, 50, 50, 3134, 76, 0 },
-			//Boost Gate
-			{ -55, 30, 50, 50, 1441, 157, 50 },
-			//Treble swell
-			{ -30, 9, 950, 25, 6703, 526, 90 } };
-
-	if (npreset < NUM_PRESETS) {
-		setPthreshold(presets[npreset][0]);
-		setPshape(presets[npreset][1]);
-		setPattack(presets[npreset][2]);
-		setPdecay(presets[npreset][3]);
-		setPlpf(presets[npreset][4]);
-		setPhpf(presets[npreset][5]);
-		setPlevel(presets[npreset][6]);
-		preset = npreset;
-	}
-
 }
 
 /**

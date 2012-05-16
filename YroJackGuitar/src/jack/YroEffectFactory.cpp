@@ -20,7 +20,6 @@
  */
 
 #include <jack/YroEffectFactory.h>
-#include <plugins/effect/Distortion.h>
 
 namespace std {
 

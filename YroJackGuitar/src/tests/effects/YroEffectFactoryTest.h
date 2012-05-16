@@ -27,6 +27,7 @@ class YroEffectFactoryTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST( testDistortion );
 	CPPUNIT_TEST( testChorus );
 	CPPUNIT_TEST( testYroScope );
+	CPPUNIT_TEST( testExpander );
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -37,6 +38,7 @@ public:
 	void testDistortion();
 	void testChorus();
 	void testYroScope();
+	void testExpander();
 
 private:
 	void init(jack_nframes_t nframes, jack_default_audio_sample_t *out1, jack_default_audio_sample_t *out2);

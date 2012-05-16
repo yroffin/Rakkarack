@@ -5,15 +5,21 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/plugins/YroEffectGenerator.cpp \
-../src/plugins/YroEffectPlugin.cpp 
+../src/plugins/YroEffectPlugin.cpp \
+../src/plugins/YroPreset.cpp \
+../src/plugins/YroPresets.cpp 
 
 OBJS += \
 ./src/plugins/YroEffectGenerator.o \
-./src/plugins/YroEffectPlugin.o 
+./src/plugins/YroEffectPlugin.o \
+./src/plugins/YroPreset.o \
+./src/plugins/YroPresets.o 
 
 CPP_DEPS += \
 ./src/plugins/YroEffectGenerator.d \
-./src/plugins/YroEffectPlugin.d 
+./src/plugins/YroEffectPlugin.d \
+./src/plugins/YroPreset.d \
+./src/plugins/YroPresets.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

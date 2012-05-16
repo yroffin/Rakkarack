@@ -20,12 +20,56 @@ YroEffectPlugin::YroEffectPlugin(const char *_name) {
 	audioSampleFactory = YroAudioSampleFactory::instance();
 }
 
+/**
+ * default constructor
+ * @param const char *_name, name of this effect
+ * @param const char *_preset, preset value
+ */
+YroEffectPlugin::YroEffectPlugin(const char *_name, const char *_preset) {
+	/**
+	 * discover presets
+	 */
+	presets = new YroPresets(_preset);
+	/**
+	 * fix name of this effect
+	 */
+	name = strdup(_name);
+	/**
+	 * fix audio sample factory
+	 */
+	audioSampleFactory = YroAudioSampleFactory::instance();
+	/**
+	 * default initialization
+	 */
+	iPERIOD = helper->getIntegerPeriod();
+	iSAMPLE_RATE = helper->getIntegerSampleRate();
+	fPERIOD = helper->getFloatPeriod();
+	fSAMPLE_RATE = helper->getFloatPeriod();
+	cSAMPLE_RATE = 1.0f / fSAMPLE_RATE;
+	preset = 0;
+}
+
 YroEffectPlugin::~YroEffectPlugin() {
 	free((void *) name);
 }
 
-void YroEffectPlugin::setPreset(int npreset) {
-	preset = npreset;
+/**
+ * general setPReset method based
+ * on getn member, be carefull about the declaration order
+ */
+void YroEffectPlugin::setPreset(int _preset) {
+ 	if (_preset < presets->size()) {
+ 		int size = presets->get(_preset)->size();
+ 		for(int i=0;i<size;i++) {
+ 			/**
+ 			 * setPreset is always (and must)
+ 			 * the first getter/setter for on effect plugin
+ 			 */
+ 			this->setInt(i+1, presets->get(_preset)->get(i));
+ 		}
+ 		preset = _preset;
+ 		cleanup();
+ 	}
 }
 
 /**

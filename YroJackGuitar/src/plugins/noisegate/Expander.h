@@ -40,39 +40,35 @@ public:
 	~Expander();
 
 	void render(float * smpsl, float * smpsr);
-	void setPreset(int npreset);
 	void cleanup();
 
 	enum functions {
 		_preset,
 		_threshold,
+		_shape,
 		_attack,
 		_decay,
-		_shape,
 		_lpf,
 		_hpf,
 		_level,
-		_efollower
 	};
 
 	int  get0() {return getPreset();};
 	void set0(int value) {setPreset(value);};
 	int  get1() {return getPthreshold();};
 	void set1(int value) {setPthreshold(value);};
-	int  get2() {return getPattack();};
-	void set2(int value) {setPattack(value);};
-	int  get3() {return getPdecay();};
-	void set3(int value) {setPdecay(value);};
-	int  get4() {return getPshape();};
-	void set4(int value) {setPshape(value);};
+	int  get2() {return getPshape();};
+	void set2(int value) {setPshape(value);};
+	int  get3() {return getPattack();};
+	void set3(int value) {setPattack(value);};
+	int  get4() {return getPdecay();};
+	void set4(int value) {setPdecay(value);};
 	int  get5() {return getPlpf();};
 	void set5(int value) {setPlpf(value);};
 	int  get6() {return getPhpf();};
 	void set6(int value) {setPhpf(value);};
 	int  get7() {return getPlevel();};
 	void set7(int value) {setPlevel(value);};
-	int  get8() {return getEfollower();};
-	void set8(int value) {setEfollower(value);};
 
 	int getEfollower() const;
 	void setEfollower(int efollower);

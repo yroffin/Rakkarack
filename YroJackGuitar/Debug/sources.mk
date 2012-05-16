@@ -30,6 +30,7 @@ src/plugins/noisegate \
 src/plugins/misc \
 src/plugins/filter \
 src/plugins/effect \
+src/plugins/distortion \
 src/plugins/analyze \
 src/plugins \
 src/jack \

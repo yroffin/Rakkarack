@@ -28,7 +28,7 @@
 
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/filter/AnalogFilter.h>
-#include <plugins/effect/Distortion.h>
+#include <plugins/distortion/Distortion.h>
 
 namespace std {
 

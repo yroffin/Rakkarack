@@ -8,6 +8,8 @@
 #include <core/YroObject.h>
 #include <jack/jack.h>
 #include <jack/YroAudioSampleFactory.h>
+#include <plugins/YroPreset.h>
+#include <plugins/YroPresets.h>
 
 #ifndef YROEFFECTPLUGIN_H_
 #define YROEFFECTPLUGIN_H_
@@ -79,8 +81,11 @@ public:
 	 * TODO add instance adjustment to setup as many effect of the same type as we want
 	 * TODO add new parameter
 	 */
-	YroEffectPlugin(const char *name);
+	YroEffectPlugin(const char *_name);
+	YroEffectPlugin(const char *_name, const char *_preset);
 	virtual ~YroEffectPlugin();
+	virtual void cleanup () {
+	}
 	/**
 	 * processing
 	 */
@@ -166,6 +171,7 @@ protected:
 	float fSAMPLE_RATE;
 	float cSAMPLE_RATE;
 	YroAudioSampleFactory *audioSampleFactory;
+	YroPresets *presets;
 };
 
 } /* namespace std */

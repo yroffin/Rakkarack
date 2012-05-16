@@ -45,47 +45,48 @@ public:
 	enum functions {
 		_preset,
 		_volume,
-		_type,
+		_panning,
 		_lrcross,
 		_drive,
 		_level,
+		_type,
 		_negate,
-		_prefiltering,
-		_stereo,
-		_panning,
-		_octave,
 		_lpf,
-		_hpf
+		_hpf,
+		_stereo,
+		_prefiltering,
+		_octave
 	};
 
 	int  get0() {return getPreset();};
 	void set0(int value) {setPreset(value);};
-	int  get2() {return getPtype();};
-	void set2(int value) {setPtype(value);};
+	int  get1() {return getPvolume();};
+	void set1(int value) {setPvolume(value);};
+	int  get2() {return getPpanning();};
+	void set2(int value) {setPpanning(value);};
 	int  get3() {return getPlrcross();};
 	void set3(int value) {setPlrcross(value);};
 	int  get4() {return getPdrive();};
 	void set4(int value) {setPdrive(value);};
 	int  get5() {return getPlevel();};
 	void set5(int value) {setPlevel(value);};
-	int  get6() {return getPnegate();};
-	void set6(int value) {setPnegate(value);};
-	int  get7() {return getPprefiltering();};
-	void set7(int value) {setPprefiltering(value);};
-	int  get8() {return getPstereo();};
-	void set8(int value) {setPstereo(value);};
-	int  get9() {return getPpanning();};
-	void set9(int value) {setPpanning(value);};
-	int  get10() {return getPoctave();};
-	void set10(int value) {setPoctave(value);};
-	int  get11() {return getPlpf();};
-	void set11(int value) {setPlpf(value);};
-	int  get12() {return getPhpf();};
-	void set12(int value) {setPhpf(value);};
+	int  get6() {return getPtype();};
+	void set6(int value) {setPtype(value);};
+	int  get7() {return getPnegate();};
+	void set7(int value) {setPnegate(value);};
+	int  get8() {return getPlpf();};
+	void set8(int value) {setPlpf(value);};
+	int  get9() {return getPhpf();};
+	void set9(int value) {setPhpf(value);};
+	int  get10() {return getPstereo();};
+	void set10(int value) {setPstereo(value);};
+	int  get11() {return getPprefiltering();};
+	void set11(int value) {setPprefiltering(value);};
+	int  get12() {return getPoctave();};
+	void set12(int value) {setPoctave(value);};
 
 	int getPdrive();
 	void setPdrive(int pdrive);
-	void setPreset(int ppreset);
 	int getPhpf() const;
 	void setPhpf(int phpf);
 	int getPlevel() const;

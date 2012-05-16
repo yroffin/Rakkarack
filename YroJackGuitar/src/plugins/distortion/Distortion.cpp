@@ -21,12 +21,19 @@
   Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 */
 
-#include <plugins/effect/Distortion.h>
+#include <plugins/distortion/Distortion.h>
 
 using namespace std;
 
 Distortion::Distortion() :
-		YroEffectPlugin("Distortion") {
+		YroEffectPlugin(
+				"Distortion",
+				"Overdrive 1: 84, 64, 35, 56, 40, 0, 0, 6703, 21, 0, 0;"
+				"Overdrive 2: 85, 64, 35, 29, 45, 1, 0, 25040, 21, 0, 0;"
+				"Distorsion 1: 0, 64, 0, 87, 14, 6, 0, 3134, 157, 0, 1;"
+				"Distorsion 2: 0, 64, 127, 87, 14, 0, 1, 3134, 102, 0, 0;"
+				"Distorsion 3: 0, 64, 127, 127, 12, 13, 0, 5078, 56, 0, 1;"
+				"Guitar Amp:  84, 64, 35, 63, 50, 2, 0, 824, 21, 0, 0;") {
 	/**
 	 * allocated during the first render
 	 */
@@ -224,44 +231,6 @@ int Distortion::getPdrive() {
 void Distortion::setPdrive(int pdrive) {
 	Pdrive = pdrive;
 	onChange(_drive);
-}
-
-void Distortion::setPreset(int npreset) {
-	const int PRESET_SIZE = 11;
-	const int NUM_PRESETS = 6;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-			//Overdrive 1
-			{ 84, 64, 35, 56, 40, 0, 0, 6703, 21, 0, 0 },
-			//Overdrive 2
-			{ 85, 64, 35, 29, 45, 1, 0, 25040, 21, 0, 0 },
-			//Distorsion 1
-			{ 0, 64, 0, 87, 14, 6, 0, 3134, 157, 0, 1 },
-			//Distorsion 2
-			{ 0, 64, 127, 87, 14, 0, 1, 3134, 102, 0, 0 },
-			//Distorsion 3
-			{ 0, 64, 127, 127, 12, 13, 0, 5078, 56, 0, 1 },
-			//Guitar Amp
-			{ 84, 64, 35, 63, 50, 2, 0, 824, 21, 0, 0 } };
-
-	/**
-	 * adjust preset
-	 */
-	if(npreset<NUM_PRESETS) {
-		setPvolume(presets[npreset][0]);
-		setPpanning(presets[npreset][1]);
-		setPlrcross(presets[npreset][2]);
-		setPdrive(presets[npreset][3]);
-		setPlevel(presets[npreset][4]);
-		setPtype(presets[npreset][5]);
-		setPnegate(presets[npreset][6]);
-		setPlpf(presets[npreset][7]);
-		setPhpf(presets[npreset][8]);
-		setPstereo(presets[npreset][9]);
-		setPprefiltering(presets[npreset][10]);
-		setPoctave(presets[npreset][12]);
-		cleanup();
-		preset = npreset;
-	}
 }
 
 int Distortion::getPhpf() const {
