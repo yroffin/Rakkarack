@@ -36,13 +36,62 @@ public:
 	Chorus();
 	~Chorus();
 	void render(jack_nframes_t nframes, float *outl, float *outr);
-
-	void setPreset(int npreset);
 	void cleanup();
+
+	enum functions {
+		_preset,
+		_volume,
+		_panning,
+		_freq,
+		_randomness,
+		_lfOtype,
+		_stereo,
+		_depth,
+		_delay,
+		_fb,
+		_lrcross,
+		_flangemode,
+		_outsub
+	};
+
+	int  get0() {return getPreset();};
+	void set0(int value) {setPreset(value);};
+	int  get1() {return getPvolume();};
+	void set1(int value) {setPvolume(value);};
+	int  get2() {return getPpanning();};
+	void set2(int value) {setPpanning(value);};
+	int  get3() {return lfo.getPfreq();};
+	void set3(int value) {lfo.setPfreq(value);onChange(_freq);};
+	int  get4() {return lfo.getPrandomness();};
+	void set4(int value) {lfo.setPrandomness(value);onChange(_randomness);};
+	int  get5() {return lfo.getPlfOtype();};
+	void set5(int value) {lfo.setPlfOtype(value);onChange(_lfOtype);};
+	int  get6() {return lfo.getPstereo();};
+	void set6(int value) {lfo.setPstereo(value);onChange(_stereo);};
+	int  get7() {return getPdepth();};
+	void set7(int value) {setPdepth(value);};
+	int  get8() {return getPdelay();};
+	void set8(int value) {setPdelay(value);};
+	int  get9() {return getPfb();};
+	void set9(int value) {setPfb(value);};
+	int  get10() {return getPlrcross();};
+	void set10(int value) {setPlrcross(value);};
+	int  get11() {return getPflangemode();};
+	void set11(int value) {setPflangemode(value);};
+	int  get12() {return getPoutsub();};
+	void set12(int value) {setPoutsub(value);};
+
 	int getPflangemode() const;
 	void setPflangemode(int pflangemode);
 	int getPoutsub() const;
 	void setPoutsub(int poutsub);
+
+	int getPvolume();
+	int getPpanning();
+	int getPdepth();
+	int getPdelay();
+	int getPfb();
+	int getPlrcross();
 
 	void setPvolume(int Pvolume);
 	void setPpanning(int Ppanning);

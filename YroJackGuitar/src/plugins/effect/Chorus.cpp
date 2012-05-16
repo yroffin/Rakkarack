@@ -29,7 +29,17 @@
 using namespace std;
 
 Chorus::Chorus() :
-		YroEffectPlugin("Chorus") {
+		YroEffectPlugin("Chorus",
+				"Chorus1: 64, 64, 33, 0, 0, 90, 40, 85, 64, 119, 0, 0;"
+						"Chorus2: 64, 64, 19, 0, 0, 98, 56, 90, 64, 19, 0, 0;"
+						"Chorus3: 64, 64, 7, 0, 1, 42, 97, 95, 90, 127, 0, 0;"
+						"Celeste1: 64, 64, 1, 0, 0, 42, 115, 18, 90, 127, 0, 0;"
+						"Celeste2: 64, 64, 7, 117, 0, 50, 115, 9, 31, 127, 0, 1;"
+						"Flange1: 64, 64, 39, 0, 0, 60, 23, 3, 62, 0, 0, 0;"
+						"Flange2: 64, 64, 9, 34, 1, 40, 35, 3, 109, 0, 0, 0;"
+						"Flange3: 64, 64, 31, 34, 1, 94, 35, 3, 54, 0, 0, 1;"
+						"Flange4: 64, 64, 14, 0, 1, 62, 12, 19, 97, 0, 0, 0;"
+						"Flange5: 64, 64, 34, 105, 0, 24, 39, 19, 17, 0, 0, 1;") {
 	dlk = 0;
 	drk = 0;
 	maxdelay = lrintf(MAX_CHORUS_DELAY / 1000.0 * iSAMPLE_RATE);
@@ -54,6 +64,7 @@ void Chorus::setPflangemode(int pflangemode) {
 	if (pflangemode > 1)
 		pflangemode = 1;
 	Pflangemode = pflangemode;
+	onChange(_flangemode);
 }
 
 int Chorus::getPoutsub() const {
@@ -64,6 +75,7 @@ void Chorus::setPoutsub(int poutsub) {
 	if (poutsub > 1)
 		poutsub = 1;
 	Poutsub = poutsub;
+	onChange(_outsub);
 }
 
 /*
@@ -167,80 +179,66 @@ void Chorus::cleanup() {
 ;
 
 /*
- * Parameter control
+ * Parameter control },
  */
+int Chorus::getPvolume() {
+	return Pvolume;
+}
+
+int Chorus::getPpanning() {
+	return Ppanning;
+}
+
+int Chorus::getPdepth() {
+	return Pdepth;
+}
+
+int Chorus::getPdelay() {
+	return Pdelay;
+}
+
+int Chorus::getPfb() {
+	return Pfb;
+}
+
+int Chorus::getPlrcross() {
+	return Plrcross;
+}
+
+
 void Chorus::setPdepth(int Pdepth) {
 	this->Pdepth = Pdepth;
 	depth = (powf(8.0f, ((float) Pdepth / 127.0f) * 2.0f) - 1.0f) / 1000.0f; //seconds
+	onChange(_depth);
 }
-;
 
 void Chorus::setPdelay(int Pdelay) {
 	this->Pdelay = Pdelay;
 	delay = (powf(10.0f, ((float) Pdelay / 127.0f) * 2.0f) - 1.0f) / 1000.0f; //seconds
+	onChange(_delay);
 }
-;
 
 void Chorus::setPfb(int Pfb) {
 	this->Pfb = Pfb;
 	fb = ((float) Pfb - 64.0f) / 64.1f;
+	onChange(_fb);
 }
-;
 
 void Chorus::setPvolume(int Pvolume) {
 	this->Pvolume = Pvolume;
 	outvolume = (float) Pvolume / 127.0f;
+	onChange(_volume);
 }
-;
 
 void Chorus::setPpanning(int Ppanning) {
 	this->Ppanning = Ppanning;
 	panning = ((float) Ppanning + .5f) / 127.0f;
+	onChange(_panning);
 }
-;
 
 void Chorus::setPlrcross(int Plrcross) {
 	this->Plrcross = Plrcross;
 	lrcross = (float) Plrcross / 127.0f;
-}
-
-void Chorus::setPreset(int npreset) {
-	YroEffectPlugin::setPreset(npreset);
-	const int PRESET_SIZE = 12;
-	const int NUM_PRESETS = 10;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Chorus1
-			{ 64, 64, 33, 0, 0, 90, 40, 85, 64, 119, 0, 0 },
-			//Chorus2
-			{ 64, 64, 19, 0, 0, 98, 56, 90, 64, 19, 0, 0 },
-			//Chorus3
-			{ 64, 64, 7, 0, 1, 42, 97, 95, 90, 127, 0, 0 },
-			//Celeste1
-			{ 64, 64, 1, 0, 0, 42, 115, 18, 90, 127, 0, 0 },
-			//Celeste2
-			{ 64, 64, 7, 117, 0, 50, 115, 9, 31, 127, 0, 1 },
-			//Flange1
-			{ 64, 64, 39, 0, 0, 60, 23, 3, 62, 0, 0, 0 },
-			//Flange2
-			{ 64, 64, 9, 34, 1, 40, 35, 3, 109, 0, 0, 0 },
-			//Flange3
-			{ 64, 64, 31, 34, 1, 94, 35, 3, 54, 0, 0, 1 },
-			//Flange4
-			{ 64, 64, 14, 0, 1, 62, 12, 19, 97, 0, 0, 0 },
-			//Flange5
-			{ 64, 64, 34, 105, 0, 24, 39, 19, 17, 0, 0, 1 } };
-
-	setPvolume(presets[npreset][0]);
-	setPpanning(presets[npreset][1]);
-	lfo.setPfreq(presets[npreset][2]);
-	lfo.setPrandomness(presets[npreset][3]);
-	lfo.setPlfOtype(presets[npreset][4]);
-	lfo.setPstereo(presets[npreset][5]);
-	setPdepth(presets[npreset][6]);
-	setPdelay(presets[npreset][7]);
-	setPfb(presets[npreset][8]);
-	setPlrcross(presets[npreset][9]);
-	setPflangemode(presets[npreset][10]);
-	setPoutsub(presets[npreset][11]);
+	onChange(_lrcross);
 }
 
