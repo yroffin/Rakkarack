@@ -12,6 +12,7 @@
 #include <jack/YroJackDriver.h>
 #include <jack/YroEffectFactory.h>
 #include <wx/WxMainTimer.h>
+#include <wx/YroJackGuitarGeneral.h>
 #include <wx/YroJackGuitarSignalFrame.h>
 #include <wx/YroJackGuitarEffectDistortion.h>
 #include <wx/YroJackGuitarEffectExpander.h>
@@ -38,6 +39,7 @@ public:
 private:
 	YroJackGuitarMainWindow(wxWindow* parent);
 	static YroJackGuitarMainWindow *__instance;
+	YroJackGuitarGeneral *myYroGeneral;
 	YroJackGuitarSignalFrame *mySignalFrame;
 	YroJackGuitarEffectDistortion *myDistortionFrame;
 	YroJackGuitarEffectExpander *myExpanderFrame;

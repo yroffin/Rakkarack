@@ -140,6 +140,7 @@ void YroEffectPlugin::subscribe(int index, wxSlider *widget) {
  * wxSpinCtrl advertise for change
  */
 void YroEffectPlugin::onChange(wxSlider *widget) {
+	LOG->debug("onChange(wxSlider 0x%08x) => set %d", widget, widget->GetValue());
 	setInt(mapSliderIndex[widget], widget->GetValue());
 }
 
@@ -164,6 +165,7 @@ void YroEffectPlugin::onChange(wxCheckBox *widget) {
  * Effect advertise for change
  */
 void YroEffectPlugin::onChange(int index) {
+	LOG->debug("onChange(%d) => set %d", index, getInt(index));
 	if (mapIndexSpinCtrl.find(index) != mapIndexSpinCtrl.end()) {
 		mapIndexSpinCtrl[index]->SetValue(getInt(index));
 		return;
@@ -186,7 +188,6 @@ void YroEffectPlugin::onChange(int index) {
  * generic getter
  */
 int YroEffectPlugin::getInt(int index) {
-	LOG->info("Fixing field %d on effect %s", index, name);
 	switch (index) {
 	case 0:
 		return get0();

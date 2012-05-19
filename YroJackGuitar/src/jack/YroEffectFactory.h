@@ -27,6 +27,7 @@
 #include <jack/YroAudioSampleFactory.h>
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/YroEffectGenerator.h>
+#include <plugins/ampli/YroAmpli.h>
 #include <plugins/distortion/Distortion.h>
 #include <plugins/noisegate/Expander.h>
 #include <plugins/effect/Chorus.h>

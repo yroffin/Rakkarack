@@ -47,9 +47,11 @@ YroEffectFactory::~YroEffectFactory() {
 void YroEffectFactory::load(const char *config) {
 	if(loaded == 1) return;
 	// TODO
-	addEffect("default#1",new YroEffectGenerator());
+	addEffect("ampli#1",new YroAmpli());
+	//addEffect("default#1",new YroEffectGenerator());
 	addEffect("distortion#1",new Distortion());
 	addEffect("expander#1",new Expander());
+	addEffect("ampli#2",new YroAmpli());
 	addEffect("scope#1",new YroScope());
 }
 

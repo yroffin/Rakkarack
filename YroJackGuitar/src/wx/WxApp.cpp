@@ -226,6 +226,169 @@ EffectDistortion::~EffectDistortion()
 	m_hpf->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeHpf ), NULL, this );
 }
 
+EffectChorus::EffectChorus( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetFont( wxFont( 8, 75, 90, 90, false, wxEmptyString ) );
+	
+	wxFlexGridSizer* fgSizer3;
+	fgSizer3 = new wxFlexGridSizer( 2, 3, 0, 0 );
+	fgSizer3->SetFlexibleDirection( wxBOTH );
+	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	fgSizer3->SetMinSize( wxSize( 100,100 ) ); 
+	m_toggleBtn1 = new wxToggleButton( this, wxID_ANY, wxT("Off"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toggleBtn1->SetValue( true ); 
+	m_toggleBtn1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
+	
+	fgSizer3->Add( m_toggleBtn1, 0, wxALL, 5 );
+	
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Preset"), wxDefaultPosition, wxSize( 150,-1 ), 0 );
+	m_staticText2->Wrap( -1 );
+	fgSizer3->Add( m_staticText2, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxArrayString m_presetChoices;
+	m_preset = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_presetChoices, 0 );
+	m_preset->SetSelection( 0 );
+	m_preset->SetToolTip( wxT("Select preset type") );
+	
+	fgSizer3->Add( m_preset, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("Wet/Dry"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	fgSizer3->Add( m_staticText1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_wetdry = new wxSlider( this, wxID_ANY, 0, -64, 63, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer3->Add( m_wetdry, 0, wxALL, 0 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3->Wrap( -1 );
+	fgSizer3->Add( m_staticText3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_lrcross = new wxSlider( this, wxID_ANY, 0, -64, 63, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer3->Add( m_lrcross, 0, wxALL, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText11 = new wxStaticText( this, wxID_ANY, wxT("Tempo"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11->Wrap( -1 );
+	fgSizer3->Add( m_staticText11, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_drive = new wxSlider( this, wxID_ANY, 0, 0, 127, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer3->Add( m_drive, 0, wxALL, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText21 = new wxStaticText( this, wxID_ANY, wxT("Rnd"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21->Wrap( -1 );
+	fgSizer3->Add( m_staticText21, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_level = new wxSlider( this, wxID_ANY, 0, 0, 127, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer3->Add( m_level, 0, wxALL, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText211 = new wxStaticText( this, wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText211->Wrap( -1 );
+	fgSizer3->Add( m_staticText211, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxString m_typeChoices[] = { wxT("Atan"), wxT("Asym1"), wxT("Pow"), wxT("Sine"), wxT("Qnts"), wxT("Zigzg"), wxT("Lmt"), wxT("LmtU"), wxT("LmtL"), wxT("ILmt"), wxT("Clip"), wxT("Asym2"), wxT("Pow2"), wxT("Sgm"), wxT("Crunch"), wxT("Hard Crunch"), wxT("Dirty Octave+"), wxT("M.Square"), wxT("M.Saw"), wxT("Compress"), wxT("Overdrive"), wxT("Soft"), wxT("Super Soft"), wxT("Hard Compress"), wxT("Lmt-NoGain"), wxT("FET"), wxT("DynoFET"), wxT("Valve 1"), wxT("Valve 2"), wxT("Diode clipper") };
+	int m_typeNChoices = sizeof( m_typeChoices ) / sizeof( wxString );
+	m_type = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_typeNChoices, m_typeChoices, 0 );
+	m_type->SetSelection( 3 );
+	fgSizer3->Add( m_type, 0, wxALL, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_negate = new wxCheckBox( this, wxID_ANY, wxT("Substract"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_negate->SetValue(true); 
+	fgSizer3->Add( m_negate, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText2111 = new wxStaticText( this, wxID_ANY, wxT("St.Df."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2111->Wrap( -1 );
+	fgSizer3->Add( m_staticText2111, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_panning = new wxSlider( this, wxID_ANY, 0, -64, 63, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer3->Add( m_panning, 0, wxALL, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText21111 = new wxStaticText( this, wxID_ANY, wxT("Depth"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21111->Wrap( -1 );
+	fgSizer3->Add( m_staticText21111, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_suboctave = new wxSlider( this, wxID_ANY, 0, 0, 127, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer3->Add( m_suboctave, 0, wxALL, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText21112 = new wxStaticText( this, wxID_ANY, wxT("Delay"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21112->Wrap( -1 );
+	fgSizer3->Add( m_staticText21112, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_lpf = new wxSlider( this, wxID_ANY, 20, 20, 26000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer3->Add( m_lpf, 0, wxALL, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText21113 = new wxStaticText( this, wxID_ANY, wxT("L/R cross"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21113->Wrap( -1 );
+	fgSizer3->Add( m_staticText21113, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_hpf = new wxSlider( this, wxID_ANY, 20, 20, 20000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer3->Add( m_hpf, 0, wxALL, 5 );
+	
+	this->SetSizer( fgSizer3 );
+	this->Layout();
+	
+	this->Centre( wxBOTH );
+	
+	// Connect Events
+	m_preset->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectChorus::onChangePreset ), NULL, this );
+	m_wetdry->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeWetDry ), NULL, this );
+	m_lrcross->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeLRCross ), NULL, this );
+	m_drive->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeDrive ), NULL, this );
+	m_level->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeLevel ), NULL, this );
+	m_type->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectChorus::onChangeType ), NULL, this );
+	m_negate->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectChorus::onChangeNegate ), NULL, this );
+	m_panning->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangePanning ), NULL, this );
+	m_suboctave->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeSubOctave ), NULL, this );
+	m_lpf->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeLpf ), NULL, this );
+	m_hpf->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeHpf ), NULL, this );
+}
+
+EffectChorus::~EffectChorus()
+{
+	// Disconnect Events
+	m_preset->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectChorus::onChangePreset ), NULL, this );
+	m_wetdry->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeWetDry ), NULL, this );
+	m_lrcross->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeLRCross ), NULL, this );
+	m_drive->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeDrive ), NULL, this );
+	m_level->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeLevel ), NULL, this );
+	m_type->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectChorus::onChangeType ), NULL, this );
+	m_negate->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( EffectChorus::onChangeNegate ), NULL, this );
+	m_panning->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangePanning ), NULL, this );
+	m_suboctave->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeSubOctave ), NULL, this );
+	m_lpf->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeLpf ), NULL, this );
+	m_hpf->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeHpf ), NULL, this );
+}
+
 EffectExpander::EffectExpander( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
@@ -348,4 +511,42 @@ EffectExpander::~EffectExpander()
 	m_level->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectExpander::onChangeLevel ), NULL, this );
 	m_lpf->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectExpander::onChangeLpf ), NULL, this );
 	m_hpf->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectExpander::onChangeHpf ), NULL, this );
+}
+
+General::General( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	
+	wxFlexGridSizer* fgSizer5;
+	fgSizer5 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer5->SetFlexibleDirection( wxBOTH );
+	fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText29 = new wxStaticText( this, wxID_ANY, wxT("Input amplification (%)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText29->Wrap( -1 );
+	fgSizer5->Add( m_staticText29, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_input = new wxSlider( this, wxID_ANY, 0, 0, 1000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer5->Add( m_input, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_staticText291 = new wxStaticText( this, wxID_ANY, wxT("Output amplification (%)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText291->Wrap( -1 );
+	fgSizer5->Add( m_staticText291, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_output = new wxSlider( this, wxID_ANY, 0, 0, 1000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer5->Add( m_output, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	this->SetSizer( fgSizer5 );
+	this->Layout();
+	
+	// Connect Events
+	m_input->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( General::onUpdateInputAmpli ), NULL, this );
+	m_output->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( General::onUpdateOutputAmpli ), NULL, this );
+}
+
+General::~General()
+{
+	// Disconnect Events
+	m_input->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( General::onUpdateInputAmpli ), NULL, this );
+	m_output->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( General::onUpdateOutputAmpli ), NULL, this );
 }

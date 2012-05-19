@@ -32,6 +32,7 @@ src/plugins/filter \
 src/plugins/effect \
 src/plugins/distortion \
 src/plugins/analyze \
+src/plugins/ampli \
 src/plugins \
 src/jack \
 src/core \
