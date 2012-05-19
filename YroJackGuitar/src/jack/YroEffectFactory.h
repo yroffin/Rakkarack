@@ -57,6 +57,7 @@ public:
 			jack_default_audio_sample_t *out2);
 	YroEffectPlugin *addEffect(const char *instance,YroEffectPlugin *effect);
 	YroEffectPlugin *getEffect(const char *name);
+	map<const char*, YroEffectPlugin*, cmp_str> getEffects() const;
 private:
 	YroEffectFactory();
 	static YroEffectFactory *__instance;

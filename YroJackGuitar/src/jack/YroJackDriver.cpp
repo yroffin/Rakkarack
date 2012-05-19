@@ -265,3 +265,8 @@ int YroJackDriver::initialize() {
 	return (0);
 }
 
+YroEffectFactory* YroJackDriver::getEffectFactory() const {
+	return effectFactory;
+}
+
+

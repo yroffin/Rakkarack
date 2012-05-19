@@ -10,6 +10,8 @@
 #include <jack/YroJackDriver.h>
 #include <jack/YroEffectFactory.h>
 
+#include <wx/custom/WxEffect.h>
+
 #include <wx/WxMainTimer.h>
 #include <wx/YroJackGuitarGeneral.h>
 #include <wx/YroJackGuitarSignalFrame.h>
@@ -43,6 +45,10 @@ private:
 	YroJackGuitarEffectDistortion *myDistortionFrame;
 	YroJackGuitarEffectExpander *myExpanderFrame;
 	WxMainTimer timer;
+	/**
+	 * effects table
+	 */
+	vector<WxEffect *> myEffects;
 };
 
 }

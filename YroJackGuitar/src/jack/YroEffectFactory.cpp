@@ -47,12 +47,12 @@ YroEffectFactory::~YroEffectFactory() {
 void YroEffectFactory::load(const char *config) {
 	if(loaded == 1) return;
 	// TODO
-	addEffect("ampli#1",new YroAmpli());
+	addEffect("#1.ampli",new YroAmpli());
 	//addEffect("default#1",new YroEffectGenerator());
-	addEffect("distortion#1",new Distortion());
-	addEffect("expander#1",new Expander());
-	addEffect("ampli#2",new YroAmpli());
-	addEffect("scope#1",new YroScope());
+	addEffect("#2.distortion",new Distortion());
+	addEffect("#3.expander",new Expander());
+	addEffect("#4.ampli",new YroAmpli());
+	addEffect("#5.scope",new YroScope());
 }
 
 /**
@@ -171,6 +171,10 @@ int YroEffectFactory::render(
 	processed2 = audioSampleFactory->copy(currentFrames,processed2,out2);
 
 	return 0;
+}
+
+map<const char*, YroEffectPlugin*, cmp_str> YroEffectFactory::getEffects() const {
+	return effects;
 }
 
 } /* namespace std */

@@ -41,6 +41,7 @@ public:
 	int initialize();
 	virtual int process(jack_nframes_t nframes);
 	virtual void jackShutdown();
+	YroEffectFactory* getEffectFactory() const;
 private:
 	YroJackDriver();
 	static YroJackDriver *__instance;

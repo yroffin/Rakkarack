@@ -536,14 +536,14 @@ General::General( wxWindow* parent, wxWindowID id, const wxString& title, const 
 	m_staticText29->Wrap( -1 );
 	fgSizer5->Add( m_staticText29, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_input = new wxSlider( this, wxID_ANY, 0, 0, 1000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_input = new wxSlider( this, wxID_ANY, 100, 0, 2000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer5->Add( m_input, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText291 = new wxStaticText( this, wxID_ANY, wxT("Output amplification (%)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText291->Wrap( -1 );
 	fgSizer5->Add( m_staticText291, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_output = new wxSlider( this, wxID_ANY, 0, 0, 1000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_output = new wxSlider( this, wxID_ANY, 100, 0, 2000, wxDefaultPosition, wxSize( 200,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizer5->Add( m_output, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	this->SetSizer( fgSizer5 );
