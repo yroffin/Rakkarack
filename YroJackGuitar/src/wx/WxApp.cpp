@@ -43,20 +43,24 @@ SignalFrame::SignalFrame( wxWindow* parent, wxWindowID id, const wxString& title
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
-	m_spinCtrl1 = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
-	bSizer1->Add( m_spinCtrl1, 0, wxALL, 5 );
+	m_toggle = new wxToggleButton( this, wxID_ANY, wxT("Off"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toggle->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
+	
+	bSizer1->Add( m_toggle, 0, wxALL, 5 );
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
 	
 	// Connect Events
 	this->Connect( wxEVT_PAINT, wxPaintEventHandler( SignalFrame::OnPaint ) );
+	m_toggle->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( SignalFrame::onActivate ), NULL, this );
 }
 
 SignalFrame::~SignalFrame()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_PAINT, wxPaintEventHandler( SignalFrame::OnPaint ) );
+	m_toggle->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( SignalFrame::onActivate ), NULL, this );
 }
 
 EffectDistortion::EffectDistortion( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
@@ -70,11 +74,11 @@ EffectDistortion::EffectDistortion( wxWindow* parent, wxWindowID id, const wxStr
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	fgSizer3->SetMinSize( wxSize( 100,100 ) ); 
-	m_toggleBtn1 = new wxToggleButton( this, wxID_ANY, wxT("Off"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_toggleBtn1->SetValue( true ); 
-	m_toggleBtn1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
+	m_toggle = new wxToggleButton( this, wxID_ANY, wxT("Off"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toggle->SetValue( true ); 
+	m_toggle->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
 	
-	fgSizer3->Add( m_toggleBtn1, 0, wxALL, 5 );
+	fgSizer3->Add( m_toggle, 0, wxALL, 5 );
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Preset"), wxDefaultPosition, wxSize( 150,-1 ), 0 );
 	m_staticText2->Wrap( -1 );
@@ -193,6 +197,7 @@ EffectDistortion::EffectDistortion( wxWindow* parent, wxWindowID id, const wxStr
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_toggle->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( EffectDistortion::onActivate ), NULL, this );
 	m_preset->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectDistortion::onChangePreset ), NULL, this );
 	m_wetdry->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeWetDry ), NULL, this );
 	m_lrcross->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLRCross ), NULL, this );
@@ -211,6 +216,7 @@ EffectDistortion::EffectDistortion( wxWindow* parent, wxWindowID id, const wxStr
 EffectDistortion::~EffectDistortion()
 {
 	// Disconnect Events
+	m_toggle->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( EffectDistortion::onActivate ), NULL, this );
 	m_preset->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectDistortion::onChangePreset ), NULL, this );
 	m_wetdry->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeWetDry ), NULL, this );
 	m_lrcross->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectDistortion::onChangeLRCross ), NULL, this );
@@ -237,11 +243,11 @@ EffectChorus::EffectChorus( wxWindow* parent, wxWindowID id, const wxString& tit
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	fgSizer3->SetMinSize( wxSize( 100,100 ) ); 
-	m_toggleBtn1 = new wxToggleButton( this, wxID_ANY, wxT("Off"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_toggleBtn1->SetValue( true ); 
-	m_toggleBtn1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
+	m_toggle = new wxToggleButton( this, wxID_ANY, wxT("Off"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toggle->SetValue( true ); 
+	m_toggle->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
 	
-	fgSizer3->Add( m_toggleBtn1, 0, wxALL, 5 );
+	fgSizer3->Add( m_toggle, 0, wxALL, 5 );
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Preset"), wxDefaultPosition, wxSize( 150,-1 ), 0 );
 	m_staticText2->Wrap( -1 );
@@ -360,6 +366,7 @@ EffectChorus::EffectChorus( wxWindow* parent, wxWindowID id, const wxString& tit
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_toggle->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( EffectChorus::onActivate ), NULL, this );
 	m_preset->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectChorus::onChangePreset ), NULL, this );
 	m_wetdry->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeWetDry ), NULL, this );
 	m_lrcross->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeLRCross ), NULL, this );
@@ -376,6 +383,7 @@ EffectChorus::EffectChorus( wxWindow* parent, wxWindowID id, const wxString& tit
 EffectChorus::~EffectChorus()
 {
 	// Disconnect Events
+	m_toggle->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( EffectChorus::onActivate ), NULL, this );
 	m_preset->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectChorus::onChangePreset ), NULL, this );
 	m_wetdry->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeWetDry ), NULL, this );
 	m_lrcross->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectChorus::onChangeLRCross ), NULL, this );
@@ -400,10 +408,10 @@ EffectExpander::EffectExpander( wxWindow* parent, wxWindowID id, const wxString&
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	fgSizer3->SetMinSize( wxSize( 100,100 ) ); 
-	m_toggleBtn1 = new wxToggleButton( this, wxID_ANY, wxT("Off"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_toggleBtn1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
+	m_toggle = new wxToggleButton( this, wxID_ANY, wxT("Off"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toggle->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
 	
-	fgSizer3->Add( m_toggleBtn1, 0, wxALL, 5 );
+	fgSizer3->Add( m_toggle, 0, wxALL, 5 );
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Preset"), wxDefaultPosition, wxSize( 150,-1 ), 0 );
 	m_staticText2->Wrap( -1 );
@@ -490,6 +498,7 @@ EffectExpander::EffectExpander( wxWindow* parent, wxWindowID id, const wxString&
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_toggle->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( EffectExpander::onActivate ), NULL, this );
 	m_preset->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectExpander::onChangePreset ), NULL, this );
 	m_atime->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectExpander::onChangeAttack ), NULL, this );
 	m_rtime->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectExpander::onChangeRelease ), NULL, this );
@@ -503,6 +512,7 @@ EffectExpander::EffectExpander( wxWindow* parent, wxWindowID id, const wxString&
 EffectExpander::~EffectExpander()
 {
 	// Disconnect Events
+	m_toggle->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( EffectExpander::onActivate ), NULL, this );
 	m_preset->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( EffectExpander::onChangePreset ), NULL, this );
 	m_atime->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectExpander::onChangeAttack ), NULL, this );
 	m_rtime->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( EffectExpander::onChangeRelease ), NULL, this );

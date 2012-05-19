@@ -18,6 +18,7 @@ YroEffectPlugin::YroEffectPlugin(const char *_name) {
 	cSAMPLE_RATE = 1.0f / fSAMPLE_RATE;
 	preset = 0;
 	audioSampleFactory = YroAudioSampleFactory::instance();
+	active = 0;
 }
 
 /**
@@ -300,3 +301,20 @@ void YroEffectPlugin::setInt(int index, int value) {
 		break;
 	}
 }
+
+int YroEffectPlugin::getActive() const {
+	return active;
+}
+
+void std::YroEffectPlugin::toggle() {
+	if(getActive() == 1) {
+		setActive(0);
+	} else {
+		setActive(1);
+	}
+}
+
+void YroEffectPlugin::setActive(int active) {
+	this->active = active;
+}
+

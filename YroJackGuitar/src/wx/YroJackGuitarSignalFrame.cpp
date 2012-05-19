@@ -8,6 +8,15 @@ YroJackGuitarSignalFrame::YroJackGuitarSignalFrame(wxWindow* parent) :
 	audioSampleFactory = YroAudioSampleFactory::instance();
 }
 
+void YroJackGuitarSignalFrame::onActivate(wxCommandEvent& event) {
+	/*
+	 * TODO toggle effect
+	effect->toggle();
+	if(m_toggle->GetValue()) m_toggle->SetLabel(wxT("On"));
+	else  m_toggle->SetLabel(wxT("Off"));
+	*/
+}
+
 void YroJackGuitarSignalFrame::OnPaint(wxPaintEvent& event) {
 	wxPaintDC dc(this);
 

@@ -18,6 +18,7 @@ class YroJackGuitarSignalFrame: public SignalFrame {
 protected:
 	// Handlers for SignalFrame events.
 	void OnPaint(wxPaintEvent& event);
+	void onActivate( wxCommandEvent& event );
 private:
 	YroAudioSampleFactory *audioSampleFactory;
 public:

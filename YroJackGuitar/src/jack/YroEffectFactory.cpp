@@ -132,6 +132,11 @@ int YroEffectFactory::render(
 	for(effect=effects.begin(); effect!=effects.end(); effect++) {
 		YroEffectPlugin *data = effect->second;
 		/**
+		 * effect can be ignore
+		 */
+		if(data->getActive()==0) continue;
+
+		/**
 		 * process the effect
 		 */
 		data->setOutLeft(processed1);

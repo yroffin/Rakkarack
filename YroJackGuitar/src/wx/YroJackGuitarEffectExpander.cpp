@@ -1,4 +1,3 @@
-#include <jack/YroEffectFactory.h>
 #include <wx/YroJackGuitarEffectExpander.h>
 
 using namespace std;
@@ -14,6 +13,12 @@ YroJackGuitarEffectExpander::YroJackGuitarEffectExpander(wxWindow* parent, Expan
 	effect->subscribe(Expander::_level, m_level);
 	effect->subscribe(Expander::_lpf, m_lpf);
 	effect->subscribe(Expander::_hpf, m_hpf);
+}
+
+void YroJackGuitarEffectExpander::onActivate(wxCommandEvent& event) {
+	effect->toggle();
+	if(m_toggle->GetValue()) m_toggle->SetLabel(wxT("On"));
+	else  m_toggle->SetLabel(wxT("Off"));
 }
 
 void YroJackGuitarEffectExpander::onChangePreset(wxCommandEvent& event) {

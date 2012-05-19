@@ -1,4 +1,3 @@
-#include <jack/YroEffectFactory.h>
 #include <wx/YroJackGuitarEffectDistortion.h>
 
 using namespace std;
@@ -18,6 +17,12 @@ YroJackGuitarEffectDistortion::YroJackGuitarEffectDistortion(wxWindow* parent, D
 	effect->subscribe(Distortion::_octave, m_suboctave);
 	effect->subscribe(Distortion::_lpf, m_lpf);
 	effect->subscribe(Distortion::_hpf, m_hpf);
+}
+
+void YroJackGuitarEffectDistortion::onActivate(wxCommandEvent& event) {
+	effect->toggle();
+	if(m_toggle->GetValue()) m_toggle->SetLabel(wxT("On"));
+	else  m_toggle->SetLabel(wxT("Off"));
 }
 
 void YroJackGuitarEffectDistortion::onChangePreset(wxCommandEvent& event) {

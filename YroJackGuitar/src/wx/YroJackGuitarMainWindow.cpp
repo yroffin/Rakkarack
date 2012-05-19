@@ -1,5 +1,4 @@
 #include <wx/YroJackGuitarMainWindow.h>
-#include <wx/YroJackGuitarEffectDistortion.h>
 
 using namespace std;
 

@@ -18,9 +18,8 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/frame.h>
-#include <wx/spinctrl.h>
-#include <wx/sizer.h>
 #include <wx/tglbtn.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/slider.h>
@@ -60,10 +59,11 @@ class SignalFrame : public wxFrame
 	private:
 	
 	protected:
-		wxSpinCtrl* m_spinCtrl1;
+		wxToggleButton* m_toggle;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPaint( wxPaintEvent& event ) { event.Skip(); }
+		virtual void onActivate( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
@@ -81,7 +81,7 @@ class EffectDistortion : public wxFrame
 	private:
 	
 	protected:
-		wxToggleButton* m_toggleBtn1;
+		wxToggleButton* m_toggle;
 		wxStaticText* m_staticText2;
 		wxChoice* m_preset;
 		wxStaticText* m_staticText1;
@@ -115,6 +115,7 @@ class EffectDistortion : public wxFrame
 		wxSlider* m_hpf;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onActivate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangePreset( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangeWetDry( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeLRCross( wxScrollEvent& event ) { event.Skip(); }
@@ -145,7 +146,7 @@ class EffectChorus : public wxFrame
 	private:
 	
 	protected:
-		wxToggleButton* m_toggleBtn1;
+		wxToggleButton* m_toggle;
 		wxStaticText* m_staticText2;
 		wxChoice* m_preset;
 		wxStaticText* m_staticText1;
@@ -179,6 +180,7 @@ class EffectChorus : public wxFrame
 		wxSlider* m_hpf;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onActivate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangePreset( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangeWetDry( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeLRCross( wxScrollEvent& event ) { event.Skip(); }
@@ -207,7 +209,7 @@ class EffectExpander : public wxFrame
 	private:
 	
 	protected:
-		wxToggleButton* m_toggleBtn1;
+		wxToggleButton* m_toggle;
 		wxStaticText* m_staticText2;
 		wxChoice* m_preset;
 		wxStaticText* m_staticText1;
@@ -232,6 +234,7 @@ class EffectExpander : public wxFrame
 		wxSlider* m_hpf;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onActivate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangePreset( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangeAttack( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeRelease( wxScrollEvent& event ) { event.Skip(); }

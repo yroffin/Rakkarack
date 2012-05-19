@@ -5,6 +5,9 @@
  *      Author: yannick
  */
 
+#include <wx/WxApp.h>
+#include <wx/spinctrl.h>
+
 #include <core/YroObject.h>
 #include <jack/jack.h>
 #include <jack/YroAudioSampleFactory.h>
@@ -86,6 +89,7 @@ public:
 	virtual ~YroEffectPlugin();
 	virtual void cleanup () {
 	}
+	void toggle();
 	/**
 	 * processing
 	 */
@@ -129,6 +133,8 @@ public:
 
 	int getInt(int index);
 	void setInt(int index, int value);
+	int getActive() const;
+	void setActive(int active);
 
 	virtual int  get0() {return 0;}; virtual void set0(int) {};
 	virtual int  get1() {return 0;}; virtual void set1(int) {};
@@ -159,6 +165,8 @@ protected:
 	map<int, wxSlider *>  mapIndexSlider;
 	map<wxCheckBox *, int> mapCheckBoxIndex;
 	map<int, wxCheckBox *>  mapIndexCheckBox;
+
+	int active;
 
 	int preset;
 	float *efxoutl;
