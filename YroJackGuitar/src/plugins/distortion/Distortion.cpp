@@ -35,6 +35,11 @@ Distortion::Distortion() :
 				"Distorsion 3: 0, 64, 127, 127, 12, 13, 0, 5078, 56, 0, 1;"
 				"Guitar Amp:  84, 64, 35, 63, 50, 2, 0, 824, 21, 0, 0;") {
 	/**
+	 * fix klass attribute
+	 */
+	klass = YroEffectPlugin::_Distortion;
+
+	/**
 	 * allocated during the first render
 	 */
 	octoutl = 0;

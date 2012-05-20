@@ -31,7 +31,6 @@
 #include <jack/YroEffectFactory.h>
 #include <jack/YroJackDriver.h>
 #include <plugins/YroEffectGenerator.h>
-#include <wx/YroJackGuitarMainWindow.h>
 
 using namespace std;
 

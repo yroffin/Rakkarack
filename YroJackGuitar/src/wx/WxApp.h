@@ -17,13 +17,17 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/scrolwin.h>
+#include <wx/panel.h>
+#include <wx/notebook.h>
+#include <wx/sizer.h>
 #include <wx/frame.h>
 #include <wx/tglbtn.h>
-#include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/slider.h>
 #include <wx/checkbox.h>
+#include <wx/statbmp.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -38,15 +42,19 @@ class MainWindow : public wxFrame
 	protected:
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu2;
+		wxNotebook* m_notebook;
+		wxScrolledWindow* m_panelEffects;
+		wxPanel* m_panel6;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnConnect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPaintEffects( wxPaintEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		MainWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		MainWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~MainWindow();
 	
 };
@@ -82,37 +90,29 @@ class EffectDistortion : public wxFrame
 	
 	protected:
 		wxToggleButton* m_toggle;
-		wxStaticText* m_staticText2;
-		wxChoice* m_preset;
 		wxStaticText* m_staticText1;
-		wxSlider* m_wetdry;
-		
 		wxStaticText* m_staticText3;
-		wxSlider* m_lrcross;
-		
 		wxStaticText* m_staticText11;
-		wxSlider* m_drive;
-		
 		wxStaticText* m_staticText21;
-		wxSlider* m_level;
-		
 		wxStaticText* m_staticText211;
+		wxStaticText* m_staticText2111;
+		wxStaticText* m_staticText21111;
+		wxStaticText* m_staticText21112;
+		wxStaticText* m_staticText21113;
+		wxChoice* m_preset;
+		wxSlider* m_wetdry;
+		wxSlider* m_lrcross;
+		wxSlider* m_drive;
+		wxSlider* m_level;
 		wxChoice* m_type;
+		wxSlider* m_panning;
+		wxSlider* m_suboctave;
+		wxSlider* m_lpf;
+		wxSlider* m_hpf;
 		
 		wxCheckBox* m_negate;
 		wxCheckBox* m_prefilter;
 		wxCheckBox* m_stereo;
-		wxStaticText* m_staticText2111;
-		wxSlider* m_panning;
-		
-		wxStaticText* m_staticText21111;
-		wxSlider* m_suboctave;
-		
-		wxStaticText* m_staticText21112;
-		wxSlider* m_lpf;
-		
-		wxStaticText* m_staticText21113;
-		wxSlider* m_hpf;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onActivate( wxCommandEvent& event ) { event.Skip(); }
@@ -122,18 +122,18 @@ class EffectDistortion : public wxFrame
 		virtual void onChangeDrive( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeLevel( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeType( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onChangeNegate( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onChangePrefilter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onChangeStereo( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangePanning( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeSubOctave( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeLpf( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onChangeHpf( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onChangeNegate( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onChangePrefilter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onChangeStereo( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		EffectDistortion( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Distortion"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		EffectDistortion( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Distortion"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~EffectDistortion();
 	
 };
@@ -210,27 +210,20 @@ class EffectExpander : public wxFrame
 	
 	protected:
 		wxToggleButton* m_toggle;
-		wxStaticText* m_staticText2;
-		wxChoice* m_preset;
 		wxStaticText* m_staticText1;
-		wxSlider* m_atime;
-		
 		wxStaticText* m_staticText3;
-		wxSlider* m_rtime;
-		
 		wxStaticText* m_staticText11;
-		wxSlider* m_shape;
-		
 		wxStaticText* m_staticText21;
-		wxSlider* m_thrhold;
-		
 		wxStaticText* m_staticText2111;
-		wxSlider* m_level;
-		
 		wxStaticText* m_staticText21112;
-		wxSlider* m_lpf;
-		
 		wxStaticText* m_staticText21113;
+		wxChoice* m_preset;
+		wxSlider* m_atime;
+		wxSlider* m_rtime;
+		wxSlider* m_shape;
+		wxSlider* m_thrhold;
+		wxSlider* m_level;
+		wxSlider* m_lpf;
 		wxSlider* m_hpf;
 		
 		// Virtual event handlers, overide them in your derived class
@@ -247,7 +240,7 @@ class EffectExpander : public wxFrame
 	
 	public:
 		
-		EffectExpander( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Expander"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		EffectExpander( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Expander"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~EffectExpander();
 	
 };
@@ -262,18 +255,61 @@ class General : public wxFrame
 	protected:
 		wxStaticText* m_staticText29;
 		wxSlider* m_input;
-		wxStaticText* m_staticText291;
-		wxSlider* m_output;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onUpdateInputAmpli( wxScrollEvent& event ) { event.Skip(); }
-		virtual void onUpdateOutputAmpli( wxScrollEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		General( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		General( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~General();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class Resource
+///////////////////////////////////////////////////////////////////////////////
+class Resource : public wxFrame 
+{
+	private:
+	
+	protected:
+		wxMenuBar* m_menubar2;
+		wxMenu* m_popup1;
+	
+	public:
+		
+		Resource( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		~Resource();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class EffectCtrl
+///////////////////////////////////////////////////////////////////////////////
+class EffectCtrl : public wxPanel 
+{
+	private:
+	
+	protected:
+		wxStaticBitmap* m_bitmap1;
+		wxCheckBox* m_enableEffect;
+		wxStaticText* m_effectName;
+		wxToggleButton* m_toggleWindow;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void onLeftDown( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onLeftUp( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onMouseEvents( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onActiveEffect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onToggleEffectProperty( wxCommandEvent& event ) { event.Skip(); }
+		
+	
+	public:
+		
+		EffectCtrl( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxRAISED_BORDER );
+		~EffectCtrl();
 	
 };
 

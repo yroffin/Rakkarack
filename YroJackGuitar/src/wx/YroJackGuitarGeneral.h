@@ -21,10 +21,9 @@ protected:
 	
 public:
 	/** Constructor */
-	YroJackGuitarGeneral( wxWindow* parent, YroAmpli *inputAmpli, YroAmpli *outputAmpli);
+	YroJackGuitarGeneral( wxWindow* parent, YroAmpli *inputAmpli);
 private:
 	YroAmpli *inputAmpli;
-	YroAmpli *outputAmpli;
 };
 
 #endif // __YroJackGuitarGeneral__

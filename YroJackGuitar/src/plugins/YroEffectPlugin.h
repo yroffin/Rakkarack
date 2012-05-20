@@ -5,7 +5,9 @@
  *      Author: yannick
  */
 
-#include <wx/WxApp.h>
+#include <wx/wx.h>
+#include <wx/slider.h>
+#include <wx/choice.h>
 #include <wx/spinctrl.h>
 
 #include <core/YroObject.h>
@@ -89,6 +91,13 @@ public:
 	virtual ~YroEffectPlugin();
 	virtual void cleanup () {
 	}
+	enum {
+		_Default,
+		_Distortion,
+		_Expander,
+		_YroAmpli,
+		_YroScope
+	} klass;
 	void toggle();
 	/**
 	 * processing

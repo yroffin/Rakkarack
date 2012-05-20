@@ -33,6 +33,10 @@ Expander::Expander() :
 				"Boost Gate: -55, 30, 50, 50, 1441, 157, 50;"
 				"Noise Gate: -50, 20, 50, 50, 3134, 76, 0;"
 				"Treble swell: -30, 9, 950, 25, 6703, 526, 90;") {
+	/**
+	 * fix klass attribute
+	 */
+	klass = YroEffectPlugin::_Expander;
 
 	lpfl = new AnalogFilter(2, 22000, 1, 0);
 	lpfr = new AnalogFilter(2, 22000, 1, 0);

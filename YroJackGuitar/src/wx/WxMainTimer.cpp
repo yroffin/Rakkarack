@@ -23,9 +23,8 @@
  WxMainTimer.cpp
  */
 
-#include <plugins/YroEffectPlugin.h>
-#include <wx/YroJackGuitarMainWindow.h>
 #include <wx/WxMainTimer.h>
+#include <wx/YroJackGuitarMainWindow.h>
 
 namespace std {
 

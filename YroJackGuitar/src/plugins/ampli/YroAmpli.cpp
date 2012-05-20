@@ -28,6 +28,10 @@ namespace std {
 YroAmpli::YroAmpli() : YroEffectPlugin(
 		"YroAmpli",
 		"Default: 100;") {
+	/**
+	 * fix klass attribute
+	 */
+	klass = YroEffectPlugin::_YroAmpli;
 	factor = 1.0;
 }
 

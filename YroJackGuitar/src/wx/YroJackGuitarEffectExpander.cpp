@@ -2,8 +2,14 @@
 
 using namespace std;
 
+extern wxFont _defaultFont;
+
 YroJackGuitarEffectExpander::YroJackGuitarEffectExpander(wxWindow* parent, Expander *_effect) :
 		EffectExpander(parent) {
+	/**
+	 * fix default font for application
+	 */
+	SetFont( _defaultFont );
 	effect = _effect;
 	effect->subscribe(Expander::_preset, m_preset);
 	effect->subscribe(Expander::_attack, m_atime);

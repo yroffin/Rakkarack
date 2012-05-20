@@ -25,45 +25,44 @@
 #include <wx/custom/WxEffect.h>
 
 namespace std {
-
 BEGIN_EVENT_TABLE(WxEffect, wxPanel)
 
-    EVT_MOTION(WxEffect::mouseMoved)
-    EVT_LEFT_DOWN(WxEffect::mouseDown)
-    EVT_LEFT_UP(WxEffect::mouseReleased)
-    EVT_RIGHT_DOWN(WxEffect::rightClick)
-    EVT_LEAVE_WINDOW(WxEffect::mouseLeftWindow)
-    EVT_KEY_DOWN(WxEffect::keyPressed)
-    EVT_KEY_UP(WxEffect::keyReleased)
-    EVT_MOUSEWHEEL(WxEffect::mouseWheelMoved)
+EVT_MOTION(WxEffect::mouseMoved)
+EVT_LEFT_DOWN(WxEffect::mouseDown)
+EVT_LEFT_UP(WxEffect::mouseReleased)
+EVT_RIGHT_DOWN(WxEffect::rightClick)
+EVT_LEAVE_WINDOW(WxEffect::mouseLeftWindow)
+EVT_KEY_DOWN(WxEffect::keyPressed)
+EVT_KEY_UP(WxEffect::keyReleased)
+EVT_MOUSEWHEEL(WxEffect::mouseWheelMoved)
 
-    // catch paint events
-    EVT_PAINT(WxEffect::paintEvent)
+// catch paint events
+EVT_PAINT(WxEffect::paintEvent)
 END_EVENT_TABLE()
 
 WxEffect::WxEffect(wxWindow *parent, YroEffectPlugin *_effect,
-		WxEffect *_previous,
-		wxWindowID id, const wxPoint& pos,
+		WxEffect *_previous, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, long style, const wxValidator& validator,
 		const wxString& name) {
 	effect = _effect;
 	previous = _previous;
-	wxSize s(320,200);
+	wxSize s(320, 200);
 	Create(parent, id, pos, s, style, name);
 	/**
 	 * fix position according to previous
 	 * effect
 	 */
-	if(previous != 0) {
-		int x,y;
+	if (previous != 0) {
+		int x, y;
 		previous->GetPosition(&x, &y);
-		wxPoint previousEffectPosition(x + 100,y);
+		wxPoint previousEffectPosition(x + 100, y);
 		this->SetPosition(previousEffectPosition);
 	}
 
 	text.sprintf(wxT("TODO: %s"), "todo");
 	this->SetToolTip(text);
-	defaultBitmap = new wxBitmap( wxT("resources/Processus.png"), wxBITMAP_TYPE_ANY );
+	defaultBitmap = new wxBitmap(wxT("resources/Processus.png"),
+			wxBITMAP_TYPE_ANY);
 }
 
 WxEffect::~WxEffect() {
@@ -76,11 +75,10 @@ WxEffect::~WxEffect() {
  * calling Refresh()/Update().
  */
 
-void WxEffect::paintEvent(wxPaintEvent & evt)
-{
-    // depending on your system you may need to look at double-buffered dcs
-    wxPaintDC dc(this);
-    render(dc);
+void WxEffect::paintEvent(wxPaintEvent & evt) {
+	// depending on your system you may need to look at double-buffered dcs
+	wxPaintDC dc(this);
+	render(dc);
 }
 
 /*
@@ -91,11 +89,10 @@ void WxEffect::paintEvent(wxPaintEvent & evt)
  * background, and expects you will redraw it when the window comes
  * back (by sending a paint event).
  */
-void WxEffect::paintNow()
-{
-    // depending on your system you may need to look at double-buffered dcs
-    wxClientDC dc(this);
-    render(dc);
+void WxEffect::paintNow() {
+	// depending on your system you may need to look at double-buffered dcs
+	wxClientDC dc(this);
+	render(dc);
 }
 
 /*
@@ -103,44 +100,44 @@ void WxEffect::paintNow()
  * method so that it can work no matter what type of DC
  * (e.g. wxPaintDC or wxClientDC) is used.
  */
-void WxEffect::render(wxDC&  dc)
-{
-    if (pressedDown)
-        dc.SetBrush( *wxRED_BRUSH );
-    else
-        dc.SetBrush( *wxGREY_BRUSH );
+void WxEffect::render(wxDC& dc) {
+	if (pressedDown)
+		dc.SetBrush(*wxRED_BRUSH);
+	else
+		dc.SetBrush(*wxGREY_BRUSH);
 
-    dc.DrawRectangle( 0, 0, 320, 200 );
-    dc.DrawText( text, 20, 15 );
-    dc.DrawBitmap(*defaultBitmap, 0, 0);
+	dc.DrawRectangle(0, 0, 320, 200);
+	dc.DrawText(text, 20, 15);
+	dc.DrawBitmap(*defaultBitmap, 0, 0);
 }
 
-void WxEffect::mouseDown(wxMouseEvent& event)
-{
-    pressedDown = true;
-    paintNow();
+void WxEffect::mouseDown(wxMouseEvent& event) {
+	pressedDown = true;
+	paintNow();
 }
-void WxEffect::mouseReleased(wxMouseEvent& event)
-{
-    pressedDown = false;
-    paintNow();
+void WxEffect::mouseReleased(wxMouseEvent& event) {
+	pressedDown = false;
+	paintNow();
 
-    wxMessageBox( wxT("You pressed a custom button") );
+	wxMessageBox(wxT("You pressed a custom button"));
 }
-void WxEffect::mouseLeftWindow(wxMouseEvent& event)
-{
-    if (pressedDown)
-    {
-        pressedDown = false;
-        paintNow();
-    }
+void WxEffect::mouseLeftWindow(wxMouseEvent& event) {
+	if (pressedDown) {
+		pressedDown = false;
+		paintNow();
+	}
 }
 
 // currently unused events
-void WxEffect::mouseMoved(wxMouseEvent& event) {}
-void WxEffect::mouseWheelMoved(wxMouseEvent& event) {}
-void WxEffect::rightClick(wxMouseEvent& event) {}
-void WxEffect::keyPressed(wxKeyEvent& event) {}
-void WxEffect::keyReleased(wxKeyEvent& event) {}
+void WxEffect::mouseMoved(wxMouseEvent& event) {
+}
+void WxEffect::mouseWheelMoved(wxMouseEvent& event) {
+}
+void WxEffect::rightClick(wxMouseEvent& event) {
+}
+void WxEffect::keyPressed(wxKeyEvent& event) {
+}
+void WxEffect::keyReleased(wxKeyEvent& event) {
+}
 
 } /* namespace std */

@@ -2,8 +2,14 @@
 
 using namespace std;
 
+extern wxFont _defaultFont;
+
 YroJackGuitarEffectDistortion::YroJackGuitarEffectDistortion(wxWindow* parent, Distortion * _effect) :
 		EffectDistortion(parent) {
+	/**
+	 * fix default font for application
+	 */
+	SetFont( _defaultFont );
 	effect = _effect;
 	effect->subscribe(Distortion::_preset, m_preset);
 	effect->subscribe(Distortion::_type, m_type);

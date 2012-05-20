@@ -2,9 +2,14 @@
 
 using namespace std;
 
-YroJackGuitarSignalFrame::YroJackGuitarSignalFrame(wxWindow* parent) :
+extern wxFont _defaultFont;
+
+YroJackGuitarSignalFrame::YroJackGuitarSignalFrame(wxWindow* parent, YroScope *_scope) :
 		SignalFrame(parent) {
-	this->Centre(0);
+	/**
+	 * fix default font for application
+	 */
+	SetFont( _defaultFont );
 	audioSampleFactory = YroAudioSampleFactory::instance();
 }
 

@@ -25,6 +25,10 @@ using namespace std;
 
 YroScope::YroScope() : YroEffectPlugin("YroScope") {
 	/**
+	 * fix klass attribute
+	 */
+	klass = YroEffectPlugin::_YroScope;
+	/**
 	 * internal YroScope buffer is based
 	 * on sample rate size
 	 */

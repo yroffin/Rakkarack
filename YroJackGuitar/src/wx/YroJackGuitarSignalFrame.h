@@ -3,6 +3,7 @@
 
 #include <wx/wx.h>
 #include <jack/YroAudioSampleFactory.h>
+#include <jack/YroEffectFactory.h>
 
 /**
  @file
@@ -23,7 +24,7 @@ private:
 	YroAudioSampleFactory *audioSampleFactory;
 public:
 	/** Constructor */
-	YroJackGuitarSignalFrame(wxWindow* parent);
+	YroJackGuitarSignalFrame(wxWindow* parent, YroScope *_scope);
 	void OnJackNewAudioSample();
 };
 

@@ -26,6 +26,9 @@
 #ifndef WXMAINTIMER_H_
 #define WXMAINTIMER_H_
 
+#include <wx/WxApp.h>
+#include <wx/wx.h>
+#include <wx/frame.h>
 #include <wx/timer.h>
 
 namespace std {
