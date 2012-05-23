@@ -1,10 +1,10 @@
 /*
-  rakarrack - a guitar effects software
+ rakarrack - a guitar effects software
 
  Vibe.C  -  Optical tremolo effect
 
-  Copyright (C) 2008-2010 Ryan Billing
-  Author: Josep Andreu
+ Copyright (C) 2008-2010 Ryan Billing
+ Author: Josep Andreu
 
 
  This program is free software; you can redistribute it and/or modify
@@ -21,581 +21,490 @@
  Foundation,
  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-*/
-
+ */
 
 #include <plugins/effect/Vibe.h>
 using namespace std;
 
-Vibe::Vibe() : YroEffectPlugin("Vibe")
-{
-  
-  
-
+Vibe::Vibe() :
+		YroEffectPlugin("Vibe",
+				"Classic: 35, 120, 10, 0, 64, 64, 64, 64, 3, 64;"
+						"Stereo Classic: 35, 120, 10, 0, 48, 64, 64, 64, 3, 64;"
+						"Wide Vibe: 127, 80, 10, 0, 0, 64, 64, 64, 0, 64;"
+						"Classic Chorus: 35, 360, 10, 0, 48, 64, 0, 64, 3, 64;"
+						"Vibe Chorus: 75, 330, 10, 0, 50, 64, 0, 64, 17, 64;"
+						"Lush Chorus: 55, 260, 10, 0, 64, 70, 0, 49, 20, 48;"
+						"Sick Phaser: 110, 75, 10, 0, 32, 64, 64, 14, 0, 30;"
+						"Warble: 127, 360, 10, 0, 0, 64, 0, 0, 0, 37;") {
 //Swing was measured on operating device of: 10K to 250k.  
 //400K is reported to sound better for the "low end" (high resistance) 
 //Because of time response, Rb needs to be driven further.
 //End resistance will max out to around 10k for most LFO freqs.
 //pushing low end a little lower for kicks and giggles
-Ra = 500000.0f;  //Cds cell dark resistance.
-Ra = logf(Ra);		//this is done for clarity 
-Rb = 600.0f;         //Cds cell full illumination
-b = (float)exp(Ra/(float)logf(Rb)) - CNST_E;
-dTC = 0.085f;
-dRCl = dTC;
-dRCr = dTC;   //Right & left channel dynamic time contsants
-minTC = logf(0.005f/dTC);
-alphal = 1.0f - cSAMPLE_RATE/(dRCl + cSAMPLE_RATE);
-alphar = alphal;
-dalphal = dalphar = alphal;
-lampTC = cSAMPLE_RATE/(0.02 + cSAMPLE_RATE);  //guessing 10ms
-ilampTC = 1.0f - lampTC;
-lstep = 0.0f;
-rstep = 0.0f;
-Pdepth = 127;
-Ppanning = 64;
-lpanning = 1.0f;
-rpanning = 1.0f;
-fdepth = 1.0f;  
-oldgl = 0.0f;
-oldgr = 0.0f;
-gl = 0.0f;
-gr = 0.0f;
-for(int jj = 0; jj<8; jj++) oldcvolt[jj] = 0.0f;
-cperiod = 1.0f/fPERIOD;
-
-init_vibes();
-cleanup();
-
+	Ra = 500000.0f; //Cds cell dark resistance.
+	Ra = logf(Ra); //this is done for clarity
+	Rb = 600.0f; //Cds cell full illumination
+	b = (float) exp(Ra / (float) logf(Rb)) - CNST_E;
+	dTC = 0.085f;
+	dRCl = dTC;
+	dRCr = dTC; //Right & left channel dynamic time contsants
+	minTC = logf(0.005f / dTC);
+	alphal = 1.0f - cSAMPLE_RATE / (dRCl + cSAMPLE_RATE);
+	alphar = alphal;
+	dalphal = dalphar = alphal;
+	lampTC = cSAMPLE_RATE / (0.02 + cSAMPLE_RATE); //guessing 10ms
+	ilampTC = 1.0f - lampTC;
+	lstep = 0.0f;
+	rstep = 0.0f;
+	Pdepth = 127;
+	Ppanning = 64;
+	lpanning = 1.0f;
+	rpanning = 1.0f;
+	fdepth = 1.0f;
+	oldgl = 0.0f;
+	oldgr = 0.0f;
+	gl = 0.0f;
+	gr = 0.0f;
+	for (int jj = 0; jj < 8; jj++)
+		oldcvolt[jj] = 0.0f;
+	cperiod = 1.0f / fPERIOD;
+	init_vibes();
+	cleanup();
 }
 
-Vibe::~Vibe ()
-{
+Vibe::~Vibe() {
 }
 
+void Vibe::cleanup() {
 
-void
-Vibe::cleanup ()
-{
+}
+;
 
+void Vibe::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 
-};
+	int i, j;
+	float lfol, lfor, xl, xr, fxl, fxr;
+	float vbe, vin;
+	float cvolt, ocvolt, evolt, input;
+	float emitterfb = 0.0f;
+	float outl, outr;
 
-void
-Vibe::render(jack_nframes_t nframes,float *smpsl, float *smpsr)
-{
+	input = cvolt = ocvolt = evolt = 0.0f;
 
-  int i,j;
-  float lfol, lfor, xl, xr, fxl, fxr;
-  float vbe,vin;
-  float cvolt, ocvolt, evolt, input;
-  float emitterfb = 0.0f;
-  float outl, outr;
-  
-  input = cvolt = ocvolt = evolt = 0.0f;
-  
-  lfo.render(nframes,&lfol, &lfor);
+	lfo.render(nframes, &lfol, &lfor);
 
-  lfol = fdepth + lfol*fwidth;
-  lfor = fdepth + lfor*fwidth;   
-  
-   if (lfol > 1.0f)
-    lfol = 1.0f;
-  else if (lfol < 0.0f)
-    lfol = 0.0f;
-  if (lfor > 1.0f)
-    lfor = 1.0f;
-  else if (lfor < 0.0f)
-    lfor = 0.0f;  
-    
-    lfor = 2.0f - 2.0f/(lfor + 1.0f);   // 
-    lfol = 2.0f - 2.0f/(lfol + 1.0f); //emulate lamp turn on/off characteristic by typical curves 
-      
-  for (i = 0; i < iPERIOD; i++)
-    {
-    //Left Lamp
-     gl = lfol*lampTC + oldgl*ilampTC; 
-     oldgl = gl;  
-    //Right Lamp
-     gr = lfor*lampTC + oldgr*ilampTC; 
-     oldgr = gr;   
-       
-    //Left Cds   
-    stepl = gl*alphal + dalphal*oldstepl;
-    oldstepl = stepl;
-    dRCl = dTC*expf(stepl*minTC);
-    alphal = cSAMPLE_RATE/(dRCl + cSAMPLE_RATE);  
-    dalphal = 1.0f - cSAMPLE_RATE/(0.5f*dRCl + cSAMPLE_RATE);     //different attack & release character
-    xl = CNST_E + stepl*b;
-    fxl = expf(Ra/logf(xl));   
-    
-    //Right Cds   
-    stepr = gr*alphar + dalphar*oldstepr;
-    oldstepr = stepr;
-    dRCr = dTC*expf(stepr*minTC);
-    alphar = cSAMPLE_RATE/(dRCr + cSAMPLE_RATE);  
-    dalphar = 1.0f - cSAMPLE_RATE/(0.5f*dRCr + cSAMPLE_RATE);      //different attack & release character
-    xr = CNST_E + stepr*b;
-    fxr = expf(Ra/logf(xr));
+	lfol = fdepth + lfol * fwidth;
+	lfor = fdepth + lfor * fwidth;
 
-    if(i%16 == 0)  modulate(fxl, fxr);   
-     
-    //Left Channel  
+	if (lfol > 1.0f)
+		lfol = 1.0f;
+	else if (lfol < 0.0f)
+		lfol = 0.0f;
+	if (lfor > 1.0f)
+		lfor = 1.0f;
+	else if (lfor < 0.0f)
+		lfor = 0.0f;
 
-//    input = bjt_shape(fbl + smpsl[i]);  
+	lfor = 2.0f - 2.0f / (lfor + 1.0f); //
+	lfol = 2.0f - 2.0f / (lfol + 1.0f); //emulate lamp turn on/off characteristic by typical curves
 
+	for (i = 0; i < iPERIOD; i++) {
+		//Left Lamp
+		gl = lfol * lampTC + oldgl * ilampTC;
+		oldgl = gl;
+		//Right Lamp
+		gr = lfor * lampTC + oldgr * ilampTC;
+		oldgr = gr;
 
+		//Left Cds
+		stepl = gl * alphal + dalphal * oldstepl;
+		oldstepl = stepl;
+		dRCl = dTC * expf(stepl * minTC);
+		alphal = cSAMPLE_RATE / (dRCl + cSAMPLE_RATE);
+		dalphal = 1.0f - cSAMPLE_RATE / (0.5f * dRCl + cSAMPLE_RATE); //different attack & release character
+		xl = CNST_E + stepl * b;
+		fxl = expf(Ra / logf(xl));
 
-    vin = 7.5f*(1.0f + fbl+smpsl[i]);
-    if(vin<0.0f) vin = 0.0f;
-    if(vin>15.0f) vin = 15.0f;
-    vbe = 0.8f - 0.8f/(vin + 1.0f);  //really rough, simplistic bjt turn-on emulator
-    input = vin - vbe;
-    input = input*0.1333333333f -0.90588f;  //some magic numbers to return gain to unity & zero the DC
+		//Right Cds
+		stepr = gr * alphar + dalphar * oldstepr;
+		oldstepr = stepr;
+		dRCr = dTC * expf(stepr * minTC);
+		alphar = cSAMPLE_RATE / (dRCr + cSAMPLE_RATE);
+		dalphar = 1.0f - cSAMPLE_RATE / (0.5f * dRCr + cSAMPLE_RATE); //different attack & release character
+		xr = CNST_E + stepr * b;
+		fxr = expf(Ra / logf(xr));
 
+		if (i % 16 == 0)
+			modulate(fxl, fxr);
 
-    
-    emitterfb = 25.0f/fxl;     
-    for(j=0;j<4;j++) //4 stages phasing
-    {
+		//Left Channel
 
-    float y0 = 0.0f;
-    y0 = input*ecvc[j].n0 + ecvc[j].x1*ecvc[j].n1 - ecvc[j].y1*ecvc[j].d1;
-    ecvc[j].y1 = y0 + DENORMAL_GUARD;
-    ecvc[j].x1 = input; 
+//    input = bjt_shape(fbl + smpsl[i]);
 
+		vin = 7.5f * (1.0f + fbl + smpsl[i]);
+		if (vin < 0.0f)
+			vin = 0.0f;
+		if (vin > 15.0f)
+			vin = 15.0f;
+		vbe = 0.8f - 0.8f / (vin + 1.0f); //really rough, simplistic bjt turn-on emulator
+		input = vin - vbe;
+		input = input * 0.1333333333f - 0.90588f; //some magic numbers to return gain to unity & zero the DC
 
-    float x0 = 0.0f;
-    float data = input + emitterfb*oldcvolt[j];
-    x0 = data*vc[j].n0 + vc[j].x1*vc[j].n1 - vc[j].y1*vc[j].d1;
-    vc[j].y1 = x0 + DENORMAL_GUARD;
-    vc[j].x1 = data; 
+		emitterfb = 25.0f / fxl;
+		for (j = 0; j < 4; j++) //4 stages phasing
+				{
 
-    cvolt=y0+x0;
-    
-        
-    ocvolt= cvolt*vcvo[j].n0 + vcvo[j].x1*vcvo[j].n1 - vcvo[j].y1*vcvo[j].d1;
-    vcvo[j].y1 = ocvolt + DENORMAL_GUARD;
-    vcvo[j].x1 = cvolt; 
+			float y0 = 0.0f;
+			y0 = input * ecvc[j].n0 + ecvc[j].x1 * ecvc[j].n1
+					- ecvc[j].y1 * ecvc[j].d1;
+			ecvc[j].y1 = y0 + DENORMAL_GUARD;
+			ecvc[j].x1 = input;
 
-    oldcvolt[j] = ocvolt;
+			float x0 = 0.0f;
+			float data = input + emitterfb * oldcvolt[j];
+			x0 = data * vc[j].n0 + vc[j].x1 * vc[j].n1 - vc[j].y1 * vc[j].d1;
+			vc[j].y1 = x0 + DENORMAL_GUARD;
+			vc[j].x1 = data;
 
-    evolt = input*vevo[j].n0 + vevo[j].x1*vevo[j].n1 - vevo[j].y1*vevo[j].d1;
-    vevo[j].y1 = evolt + DENORMAL_GUARD;
-    vevo[j].x1 = input; 
+			cvolt = y0 + x0;
 
-    vin = 7.5f*(1.0f + ocvolt+evolt);
-    if(vin<0.0f) vin = 0.0f;
-    if(vin>15.0f) vin = 15.0f;
-    vbe = 0.8f - 0.8f/(vin + 1.0f);  //really rough, simplistic bjt turn-on emulator
-    input = vin - vbe;
-    input = input*0.1333333333f -0.90588f;  //some magic numbers to return gain to unity & zero the DC
+			ocvolt = cvolt * vcvo[j].n0 + vcvo[j].x1 * vcvo[j].n1
+					- vcvo[j].y1 * vcvo[j].d1;
+			vcvo[j].y1 = ocvolt + DENORMAL_GUARD;
+			vcvo[j].x1 = cvolt;
 
+			oldcvolt[j] = ocvolt;
 
+			evolt = input * vevo[j].n0 + vevo[j].x1 * vevo[j].n1
+					- vevo[j].y1 * vevo[j].d1;
+			vevo[j].y1 = evolt + DENORMAL_GUARD;
+			vevo[j].x1 = input;
+
+			vin = 7.5f * (1.0f + ocvolt + evolt);
+			if (vin < 0.0f)
+				vin = 0.0f;
+			if (vin > 15.0f)
+				vin = 15.0f;
+			vbe = 0.8f - 0.8f / (vin + 1.0f); //really rough, simplistic bjt turn-on emulator
+			input = vin - vbe;
+			input = input * 0.1333333333f - 0.90588f; //some magic numbers to return gain to unity & zero the DC
 
 //    cvolt = vibefilter(input,ecvc,j) + vibefilter(input + emitterfb*oldcvolt[j],vc,j);
 //    ocvolt = vibefilter(cvolt,vcvo,j);
 //    oldcvolt[j] = ocvolt;
 //    evolt = vibefilter(input, vevo,j);
-    
+
 //    input = bjt_shape(ocvolt + evolt);
-    }
-    fbl = fb*ocvolt;
-    outl = lpanning*input;    
-    
-    //Right channel
+		}
+		fbl = fb * ocvolt;
+		outl = lpanning * input;
 
-    
-    vin = 7.5f*(1.0f + fbr+smpsr[i]);
-    if(vin<0.0f) vin = 0.0f;
-    if(vin>15.0f) vin = 15.0f;
-    vbe = 0.8f - 0.8f/(vin + 1.0f);  //really rough, simplistic bjt turn-on emulator
-    input = vin - vbe;
-    input = input*0.1333333333f -0.90588f;  //some magic numbers to return gain to unity & zero the DC
+		//Right channel
 
-
+		vin = 7.5f * (1.0f + fbr + smpsr[i]);
+		if (vin < 0.0f)
+			vin = 0.0f;
+		if (vin > 15.0f)
+			vin = 15.0f;
+		vbe = 0.8f - 0.8f / (vin + 1.0f); //really rough, simplistic bjt turn-on emulator
+		input = vin - vbe;
+		input = input * 0.1333333333f - 0.90588f; //some magic numbers to return gain to unity & zero the DC
 
 //    input = bjt_shape(fbr + smpsr[i]);  
-    
-    emitterfb = 25.0f/fxr;     
-    for(j=4;j<8;j++) //4 stages phasing
-    {
 
-    float y0 = 0.0f;
-    y0 = input*ecvc[j].n0 + ecvc[j].x1*ecvc[j].n1 - ecvc[j].y1*ecvc[j].d1;
-    ecvc[j].y1 = y0 + DENORMAL_GUARD;
-    ecvc[j].x1 = input; 
+		emitterfb = 25.0f / fxr;
+		for (j = 4; j < 8; j++) //4 stages phasing
+				{
 
+			float y0 = 0.0f;
+			y0 = input * ecvc[j].n0 + ecvc[j].x1 * ecvc[j].n1
+					- ecvc[j].y1 * ecvc[j].d1;
+			ecvc[j].y1 = y0 + DENORMAL_GUARD;
+			ecvc[j].x1 = input;
 
-    float x0 = 0.0f;
-    float data = input + emitterfb*oldcvolt[j];
-    x0 = data*vc[j].n0 + vc[j].x1*vc[j].n1 - vc[j].y1*vc[j].d1;
-    vc[j].y1 = x0 + DENORMAL_GUARD;
-    vc[j].x1 = data; 
+			float x0 = 0.0f;
+			float data = input + emitterfb * oldcvolt[j];
+			x0 = data * vc[j].n0 + vc[j].x1 * vc[j].n1 - vc[j].y1 * vc[j].d1;
+			vc[j].y1 = x0 + DENORMAL_GUARD;
+			vc[j].x1 = data;
 
-    cvolt=y0+x0;
-    
-        
-    ocvolt= cvolt*vcvo[j].n0 + vcvo[j].x1*vcvo[j].n1 - vcvo[j].y1*vcvo[j].d1;
-    vcvo[j].y1 = ocvolt + DENORMAL_GUARD;
-    vcvo[j].x1 = cvolt; 
+			cvolt = y0 + x0;
 
-    oldcvolt[j] = ocvolt;
+			ocvolt = cvolt * vcvo[j].n0 + vcvo[j].x1 * vcvo[j].n1
+					- vcvo[j].y1 * vcvo[j].d1;
+			vcvo[j].y1 = ocvolt + DENORMAL_GUARD;
+			vcvo[j].x1 = cvolt;
 
-    evolt = input*vevo[j].n0 + vevo[j].x1*vevo[j].n1 - vevo[j].y1*vevo[j].d1;
-    vevo[j].y1 = evolt + DENORMAL_GUARD;
-    vevo[j].x1 = input; 
+			oldcvolt[j] = ocvolt;
 
-    
-    vin = 7.5f*(1.0f + ocvolt+evolt);
-    if(vin<0.0f) vin = 0.0f;
-    if(vin>15.0f) vin = 15.0f;
-    vbe = 0.8f - 0.8f/(vin + 1.0f);  //really rough, simplistic bjt turn-on emulator
-    input = vin - vbe;
-    input = input*0.1333333333f -0.90588f;  //some magic numbers to return gain to unity & zero the DC
+			evolt = input * vevo[j].n0 + vevo[j].x1 * vevo[j].n1
+					- vevo[j].y1 * vevo[j].d1;
+			vevo[j].y1 = evolt + DENORMAL_GUARD;
+			vevo[j].x1 = input;
 
-
+			vin = 7.5f * (1.0f + ocvolt + evolt);
+			if (vin < 0.0f)
+				vin = 0.0f;
+			if (vin > 15.0f)
+				vin = 15.0f;
+			vbe = 0.8f - 0.8f / (vin + 1.0f); //really rough, simplistic bjt turn-on emulator
+			input = vin - vbe;
+			input = input * 0.1333333333f - 0.90588f; //some magic numbers to return gain to unity & zero the DC
 
 //    cvolt = vibefilter(input,ecvc,j) + vibefilter(input + emitterfb*oldcvolt[j],vc,j);
 //    ocvolt = vibefilter(cvolt,vcvo,j);
 //    oldcvolt[j] = ocvolt;
 //    evolt = vibefilter(input, vevo,j);
-    
+
 //    input = bjt_shape(ocvolt + evolt);
-    }
-    
-    fbr = fb*ocvolt;
-    outr = rpanning*input;  
-    
-    efxoutl[i] = outl*fcross + outr*flrcross;
-    efxoutr[i] = outr*fcross + outl*flrcross;
-    
-    };
- 
-};
+		}
 
-float 
-Vibe::vibefilter(float data, fparams *ftype, int stage)
-{
-float y0 = 0.0f;
-y0 = data*ftype[stage].n0 + ftype[stage].x1*ftype[stage].n1 - ftype[stage].y1*ftype[stage].d1;
-ftype[stage].y1 = y0 + DENORMAL_GUARD;
-ftype[stage].x1 = data; 
-return y0;
-};
+		fbr = fb * ocvolt;
+		outr = rpanning * input;
 
-float 
-Vibe::bjt_shape(float data)
-{
-float vbe, vout;
-float vin = 7.5f*(1.0f + data);
-if(vin<0.0f) vin = 0.0f;
-if(vin>15.0f) vin = 15.0f;
-vbe = 0.8f - 0.8f/(vin + 1.0f);  //really rough, simplistic bjt turn-on emulator
-vout = vin - vbe;
-vout = vout*0.1333333333f -0.90588f;  //some magic numbers to return gain to unity & zero the DC
-return vout;
+		efxoutl[i] = outl * fcross + outr * flrcross;
+		efxoutr[i] = outr * fcross + outl * flrcross;
+
+	};
+
+}
+;
+
+float Vibe::vibefilter(float data, fparams *ftype, int stage) {
+	float y0 = 0.0f;
+	y0 = data * ftype[stage].n0 + ftype[stage].x1 * ftype[stage].n1
+			- ftype[stage].y1 * ftype[stage].d1;
+	ftype[stage].y1 = y0 + DENORMAL_GUARD;
+	ftype[stage].x1 = data;
+	return y0;
+}
+;
+
+float Vibe::bjt_shape(float data) {
+	float vbe, vout;
+	float vin = 7.5f * (1.0f + data);
+	if (vin < 0.0f)
+		vin = 0.0f;
+	if (vin > 15.0f)
+		vin = 15.0f;
+	vbe = 0.8f - 0.8f / (vin + 1.0f); //really rough, simplistic bjt turn-on emulator
+	vout = vin - vbe;
+	vout = vout * 0.1333333333f - 0.90588f; //some magic numbers to return gain to unity & zero the DC
+	return vout;
 }
 
-void
-Vibe::init_vibes()
-{
-k = 2.0f*fSAMPLE_RATE;
-float tmpgain = 1.0f;
- R1 = 4700.0f;
- Rv = 4700.0f;
- C2 = 1e-6f;
- beta = 150.0f;  //transistor forward gain.
- gain = -beta/(beta + 1.0f); 
+void Vibe::init_vibes() {
+	k = 2.0f * fSAMPLE_RATE;
+	float tmpgain = 1.0f;
+	R1 = 4700.0f;
+	Rv = 4700.0f;
+	C2 = 1e-6f;
+	beta = 150.0f; //transistor forward gain.
+	gain = -beta / (beta + 1.0f);
 
 //Univibe cap values 0.015uF, 0.22uF, 470pF, and 0.0047uF
-C1[0] = 0.015e-6f;
-C1[1] = 0.22e-6f;
-C1[2] = 470e-12f;
-C1[3] = 0.0047e-6f;
-C1[4] = 0.015e-6f;
-C1[5] = 0.22e-6f;
-C1[6] = 470e-12f;
-C1[7] = 0.0047e-6f;
+	C1[0] = 0.015e-6f;
+	C1[1] = 0.22e-6f;
+	C1[2] = 470e-12f;
+	C1[3] = 0.0047e-6f;
+	C1[4] = 0.015e-6f;
+	C1[5] = 0.22e-6f;
+	C1[6] = 470e-12f;
+	C1[7] = 0.0047e-6f;
 
-for(int i =0; i<8; i++)
-{
+	for (int i = 0; i < 8; i++) {
 //Vo/Ve driven from emitter
-en1[i] = k*R1*C1[i];
-en0[i] = 1.0f;
-ed1[i] = k*(R1 + Rv)*C1[i];
-ed0[i] = 1.0f + C1[i]/C2;
+		en1[i] = k * R1 * C1[i];
+		en0[i] = 1.0f;
+		ed1[i] = k * (R1 + Rv) * C1[i];
+		ed0[i] = 1.0f + C1[i] / C2;
 
 // Vc~=Ve/(Ic*Re*alpha^2) collector voltage from current input.  
 //Output here represents voltage at the collector
 
-cn1[i] = k*gain*Rv*C1[i];
-cn0[i] = gain*(1.0f + C1[i]/C2);
-cd1[i] = k*(R1 + Rv)*C1[i];
-cd0[i] = 1.0f + C1[i]/C2;
+		cn1[i] = k * gain * Rv * C1[i];
+		cn0[i] = gain * (1.0f + C1[i] / C2);
+		cd1[i] = k * (R1 + Rv) * C1[i];
+		cd0[i] = 1.0f + C1[i] / C2;
 
 //Contribution from emitter load through passive filter network
-ecn1[i] = k*gain*R1*(R1 + Rv)*C1[i]*C2/(Rv*(C2 + C1[i]));
-ecn0[i] = 0.0f;
-ecd1[i] = k*(R1 + Rv)*C1[i]*C2/(C2 + C1[i]);
-ecd0[i] = 1.0f;
+		ecn1[i] = k * gain * R1 * (R1 + Rv) * C1[i] * C2 / (Rv * (C2 + C1[i]));
+		ecn0[i] = 0.0f;
+		ecd1[i] = k * (R1 + Rv) * C1[i] * C2 / (C2 + C1[i]);
+		ecd0[i] = 1.0f;
 
 // %Represents Vo/Vc.  Output over collector voltage
-on1[i] = k*Rv*C2;
-on0[i] = 1.0f;
-od1[i] = k*Rv*C2;
-od0[i] = 1.0f + C2/C1[i];
+		on1[i] = k * Rv * C2;
+		on0[i] = 1.0f;
+		od1[i] = k * Rv * C2;
+		od0[i] = 1.0f + C2 / C1[i];
 
 //%Bilinear xform stuff
-tmpgain =  1.0f/(cd1[i] + cd0[i]);
-vc[i].n1 = tmpgain*(cn0[i] - cn1[i]);
-vc[i].n0 = tmpgain*(cn1[i] + cn0[i]);
-vc[i].d1 = tmpgain*(cd0[i] - cd1[i]);
-vc[i].d0 = 1.0f;
+		tmpgain = 1.0f / (cd1[i] + cd0[i]);
+		vc[i].n1 = tmpgain * (cn0[i] - cn1[i]);
+		vc[i].n0 = tmpgain * (cn1[i] + cn0[i]);
+		vc[i].d1 = tmpgain * (cd0[i] - cd1[i]);
+		vc[i].d0 = 1.0f;
 
-tmpgain =  1.0f/(ecd1[i] + ecd0[i]);
-ecvc[i].n1 = tmpgain*(ecn0[i] - ecn1[i]);
-ecvc[i].n0 = tmpgain*(ecn1[i] + ecn0[i]);
-ecvc[i].d1 = tmpgain*(ecd0[i] - ecd1[i]);
-ecvc[i].d0 = 1.0f;
+		tmpgain = 1.0f / (ecd1[i] + ecd0[i]);
+		ecvc[i].n1 = tmpgain * (ecn0[i] - ecn1[i]);
+		ecvc[i].n0 = tmpgain * (ecn1[i] + ecn0[i]);
+		ecvc[i].d1 = tmpgain * (ecd0[i] - ecd1[i]);
+		ecvc[i].d0 = 1.0f;
 
-tmpgain =  1.0f/(od1[i] + od0[i]);
-vcvo[i].n1 = tmpgain*(on0[i] - on1[i]);
-vcvo[i].n0 = tmpgain*(on1[i] + on0[i]);
-vcvo[i].d1 = tmpgain*(od0[i] - od1[i]);
-vcvo[i].d0 = 1.0f;
+		tmpgain = 1.0f / (od1[i] + od0[i]);
+		vcvo[i].n1 = tmpgain * (on0[i] - on1[i]);
+		vcvo[i].n0 = tmpgain * (on1[i] + on0[i]);
+		vcvo[i].d1 = tmpgain * (od0[i] - od1[i]);
+		vcvo[i].d0 = 1.0f;
 
-tmpgain =  1.0f/(ed1[i] + ed0[i]);
-vevo[i].n1 = tmpgain*(en0[i] - en1[i]);
-vevo[i].n0 = tmpgain*(en1[i] + en0[i]);
-vevo[i].d1 = tmpgain*(ed0[i] - ed1[i]);
-vevo[i].d0 = 1.0f;
+		tmpgain = 1.0f / (ed1[i] + ed0[i]);
+		vevo[i].n1 = tmpgain * (en0[i] - en1[i]);
+		vevo[i].n0 = tmpgain * (en1[i] + en0[i]);
+		vevo[i].d1 = tmpgain * (ed0[i] - ed1[i]);
+		vevo[i].d0 = 1.0f;
 
 // bootstrap[i].n1
 // bootstrap[i].n0
 // bootstrap[i].d1
+	}
+
 }
+;
 
+void Vibe::modulate(float ldrl, float ldrr) {
+	float tmpgain;
+	float R1pRv;
+	float C2pC1;
+	Rv = 4700.0f + ldrl;
+	R1pRv = R1 + Rv;
 
-};
+	for (int i = 0; i < 8; i++) {
+		if (i == 4) {
+			Rv = 4700.0f + ldrr;
+			R1pRv = R1 + Rv;
+		}
 
-void
-Vibe::modulate(float ldrl, float ldrr)
-{
-float tmpgain;
-float R1pRv;
-float C2pC1;
-Rv = 4700.0f + ldrl;
-R1pRv = R1 + Rv;
-
-
-for(int i =0; i<8; i++)
-{
-if(i==4) {
-Rv = 4700.0f + ldrr;
-R1pRv = R1 + Rv;
-}
-
-C2pC1 = C2 + C1[i];
+		C2pC1 = C2 + C1[i];
 //Vo/Ve driven from emitter
-ed1[i] = k*(R1pRv)*C1[i];
+		ed1[i] = k * (R1pRv) * C1[i];
 //ed1[i] = R1pRv*kC1[i];
 
 // Vc~=Ve/(Ic*Re*alpha^2) collector voltage from current input.  
 //Output here represents voltage at the collector
-cn1[i] = k*gain*Rv*C1[i];
+		cn1[i] = k * gain * Rv * C1[i];
 //cn1[i] = kgainCl[i]*Rv;
 //cd1[i] = (R1pRv)*C1[i];
-cd1[i]=ed1[i];
+		cd1[i] = ed1[i];
 
 //Contribution from emitter load through passive filter network
-ecn1[i] = k*gain*R1*cd1[i]*C2/(Rv*(C2pC1));
+		ecn1[i] = k * gain * R1 * cd1[i] * C2 / (Rv * (C2pC1));
 //ecn1[i] = iC2pC1[i]*kgainR1C2*cd1[i]/Rv;
-ecd1[i] = k*cd1[i]*C2/(C2pC1);
+		ecd1[i] = k * cd1[i] * C2 / (C2pC1);
 //ecd1[i] = iC2pC1[i]*k*cd1[i]*C2/(C2pC1);
 
 // %Represents Vo/Vc.  Output over collector voltage
-on1[i] = k*Rv*C2;
-od1[i] = on1[i];
+		on1[i] = k * Rv * C2;
+		od1[i] = on1[i];
 
 //%Bilinear xform stuff
-tmpgain =  1.0f/(cd1[i] + cd0[i]);
-vc[i].n1 = tmpgain*(cn0[i] - cn1[i]);
-vc[i].n0 = tmpgain*(cn1[i] + cn0[i]);
-vc[i].d1 = tmpgain*(cd0[i] - cd1[i]);
+		tmpgain = 1.0f / (cd1[i] + cd0[i]);
+		vc[i].n1 = tmpgain * (cn0[i] - cn1[i]);
+		vc[i].n0 = tmpgain * (cn1[i] + cn0[i]);
+		vc[i].d1 = tmpgain * (cd0[i] - cd1[i]);
 
-tmpgain =  1.0f/(ecd1[i] + ecd0[i]);
-ecvc[i].n1 = tmpgain*(ecn0[i] - ecn1[i]);
-ecvc[i].n0 = tmpgain*(ecn1[i] + ecn0[i]);
-ecvc[i].d1 = tmpgain*(ecd0[i] - ecd1[i]);
-ecvc[i].d0 = 1.0f;
+		tmpgain = 1.0f / (ecd1[i] + ecd0[i]);
+		ecvc[i].n1 = tmpgain * (ecn0[i] - ecn1[i]);
+		ecvc[i].n0 = tmpgain * (ecn1[i] + ecn0[i]);
+		ecvc[i].d1 = tmpgain * (ecd0[i] - ecd1[i]);
+		ecvc[i].d0 = 1.0f;
 
-tmpgain =  1.0f/(od1[i] + od0[i]);
-vcvo[i].n1 = tmpgain*(on0[i] - on1[i]);
-vcvo[i].n0 = tmpgain*(on1[i] + on0[i]);
-vcvo[i].d1 = tmpgain*(od0[i] - od1[i]);
+		tmpgain = 1.0f / (od1[i] + od0[i]);
+		vcvo[i].n1 = tmpgain * (on0[i] - on1[i]);
+		vcvo[i].n0 = tmpgain * (on1[i] + on0[i]);
+		vcvo[i].d1 = tmpgain * (od0[i] - od1[i]);
 
-tmpgain =  1.0f/(ed1[i] + ed0[i]);
-vevo[i].n1 = tmpgain*(en0[i] - en1[i]);
-vevo[i].n0 = tmpgain*(en1[i] + en0[i]);
-vevo[i].d1 = tmpgain*(ed0[i] - ed1[i]);
+		tmpgain = 1.0f / (ed1[i] + ed0[i]);
+		vevo[i].n1 = tmpgain * (en0[i] - en1[i]);
+		vevo[i].n0 = tmpgain * (en1[i] + en0[i]);
+		vevo[i].d1 = tmpgain * (ed0[i] - ed1[i]);
+
+	}
 
 }
+;
 
+void Vibe::setPanning(int value) {
+	Ppanning = value;
+	rpanning = ((float) Ppanning) / 64.0f;
+	lpanning = 2.0f - rpanning;
+	lpanning = 10.0f * powf(lpanning, 4);
+	rpanning = 10.0f * powf(rpanning, 4);
+	lpanning = 1.0f - 1.0f / (lpanning + 1.0f);
+	rpanning = 1.0f - 1.0f / (rpanning + 1.0f);
+	lpanning *= 1.3f;
+	rpanning *= 1.3f;
+}
+;
 
-};
+void Vibe::setVolume(int value) {
+	Pvolume = value;
+	outvolume = (float) Pvolume / 127.0f;
+}
 
-void
-Vibe::setpanning (int value)
-{
-  Ppanning = value;
-  rpanning = ((float)Ppanning) / 64.0f;
-  lpanning = 2.0f - rpanning;
-  lpanning = 10.0f * powf(lpanning, 4);
-  rpanning = 10.0f * powf(rpanning, 4);
-  lpanning = 1.0f - 1.0f/(lpanning + 1.0f);
-  rpanning = 1.0f - 1.0f/(rpanning + 1.0f); 
-  lpanning *= 1.3f;
-  rpanning *= 1.3f; 
-};
+void Vibe::setWidth(int value) {
+	Pwidth = value;
+	fwidth = ((float) Pwidth) / 90.0f;
+}
 
+void Vibe::setFb(int value) {
+	Pfb = value;
+	fb = ((float) (Pfb - 64)) / 65.0f;
+}
 
-void
-Vibe::setvolume (int value)
-{
-  Pvolume = value;
-  outvolume = (float)Pvolume / 127.0f;
-};
+void Vibe::setDepth(int value) {
+	Pdepth = value;
+	fdepth = ((float) Pdepth) / 127.0f;
+}
 
+void Vibe::setLrcross(int value) {
+	Plrcross = value;
+	flrcross = ((float) (Plrcross - 64)) / 64.0f;
+	fcross = 1.0f - abs(flrcross);
+}
 
+int Vibe::getWidth() {
+	return Pwidth;
+}
+int Vibe::getLfoPfreq() {
+	return lfo.getPfreq();
+}
+int Vibe::getLfoPrandomness() {
+	return lfo.getPrandomness();
+}
+int Vibe::getLfoPlfOtype() {
+	return lfo.getPlfOtype();
+}
+int Vibe::getLfoPstereo() {
+	return lfo.getPstereo();
+}
+int Vibe::getPanning() {
+	return Ppanning;
+}
+int Vibe::getVolume() {
+	return Pvolume;
+}
+int Vibe::getFb() {
+	return Pfb;
+}
+int Vibe::getDepth() {
+	return Pdepth;
+}
+int Vibe::getLrcross() {
+	return Plrcross;
+}
 
-void
-Vibe::setpreset (int npreset)
-{
-  const int PRESET_SIZE = 10;
-  const int NUM_PRESETS = 8;
-  int presets[NUM_PRESETS][PRESET_SIZE] = {
-    //Classic
-    {35, 120, 10, 0, 64, 64, 64, 64, 3, 64},
-    //Stereo Classic
-    {35, 120, 10, 0, 48, 64, 64, 64, 3, 64},
-    //Wide Vibe
-    {127, 80, 10, 0, 0, 64, 64, 64, 0, 64},
-    //Classic Chorus
-    {35, 360, 10, 0, 48, 64, 0, 64, 3, 64},   
-    //Vibe Chorus
-    {75, 330, 10, 0, 50, 64, 0, 64, 17, 64},
-    //Lush Chorus
-    {55, 260, 10, 0, 64, 70, 0, 49, 20, 48},  
-    //Sick Phaser
-    {110, 75, 10, 0, 32, 64, 64, 14, 0, 30},
-    //Warble
-    {127, 360, 10, 0, 0, 64, 0, 0, 0, 37}
-    
-  };
-
-  if(npreset>NUM_PRESETS-1)  
-  {     
-   for (int n = 0; n < PRESET_SIZE; n++)
-   changepar (n, presets[npreset][n]);
-  }
-
-};
-
-void
-Vibe::changepar (int npar, int value)
-{
-
-  switch (npar)
-    {
-
-    case 0:
-      Pwidth = value;
-      fwidth = ((float) Pwidth)/90.0f;    
-      break;
-    case 1:
-      lfo.setPfreq(value);
-      
-      break;
-    case 2:
-      lfo.setPrandomness(value);
-      
-      break;
-    case 3:
-      lfo.setPlfOtype(value);
-      
-      break;
-    case 4:
-      lfo.setPstereo(value);
-      
-      break;
-    case 5: // pan
-    setpanning(value);
-      break;  
-    case 6:
-    setvolume(value);
-      break;
-    case 7: //fb
-    Pfb = value;
-    fb = ((float) (Pfb - 64))/65.0f;
-      break;
-    case 8: //depth
-    Pdepth = value;
-    fdepth = ((float) Pdepth)/127.0f;
-      break;
-    case 9: //lrcross
-    Plrcross = value;
-    flrcross = ((float) (Plrcross - 64))/64.0f;
-    fcross = 1.0f - abs(flrcross);
-      break; 
-    
-
-    }
-   
-};
-
-int
-Vibe::getpar (int npar)
-{
-
-  switch (npar)
-
-    {
-    case 0:
-      return (Pwidth);
-      break;
-    case 1:
-      return lfo.getPfreq();
-      break;
-    case 2:
-      return lfo.getPrandomness();
-      break;
-    case 3:
-      return lfo.getPlfOtype();
-      break;
-    case 4:
-      return lfo.getPstereo();
-      break;
-    case 5:
-      return (Ppanning); //pan
-      break;
-    case 6:
-      return(Pvolume);
-      break;
-    case 7:
-      return(Pfb);
-      break;
-    case 8:
-      return(Pdepth);
-      break;
-    case 9:
-      return(Plrcross);
-      break;   
-
-    }
-
-  return (0);
-
-};
-
-
+void Vibe::setLfoPfreq(int value) {lfo.setPfreq(value);}
+void Vibe::setLfoPrandomness(int value) {lfo.setPrandomness(value);}
+void Vibe::setLfoPlfOtype(int value) {lfo.setPlfOtype(value);}
+void Vibe::setLfoPstereo(int value) {lfo.setPstereo(value);}

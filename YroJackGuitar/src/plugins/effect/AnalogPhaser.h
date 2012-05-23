@@ -38,16 +38,160 @@ public:
 	AnalogPhaser();
 	~AnalogPhaser();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpsr);
-	void setpreset(int npreset);
-	void changepar(int npar, int value);
-	int getpar(int npar);
 	void cleanup();
-	int Ppreset;
-	float *efxoutl;
-	float *efxoutr;
-	float outvolume;
+
+	/**
+	 * member declaration
+	 */
+	enum functions {
+		_volume,
+		_distortion,
+		_LfoPfreq,
+		_LfoPrandomness,
+		_LfoPlfOtype,
+		_LfoPstereo,
+		_width,
+		_fb,
+		_stages,
+		_off,
+		_outsub,
+		_depth,
+		_hyper
+	};
+
+	/**
+	 * setter and getter map
+	 */
+	int get0() {
+		return getVolume();
+	}
+
+	void set0(int value) {
+		setVolume(value);
+	}
+
+	int get1() {
+		return getDistortion();
+	}
+
+	void set1(int value) {
+		setDistortion(value);
+	}
+
+	int get2() {
+		return getLfoPfreq();
+	}
+
+	void set2(int value) {
+		setLfoPfreq(value);
+	}
+
+	int get3() {
+		return getLfoPrandomness();
+	}
+
+	void set3(int value) {
+		setLfoPrandomness(value);
+	}
+
+	int get4() {
+		return getLfoPlfOtype();
+	}
+
+	void set4(int value) {
+		setLfoPlfOtype(value);
+	}
+
+	int get5() {
+		return getLfoPstereo();
+	}
+
+	void set5(int value) {
+		setLfoPstereo(value);
+	}
+
+	int get6() {
+		return getWidth();
+	}
+
+	void set6(int value) {
+		setWidth(value);
+	}
+
+	int get7() {
+		return getFb();
+	}
+
+	void set7(int value) {
+		setFb(value);
+	}
+
+	int get8() {
+		return getStages();
+	}
+
+	void set8(int value) {
+		setStages(value);
+	}
+
+	int get9() {
+		return getOffset();
+	}
+
+	void set9(int value) {
+		setOffset(value);
+	}
+	int get10() {
+		return getOutsub();
+	}
+	void set10(int value) {
+		setOutsub(value);
+	}
+	int get11() {
+		return getDepth();
+	}
+	void set11(int value) {
+		setDepth(value);
+	}
+	int get12() {
+		return getHyper();
+	}
+	void set12(int value) {
+		setHyper(value);
+	}
+
+	/**
+	 * setter and getter
+	 */
+	int getVolume();
+	void setVolume(int value);
+	int getDistortion();
+	void setDistortion(int value);
+	int getLfoPfreq();
+	void setLfoPfreq(int value);
+	int getLfoPrandomness();
+	void setLfoPrandomness(int value);
+	int getLfoPlfOtype();
+	void setLfoPlfOtype(int value);
+	int getLfoPstereo();
+	void setLfoPstereo(int value);
+	int getWidth();
+	void setWidth(int value);
+	int getFb();
+	void setFb(int value);
+	int getStages();
+	void setStages(int value);
+	int getOffset();
+	void setOffset(int value);
+	int getOutsub();
+	void setOutsub(int value);
+	int getDepth();
+	void setDepth(int value);
+	int getHyper();
+	void setHyper(int value);
 
 private:
+	float outvolume;
 	//Phaser parameters
 	YroLowfrequencyOscillation lfo; //Phaser modulator
 	int Pvolume; //Used in Process.C to set wet/dry mix
@@ -60,15 +204,6 @@ private:
 	int Phyper; //lfo^2 -- converts tri into hyper-sine
 	int Pdepth; //Depth of phaser sweep
 	int Pbarber; //Enable barber pole phasing
-
-	//Control parameters
-	void setvolume(int Pvolume);
-	void setdistortion(int Pdistortion);
-	void setwidth(int Pwidth);
-	void setfb(int Pfb);
-	void setoffset(int Poffset);
-	void setstages(int Pstages);
-	void setdepth(int Pdepth);
 
 	//Internal Variables
 	bool barber; //Barber pole phasing flag

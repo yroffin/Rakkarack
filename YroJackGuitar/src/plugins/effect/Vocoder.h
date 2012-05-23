@@ -39,24 +39,66 @@ public:
   Vocoder(float *auxresampled_,int bands, int DS, int uq, int dq);
   ~Vocoder();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
   void adjust(int DS);
 
-  int Ppreset;
-  float outvolume;
-  float vulevel;
+  /**
+  * member declaration
+  */
+  enum functions {_preset
+  , _volume
+  , _panning
+  , _Muffle
+  , _Qq
+  , _Input
+  , _level
+  , _Ring
+  };
 
-  float *efxoutl;
-  float *efxoutr;
-  float *auxresampled;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getPanning();}
+  void set2(int value) {setPanning(value);}
+  int  get3() {return getMuffle();}
+  void set3(int value) {setMuffle(value);}
+  int  get4() {return getQq();}
+  void set4(int value) {setQq(value);}
+  int  get5() {return getInput();}
+  void set5(int value) {setInput(value);}
+  int  get6() {return getLevel();}
+  void set6(int value) {setLevel(value);}
+  int  get7() {return getRing();}
+  void set7(int value) {setRing(value);}
+
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getPanning();
+  void setPanning(int value);
+  int  getMuffle();
+  void setMuffle(int value);
+  int  getQq();
+  void setQq(int value);
+  int  getInput();
+  void setInput(int value);
+  int  getLevel();
+  void setLevel(int value);
+  int  getRing();
+  void setRing(int value);
 
 private:
+  float outvolume;
+  float vulevel;
+  float *auxresampled;
 
-  void setvolume (int Pvolume);
-  void setpanning (int Ppanning);
+
   void init_filters();
   void adjustq(float q);
   void   setbands(int numbands, float startfreq, float endfreq);

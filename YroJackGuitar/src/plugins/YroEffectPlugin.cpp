@@ -48,6 +48,7 @@ YroEffectPlugin::YroEffectPlugin(const char *_name, const char *_preset) {
 	fSAMPLE_RATE = helper->getFloatPeriod();
 	cSAMPLE_RATE = 1.0f / fSAMPLE_RATE;
 	preset = 0;
+	setPreset(0);
 }
 
 YroEffectPlugin::~YroEffectPlugin() {

@@ -36,17 +36,79 @@ public:
   Arpie();
   ~Arpie();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
-  float *efxoutl;
-  float *efxoutr;
-  float outvolume;
+  /**
+  * member declaration
+  */
+  enum functions {
+  _volume
+  , _panning
+  , _delay
+  , _lrdelay
+  , _lrcross
+  , _fb
+  , _hidamp
+  , _reverse
+  , _harms
+  , _pattern
+  , _subdiv
+  };
+
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getVolume();}
+  void set0(int value) {setVolume(value);}
+  int  get1() {return getPanning();}
+  void set1(int value) {setPanning(value);}
+  int  get2() {return getDelay();}
+  void set2(int value) {setDelay(value);}
+  int  get3() {return getLrdelay();}
+  void set3(int value) {setLrdelay(value);}
+  int  get4() {return getLrcross();}
+  void set4(int value) {setLrcross(value);}
+  int  get5() {return getFb();}
+  void set5(int value) {setFb(value);}
+  int  get6() {return getHidamp();}
+  void set6(int value) {setHidamp(value);}
+  int  get7() {return getReverse();}
+  void set7(int value) {setReverse(value);}
+  int  get8() {return getHarms();}
+  void set8(int value) {setHarms(value);}
+  int  get9() {return getPattern();}
+  void set9(int value) {setPattern(value);}
+  int  get10() {return getSubdiv();}
+  void set10(int value) {setSubdiv(value);}
+
+  /**
+  * setter and getter
+  */
+  int getHarms();
+  void setHarms(int value);
+  int getSubdiv();
+  void setSubdiv(int value);
+  int  getVolume();
+  void setVolume(int value);
+  int  getPanning();
+  void setPanning(int value);
+  int  getDelay();
+  void setDelay(int value);
+  int  getLrdelay();
+  void setLrdelay(int value);
+  int  getLrcross();
+  void setLrcross(int value);
+  int  getFb();
+  void setFb(int value);
+  int  getHidamp();
+  void setHidamp(int value);
+  int  getReverse();
+  void setReverse(int value);
+  int  getPattern();
+  void setPattern(int value);
 
 private:
+  float outvolume;
   //Parametrii
   int Pvolume;	//Volumul or E/R
   int Ppanning;	//Panning

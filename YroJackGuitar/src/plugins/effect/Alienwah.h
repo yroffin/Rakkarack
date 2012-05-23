@@ -38,19 +38,120 @@ public:
 	~Alienwah();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpsr);
 
-	void setpreset(int npreset);
-	void changepar(int npar, int value);
-	int getpar(int npar);
+	/**
+	 * member declaration
+	 */
+	enum functions {
+		_volume,
+		_panning,
+		_LfoPfreq,
+		_LfoPrandomness,
+		_LfoPlfOtype,
+		_LfoPstereo,
+		_depth,
+		_fb,
+		_delay,
+		_lrcross,
+		_phase
+	};
+
+	/**
+	 * setter and getter
+	 */
+	int get0() {
+		return getVolume();
+	}
+	;
+	void set0(int value) {
+		setVolume(value);
+	}
+	;
+	int get1() {
+		return getPanning();
+	}
+	;
+	void set1(int value) {
+		setPanning(value);
+	}
+	;
+	int get2() {
+		return getLfoPfreq();
+	}
+	;
+	void set2(int value) {
+		setLfoPfreq(value);
+	}
+	;
+	int get3() {
+		return getLfoPrandomness();
+	}
+	;
+	void set3(int value) {
+		setLfoPrandomness(value);
+	}
+	;
+	int get4() {
+		return getLfoPlfOtype();
+	}
+	;
+	void set4(int value) {
+		setLfoPlfOtype(value);
+	}
+	;
+	int get5() {
+		return getLfoPstereo();
+	}
+	;
+	void set5(int value) {
+		setLfoPstereo(value);
+	}
+	;
+	int get6() {
+		return getDepth();
+	}
+	;
+	void set6(int value) {
+		setDepth(value);
+	}
+	;
+	int get7() {
+		return getFb();
+	}
+	;
+	void set7(int value) {
+		setFb(value);
+	}
+	;
+	int get8() {
+		return getDelay();
+	}
+	;
+	void set8(int value) {
+		setDelay(value);
+	}
+	;
+	int get9() {
+		return getLrcross();
+	}
+	;
+	void set9(int value) {
+		setLrcross(value);
+	}
+	;
+	int get10() {
+		return getPhase();
+	}
+	;
+	void set10(int value) {
+		setPhase(value);
+	}
+	;
+
 	void cleanup();
 
-	int Ppreset;
-
-	float *efxoutl;
-	float *efxoutr;
-
+private:
 	float outvolume;
 
-private:
 	struct COMPLEXTYPE {
 		float a, b;
 	};
@@ -68,14 +169,32 @@ private:
 	int oldk;
 	int oldpdelay;
 
-	//Control Parametrii
-	void setvolume(int Pvolume);
-	void setpanning(int Ppanning);
-	void setdepth(int Pdepth);
-	void setfb(int Pfb);
-	void setlrcross(int Plrcross);
-	void setdelay(int Pdelay);
-	void setphase(int Pphase);
+	/**
+	 * control
+	 */
+	void setVolume(int Pvolume);
+	void setPanning(int Ppanning);
+	void setDepth(int Pdepth);
+	void setFb(int Pfb);
+	void setLrcross(int Plrcross);
+	void setDelay(int Pdelay);
+	void setPhase(int Pphase);
+	int getVolume();
+	int getPanning();
+	int getDepth();
+	int getFb();
+	int getLrcross();
+	int getDelay();
+	int getPhase();
+
+	int getLfoPstereo();
+	int getLfoPlfOtype();
+	int getLfoPrandomness();
+	int getLfoPfreq();
+	void setLfoPstereo(int);
+	void setLfoPlfOtype(int);
+	void setLfoPrandomness(int);
+	void setLfoPfreq(int);
 
 	//Valorile interne
 	float panning, fb, depth, lrcross, phase;

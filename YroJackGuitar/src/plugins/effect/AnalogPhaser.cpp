@@ -38,7 +38,13 @@ using namespace std;
 #define ONE_  0.99999f        // To prevent LFO ever reaching 1.0 for filter stability purposes
 #define ZERO_ 0.00001f        // Same idea as above.
 AnalogPhaser::AnalogPhaser() :
-		YroEffectPlugin("AnalogPhaser") {
+		YroEffectPlugin("AnalogPhaser",
+				"Phaser1: 64, 20, 14, 0, 1, 64, 110, 40, 4, 10, 0, 64, 1;"
+						"Phaser2: 64, 20, 14, 5, 1, 64, 110, 40, 6, 10, 0, 70, 1;"
+						"Phaser3: 64, 20, 9, 0, 0, 64, 40, 40, 8, 10, 0, 60, 0;"
+						"Phaser4: 64, 20, 14, 10, 0, 64, 110, 80, 7, 10, 1, 45, 1;"
+						"Phaser5: 25, 20, 240, 10, 0, 64, 25, 16, 8, 100, 0, 25, 0;"
+						"Phaser6: 64, 20, 1, 10, 1, 64, 110, 40, 12, 10, 0, 70, 1;") {
 
 	lxn1 = (float *) malloc(sizeof(float) * MAX_PHASER_STAGES);
 
@@ -73,11 +79,9 @@ AnalogPhaser::AnalogPhaser() :
 	CFs = 2.0f * fSAMPLE_RATE * C;
 	invperiod = 1.0f / fPERIOD;
 
-	Ppreset = 0;
-	setpreset(Ppreset);
+	setPreset(0);
 	cleanup();
 }
-;
 
 AnalogPhaser::~AnalogPhaser() {
 }
@@ -216,38 +220,38 @@ void AnalogPhaser::cleanup() {
 /*
  * Parameter control
  */
-void AnalogPhaser::setwidth(int Pwidth) {
+void AnalogPhaser::setWidth(int Pwidth) {
 	this->Pwidth = Pwidth;
 	width = ((float) Pwidth / 127.0f);
 }
 ;
 
-void AnalogPhaser::setfb(int Pfb) {
+void AnalogPhaser::setFb(int Pfb) {
 	this->Pfb = Pfb;
 	fb = (float) (Pfb - 64) / 64.2f;
 }
 ;
 
-void AnalogPhaser::setvolume(int Pvolume) {
+void AnalogPhaser::setVolume(int Pvolume) {
 	this->Pvolume = Pvolume;
 	// outvolume is needed in calling program
 	outvolume = (float) Pvolume / 127.0f;
 }
 ;
 
-void AnalogPhaser::setdistortion(int Pdistortion) {
+void AnalogPhaser::setDistortion(int Pdistortion) {
 	this->Pdistortion = Pdistortion;
 	distortion = (float) Pdistortion / 127.0f;
 }
 ;
 
-void AnalogPhaser::setoffset(int Poffset) {
+void AnalogPhaser::setOffset(int Poffset) {
 	this->Poffset = Poffset;
 	offsetpct = (float) Poffset / 127.0f;
 }
 ;
 
-void AnalogPhaser::setstages(int Pstages) {
+void AnalogPhaser::setStages(int Pstages) {
 
 	if (Pstages >= MAX_PHASER_STAGES)
 		Pstages = MAX_PHASER_STAGES;
@@ -257,140 +261,74 @@ void AnalogPhaser::setstages(int Pstages) {
 }
 ;
 
-void AnalogPhaser::setdepth(int Pdepth) {
+void AnalogPhaser::setDepth(int Pdepth) {
 	this->Pdepth = Pdepth;
 	depth = (float) (Pdepth - 64) / 127.0f; //Pdepth input should be 0-127.  depth shall range 0-0.5 since we don't need to shift the full spectrum.
 }
 ;
 
-void AnalogPhaser::setpreset(int npreset) {
-	const int PRESET_SIZE = 13;
-	const int NUM_PRESETS = 6;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Phaser1
-			{ 64, 20, 14, 0, 1, 64, 110, 40, 4, 10, 0, 64, 1 },
-			//Phaser2
-			{ 64, 20, 14, 5, 1, 64, 110, 40, 6, 10, 0, 70, 1 },
-			//Phaser3
-			{ 64, 20, 9, 0, 0, 64, 40, 40, 8, 10, 0, 60, 0 },
-			//Phaser4
-			{ 64, 20, 14, 10, 0, 64, 110, 80, 7, 10, 1, 45, 1 },
-			//Phaser5
-			{ 25, 20, 240, 10, 0, 64, 25, 16, 8, 100, 0, 25, 0 },
-			//Phaser6
-			{ 64, 20, 1, 10, 1, 64, 110, 40, 12, 10, 0, 70, 1 } };
-
-	if (npreset < NUM_PRESETS) {
-
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
-	}
-
-	Ppreset = npreset;
+int AnalogPhaser::getVolume() {
+	return Pvolume;
 }
-;
-
-void AnalogPhaser::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		setdistortion(value);
-		break;
-	case 2:
-		lfo.setPfreq(value);
-
-		break;
-	case 3:
-		lfo.setPrandomness(value);
-
-		break;
-	case 4:
-		lfo.setPlfOtype(value);
-
-		barber = 0;
-		if (value == 2)
-			barber = 1;
-		break;
-	case 5:
-		lfo.setPstereo(value);
-
-		break;
-	case 6:
-		setwidth(value);
-		break;
-	case 7:
-		setfb(value);
-		break;
-	case 8:
-		setstages(value);
-		break;
-	case 9:
-		setoffset(value);
-		break;
-	case 10:
-		if (value > 1)
-			value = 1;
-		Poutsub = value;
-		break;
-	case 11:
-		setdepth(value);
-		break;
-	case 12:
-		if (value > 1)
-			value = 1;
-		Phyper = value;
-		break;
-	};
+int AnalogPhaser::getDistortion() {
+	return Pdistortion;
 }
-;
-
-int AnalogPhaser::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Pdistortion);
-		break;
-	case 2:
-		return lfo.getPfreq();
-		break;
-	case 3:
-		return lfo.getPrandomness();
-		break;
-	case 4:
-		return lfo.getPlfOtype();
-		break;
-	case 5:
-		return lfo.getPstereo();
-		break;
-	case 6:
-		return (Pwidth);
-		break;
-	case 7:
-		return (Pfb);
-		break;
-	case 8:
-		return (Pstages);
-		break;
-	case 9:
-		return (Poffset);
-		break;
-	case 10:
-		return (Poutsub);
-		break;
-	case 11:
-		return (Pdepth);
-		break;
-	case 12:
-		return (Phyper);
-		break;
-
-	default:
-		return (0);
-	};
-	return 0;
+int AnalogPhaser::getWidth() {
+	return Pwidth;
+}
+int AnalogPhaser::getFb() {
+	return Pfb;
+}
+int AnalogPhaser::getStages() {
+	return Pstages;
+}
+int AnalogPhaser::getOffset() {
+	return Poffset;
+}
+int AnalogPhaser::getDepth() {
+	return Pdepth;
 }
 
+int AnalogPhaser::getOutsub() {
+	return Poutsub;
+}
+void AnalogPhaser::setOutsub(int value) {
+	Poutsub = value;
+}
+int AnalogPhaser::getHyper() {
+	return Phyper;
+}
+void AnalogPhaser::setHyper(int value) {
+	if (value > 1)
+		value = 1;
+	Phyper = value;
+}
+
+int AnalogPhaser::getLfoPstereo() {
+	return lfo.getPstereo();
+}
+int AnalogPhaser::getLfoPlfOtype() {
+	return lfo.getPlfOtype();
+}
+int AnalogPhaser::getLfoPrandomness() {
+	return lfo.getPrandomness();
+}
+int AnalogPhaser::getLfoPfreq() {
+	return lfo.getPfreq();
+}
+
+void AnalogPhaser::setLfoPstereo(int value) {
+	lfo.setPstereo(value);
+}
+void AnalogPhaser::setLfoPlfOtype(int value) {
+	lfo.setPlfOtype(value);
+	barber = 0;
+	if (value == 2)
+		barber = 1;
+}
+void AnalogPhaser::setLfoPrandomness(int value) {
+	lfo.setPrandomness(value);
+}
+void AnalogPhaser::setLfoPfreq(int value) {
+	lfo.setPfreq(value);
+}

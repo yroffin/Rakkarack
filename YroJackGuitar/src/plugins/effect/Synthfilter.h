@@ -44,25 +44,106 @@ public:
   Synthfilter();
   ~Synthfilter();
   void render(jack_nframes_t nframes,float * smpsl, float * smpsr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
-  float outvolume;
+  /**
+  * member declaration
+  */
+  enum functions {_preset
+  , _volume
+  , _distortion
+  , _LfoPfreq
+  , _LfoPrandomness
+  , _LfoPlfOtype
+  , _LfoPstereo
+  , _width
+  , _fb
+  , _pstage
+  , _hpstages
+  , _outsub
+  , _depth
+  , _envelope
+  , _attack
+  , _release
+  , _bandwith
+  };
 
-  float *efxoutl;
-  float *efxoutr;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getDistortion();}
+  void set2(int value) {setDistortion(value);}
+  int  get3() {return getLfoPfreq();}
+  void set3(int value) {setLfoPfreq(value);}
+  int  get4() {return getLfoPrandomness();}
+  void set4(int value) {setLfoPrandomness(value);}
+  int  get5() {return getLfoPlfOtype();}
+  void set5(int value) {setLfoPlfOtype(value);}
+  int  get6() {return getLfoPstereo();}
+  void set6(int value) {setLfoPstereo(value);}
+  int  get7() {return getWidth();}
+  void set7(int value) {setWidth(value);}
+  int  get8() {return getFb();}
+  void set8(int value) {setFb(value);}
+  int  get9() {return getPstage();}
+  void set9(int value) {setPstage(value);}
+  int  get10() {return getHpstages();}
+  void set10(int value) {setHpstages(value);}
+  int  get11() {return getOutsub();}
+  void set11(int value) {setOutsub(value);}
+  int  get12() {return getDepth();}
+  void set12(int value) {setDepth(value);}
+  int  get13() {return getEnvelope();}
+  void set13(int value) {setEnvelope(value);}
+  int  get14() {return getAttack();}
+  void set14(int value) {setAttack(value);}
+  int  get15() {return getRelease();}
+  void set15(int value) {setRelease(value);}
+  int  get16() {return getBandwidth();}
+  void set16(int value) {setBandwidth(value);}
+
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getDistortion();
+  void setDistortion(int value);
+  int  getLfoPfreq();
+  void setLfoPfreq(int value);
+  int  getLfoPrandomness();
+  void setLfoPrandomness(int value);
+  int  getLfoPlfOtype();
+  void setLfoPlfOtype(int value);
+  int  getLfoPstereo();
+  void setLfoPstereo(int value);
+  int  getWidth();
+  void setWidth(int value);
+  int  getFb();
+  void setFb(int value);
+  int  getPstage();
+  void setPstage(int value);
+  int  getHpstages();
+  void setHpstages(int value);
+  int  getOutsub();
+  void setOutsub(int value);
+  int  getDepth();
+  void setDepth(int value);
+  int  getEnvelope();
+  void setEnvelope(int value);
+  int  getAttack();
+  void setAttack(int value);
+  int  getRelease();
+  void setRelease(int value);
+  int  getBandwidth();
+  void setBandwidth(int value);
 
 private:
-
-  //Control parameters
-  void setvolume (int Pvolume);
-  void setdistortion (int Pdistortion);
-  void setwidth (int Pwidth);
-  void setfb (int Pfb);
-  void setdepth (int Pdepth);
+  float outvolume;
 
   //Phaser parameters
   int Pvolume;			 //0//Used in Process.C to set wet/dry mix

@@ -1,184 +1,125 @@
 #!/bin/bash
 
-for effect in `cat ../rakarrack-0.6.1/listeEffect.txt`; do cp ../rakarrack-0.6.1/src/$effect.C src/plugins/effect/$effect.cpp; done
-for effect in `cat ../rakarrack-0.6.1/listeEffect.txt`; do cp ../rakarrack-0.6.1/src/$effect.h src/plugins/effect/$effect.h; done
+set -a tMember
+typeset -i iMember=0
+typeset -i iGetpar=0
+typeset -i iGetparDeb=0
+typeset -i iGetparFin=0
 
-normalize() {
-	set -x
-	mv src/plugins/effect/$1.cpp src/plugins/effect/$2.cpp
-	mv src/plugins/effect/$1.h src/plugins/effect/$2.h
-	FILE=src/plugins/effect/$2.cpp
-	FILESED=src/plugins/effect/$2.sed
-	cat $FILE | sed "s!$3!$2!g" > $FILESED
-	mv -f $FILESED $FILE
-	FILE=src/plugins/effect/$2.h
-	FILESED=src/plugins/effect/$2.sed
-	cat $FILE | sed "s!$3!$2!g" > $FILESED
-	mv -f $FILESED $FILE
-	FILE=src/plugins/effect/$2.cpp
-	FILESED=src/plugins/effect/$2.sed
-	cat $FILE | sed "s!$4!$2!g" > $FILESED
-	mv -f $FILESED $FILE
-	FILE=src/plugins/effect/$2.h
-	FILESED=src/plugins/effect/$2.sed
-	cat $FILE | sed "s!$4!$2!g" > $FILESED
-	mv -f $FILESED $FILE
-	set +x
+set -a tAtt
+typeset -i iAtt=0
+set -a tAttMin
+typeset -i iAttMin=0
+set -a tAttIndex
+typeset -i iAttIndex=0
+
+searchMember() {
+	typeset -i balise=`grep -n ::changepar $FILECPP | cut -f1 -d:`
+	for iNbLigne in `grep -n :: $FILECPP | cut -f1 -d':'`
+	do
+		[ ${iNbLigne} == $balise ] && {
+			iGetpar=${iMember}
+		}
+		tMember[${iMember}]=${iNbLigne}
+		iMember=${iMember}+1
+	done
+	iGetparDeb=${tMember[$iGetpar]}+1
+	iGetparFin=${tMember[${iGetpar}+1]}-$iGetparDeb
+	iGetparDeb=${tMember[${iGetpar}+1]}-2
 }
 
-# $1 le nom du fichier original
-# $2 le nom du fichier cible
-# $3 replace interne vers $2
-# $4 replace interne vers $2
-
-#normalize Dual_Flange DualFlanger Dflange Dual_Flange
-
-inject_include() {
-	echo inject include : $*
-	effect=$1
-	include=$2
-	FILE=src/plugins/effect/$effect.h
-	FILESED=src/plugins/effect/$effect.sed
-	grep $include $FILE >/dev/null
-	[ $? = 0 ] && {
-		cat $FILE | sed "s!#include <plugins/YroEffectPlugin.h>!#include <plugins/YroEffectPlugin.h>\n#include <$3.h>!g" > $FILESED
-		mv -f $FILESED $FILE
-	}
+extractPar() {
+	printf "Extract from %d, %d\n" $iGetparDeb $iGetparFin
+	for att in `head -n $iGetparDeb $FILECPP | tail -n $iGetparFin | grep set | sed 's!lfo.set!setLfo!g;s!\t!!g;s!set!!g' | cut -f1 -d '('`
+	do
+		tAtt[${iAtt}]=`echo ${att} | cut -b1 | tr [:lower:] [:upper:]``echo ${att} | cut -b2-`
+		iAtt=${iAtt}+1
+		tAttMin[${iAttMin}]=${att}
+		iAttMin=${iAttMin}+1
+	done
+	for att in `head -n $iGetparDeb $FILECPP | tail -n $iGetparFin | grep case | sed 's! !!g;s!\t!!g;s!case!!g' | cut -f1 -d':'`
+	do
+		tAttIndex[${iAttIndex}]=${att}
+		iAttIndex=${iAttIndex}+1
+	done
+	typeset -i iCpt=0
+	while [ $iCpt -lt $iAtt ]
+	do
+		printf "Attribute[%s]: %s\n" ${tAttIndex[$iCpt]} ${tAtt[$iCpt]}
+		[ "0${tAttIndex[$iCpt]}" -ne $iCpt ] && {
+			echo "Rupture d'index"
+			exit 1
+		}
+		iCpt=$iCpt+1
+	done
+	printf "/**\n* member declaration\n*/\nenum functions {_preset\n"
+	typeset -i iCpt=0
+	while [ $iCpt -lt $iAtt ]
+	do
+		printf ", _%s\n" ${tAttMin[$iCpt]}
+		iCpt=$iCpt+1
+	done
+	printf "};\n\n/**\n* setter and getter map\n*/\n"
+	printf "int  get0() {return getPreset();}\n"
+	printf "void set0(int value) {setPreset(value);}\n"
+	typeset -i iCpt=0
+	while [ $iCpt -lt $iAtt ]
+	do
+		typeset -i occur=${tAttIndex[$iCpt]}+1
+		printf "int  get%s() {return get%s();}\n" $occur ${tAtt[$iCpt]}
+		printf "void set%s(int value) {set%s(value);}\n" $occur ${tAtt[$iCpt]}
+		iCpt=$iCpt+1
+	done
+	printf "\n"
+	printf "/**\n* setter and getter\n*/\n"
+	typeset -i iCpt=0
+	while [ $iCpt -lt $iAtt ]
+	do
+		printf "int  get%s();\n" ${tAtt[$iCpt]}
+		printf "void set%s(int value);\n" ${tAtt[$iCpt]}
+		iCpt=$iCpt+1
+	done
+	printf "\n"
+	typeset -i iCpt=0
+	while [ $iCpt -lt $iAtt ]
+	do
+		printf "int  %s::get%s() {return P%s;}\n" $effect ${tAtt[$iCpt]} ${tAttMin[$iCpt]} | sed 's!PLfo!lfo.get!g;s!getPrandomness!getPrandomness()!g;s!getPfreq!getPfreq()!g;s!getPstereo!getPstereo()!g;s!getPlfOtype!getPlfOtype()!g'
+		iCpt=$iCpt+1
+	done
+	printf "\n"
+	typeset -i iCpt=0
+	while [ $iCpt -lt $iAtt ]
+	do
+		printf "void %s::set%s(int value) {P%s = value;}\n" $effect ${tAtt[$iCpt]} ${tAttMin[$iCpt]} | sed 's!PLfo!lfo.set!g;s!setPrandomness = value!setPrandomness(value)!g;s!setPfreq = value!setPfreq(value)!g;s!setPlfOtype = value!setPlfOtype(value)!g;s!setPstereo = value!setPstereo(value)!g'
+		iCpt=$iCpt+1
+	done
+	printf "\n"
 }
 
-replace_cpp() {
+normalizeCpp() {
 	echo replace cpp: $*
 	FILE=src/plugins/effect/$effect.cpp
 	FILESED=src/plugins/effect/$effect.sed
 	# menage
-	cat $FILE | sed "s!#include <math.h>!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!#include <stdio.h>!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!efxoutl = efxoutl_;!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!efxoutr = efxoutr_;!!g" > $FILESED
-	mv -f $FILESED $FILE
-	# default include
-	cat $FILE | sed "s!#include \"$effect.h\"!#include <plugins/effect/$effect.h>\nusing namespace std;!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!$effect::$effect!CONSTRUCTOR\n$effect::$effect!g" > $FILESED
-	mv -f $FILESED $FILE
-	grep -v $effect::$effect $FILE > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!CONSTRUCTOR!$effect::$effect() : YroEffectPlugin(\"$effect\")!g" > $FILESED
-	mv -f $FILESED $FILE
-	# lfo
-	cat $FILE | sed "s!$effect::out (!$effect::render(jack_nframes_t nframes,!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!effectlfoout (!render(nframes,!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!lfo.Pfreq = value!lfo.setPfreq(value)!g;s!lfo.Prandomness = value!lfo.setPrandomness(value)!g;s!lfo.PLFOtype = value!lfo.setPlfOtype(value)!g;s!lfo.Pstereo = value!lfo.setPstereo(value)!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!(lfo.Pfreq)!lfo.getPfreq()!g;s!(lfo.Prandomness)!lfo.getPrandomness()!g;s!(lfo.PLFOtype)!lfo.getPlfOtype()!g;s!(lfo.Pstereo)!lfo.getPstereo()!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!dlfo.updateparams ();!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!lfo.updateparams ();!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s! PERIOD! iPERIOD!g" > $FILESED
-	mv -f $FILESED $FILE
-	# lfo1
-	cat $FILE | sed "s!lfo1.Pfreq = value!lfo1.setPfreq(value)!g;s!lfo1.Prandomness = value!lfo1.setPrandomness(value)!g;s!lfo1.PLFOtype = value!lfo1.setPlfOtype(value)!g;s!lfo1.Pstereo = value!lfo1.setPstereo(value)!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!(lfo1.Pfreq)!lfo1.getPfreq()!g;s!(lfo1.Prandomness)!lfo1.getPrandomness()!g;s!(lfo1.PLFOtype)!lfo1.getPlfOtype()!g;s!(lfo1.Pstereo)!lfo1.getPstereo()!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!dlfo1.updateparams ();!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!lfo1.updateparams ();!!g" > $FILESED
-	mv -f $FILESED $FILE
-	# lfo2
-	cat $FILE | sed "s!lfo2.Pfreq = value!lfo2.setPfreq(value)!g;s!lfo2.Prandomness = value!lfo2.setPrandomness(value)!g;s!lfo2.PLFOtype = value!lfo2.setPlfOtype(value)!g;s!lfo2.Pstereo = value!lfo2.setPstereo(value)!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!(lfo2.Pfreq)!lfo2.getPfreq()!g;s!(lfo2.Prandomness)!lfo2.getPrandomness()!g;s!(lfo2.PLFOtype)!lfo2.getPlfOtype()!g;s!(lfo2.Pstereo)!lfo2.getPstereo()!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!dlfo2.updateparams ();!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!lfo2.updateparams ();!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s! PERIOD! iPERIOD!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!(PERIOD!(iPERIOD!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s! SAMPLE_RATE! iSAMPLE_RATE!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!(SAMPLE_RATE!(iSAMPLE_RATE!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!error_num=!helper->setErrorNumber(!g" > $FILESED
-	mv -f $FILESED $FILE
-	# filterout
-	cat $FILE | sed "s!->filterout(h!->filterout(iPERIOD,fPERIOD,h!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!->filterout(l!->filterout(iPERIOD,fPERIOD,l!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!->filterout(m!->filterout(iPERIOD,fPERIOD,m!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!->filterout(e!->filterout(iPERIOD,fPERIOD,e!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!->filterout(input!->filterout(iPERIOD,fPERIOD,input!g" > $FILESED
-	mv -f $FILESED $FILE
+	#cat $FILE | sed "s!#include <math.h>!!g" > $FILESED
+	#mv -f $FILESED $FILE
 }
 
-replace_hpp() {
+normalizeHpp() {
 	echo replace hpp: $*
-	FILE=src/plugins/effect/$effect.h
-	FILESED=src/plugins/effect/$effect.sed
-	cat $FILE | sed "s!class $effect!\nnamespace std {\n\nclass $effect : public YroEffectPlugin\n!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!EffectLFO!YroLowfrequencyOscillation!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!EffectLFO!YroLowfrequencyOscillation!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!#include \"global.h\"!#include <plugins/YroEffectPlugin.h>!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!#include \"YroLowfrequencyOscillation.h\"!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!#endif!}\n#endif!g" > $FILESED
-	mv -f $FILESED $FILE
-	# menage
-	cat $FILE | sed "s!#include \"HarmonicEnhancer.h\"!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!#include \"AnalogFilter.h\"!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!$effect (!CONSTRUCTOR\nTODELETE(!g" > $FILESED
-	mv -f $FILESED $FILE
-	grep -v "\~$effect" $FILE > $FILESED
-	mv -f $FILESED $FILE
-	grep -v "$effect (" $FILE > $FILESED
-	mv -f $FILESED $FILE
-	grep -v "TODELETE" $FILE > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!CONSTRUCTOR!$effect();!g" > $FILESED
-	mv -f $FILESED $FILE
-	# render
-	cat $FILE | sed "s!void out (!void render(jack_nframes_t nframes,!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!class FPreset \*Fpre;!!g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!class AnalogFilter !AnalogFilter !g" > $FILESED
-	mv -f $FILESED $FILE
-	cat $FILE | sed "s!class Resample !Resample !g" > $FILESED
-	mv -f $FILESED $FILE
 }
 
-for effect in `cat refactor.txt`
+for effect in Shuffle
 do
-	replace_cpp $effect
-	replace_hpp $effect
-	inject_include $effect YroLowfrequencyOscillation plugins/misc/YroLowfrequencyOscillation
-	inject_include $effect HarmEnhancer plugins/filter/HarmEnhancer
-	inject_include $effect AnalogFilter plugins/filter/AnalogFilter
-	inject_include $effect Resample plugins/misc/Resample
+	export effect
+	export FILESED=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.sed
+	export FILECPP=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.cpp
+	export FILEHPP=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.h
+	searchMember
+	extractPar
+
+	normalizeCpp $effect
+	normalizeHpp $effect
 done
 exit 0
-#include <plugins/YroEffectPlugin.h>
-
-namespace std {
-
-class YroChorus : public YroEffectPlugin {
 

@@ -26,18 +26,17 @@
 using namespace std;
 
 Alienwah::Alienwah() :
-		YroEffectPlugin("Alienwah") {
-
-	Ppreset = 0;
-	setpreset(Ppreset);
-	cleanup();
+		YroEffectPlugin("Alienwah",
+				"AlienWah1: 64, 64, 80, 0, 0, 62, 60, 105, 25, 0, 64;"
+						"AlienWah2: 64, 64, 95, 106, 0, 101, 60, 105, 17, 0, 64;"
+						"AlienWah3: 64, 64, 55, 0, 1, 100, 112, 105, 31, 0, 42;"
+						"AlienWah4: 64, 64, 1, 0, 1, 66, 101, 11, 47, 0, 86;") {
 	oldclfol.a = fb;
 	oldclfol.b = 0.0;
 	oldclfor.a = fb;
 	oldclfor.b = 0.0;
-
+	cleanup();
 }
-;
 
 Alienwah::~Alienwah() {
 }
@@ -112,19 +111,16 @@ void Alienwah::cleanup() {
 	};
 	oldk = 0;
 }
-;
 
 /*
  * Parameter control
  */
-
-void Alienwah::setdepth(int Pdepth) {
+void Alienwah::setDepth(int Pdepth) {
 	this->Pdepth = Pdepth;
 	depth = ((float) Pdepth / 127.0f);
 }
-;
 
-void Alienwah::setfb(int Pfb) {
+void Alienwah::setFb(int Pfb) {
 	this->Pfb = Pfb;
 	fb = fabsf(((float) Pfb - 64.0f) / 64.1f);
 	fb = sqrtf(fb);
@@ -133,33 +129,28 @@ void Alienwah::setfb(int Pfb) {
 	if (Pfb < 64)
 		fb = -fb;
 }
-;
 
-void Alienwah::setvolume(int Pvolume) {
+void Alienwah::setVolume(int Pvolume) {
 	this->Pvolume = Pvolume;
 	outvolume = (float) Pvolume / 127.0f;
 }
-;
 
-void Alienwah::setpanning(int Ppanning) {
+void Alienwah::setPanning(int Ppanning) {
 	this->Ppanning = Ppanning;
 	panning = ((float) Ppanning + .5f) / 127.0f;
 }
-;
 
-void Alienwah::setlrcross(int Plrcross) {
+void Alienwah::setLrcross(int Plrcross) {
 	this->Plrcross = Plrcross;
 	lrcross = (float) Plrcross / 127.0f;
 }
-;
 
-void Alienwah::setphase(int Pphase) {
+void Alienwah::setPhase(int Pphase) {
 	this->Pphase = Pphase;
 	phase = ((float) Pphase - 64.0f) / 64.0f * PI;
 }
-;
 
-void Alienwah::setdelay(int Pdelay) {
+void Alienwah::setDelay(int Pdelay) {
 	if (Pdelay > MAX_ALIENWAH_DELAY)
 		Pdelay = MAX_ALIENWAH_DELAY;
 	this->Pdelay = Pdelay;
@@ -167,112 +158,57 @@ void Alienwah::setdelay(int Pdelay) {
 		cleanup();
 	oldpdelay = Pdelay;
 }
-;
 
-void Alienwah::setpreset(int npreset) {
-	const int PRESET_SIZE = 11;
-	const int NUM_PRESETS = 4;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//AlienWah1
-			{ 64, 64, 80, 0, 0, 62, 60, 105, 25, 0, 64 },
-			//AlienWah2
-			{ 64, 64, 95, 106, 0, 101, 60, 105, 17, 0, 64 },
-			//AlienWah3
-			{ 64, 64, 55, 0, 1, 100, 112, 105, 31, 0, 42 },
-			//AlienWah4
-			{ 64, 64, 1, 0, 1, 66, 101, 11, 47, 0, 86 } };
-
-	if (npreset < NUM_PRESETS) {
-
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
-	}
-
-	Ppreset = npreset;
+int Alienwah::getDepth() {
+	return Pdepth;
 }
-;
 
-void Alienwah::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		setpanning(value);
-		break;
-	case 2:
-		lfo.setPfreq(value);
-
-		break;
-	case 3:
-		lfo.setPrandomness(value);
-
-		break;
-	case 4:
-		lfo.setPlfOtype(value);
-
-		break;
-	case 5:
-		lfo.setPstereo(value);
-
-		break;
-	case 6:
-		setdepth(value);
-		break;
-	case 7:
-		setfb(value);
-		break;
-	case 8:
-		setdelay(value);
-		break;
-	case 9:
-		setlrcross(value);
-		break;
-	case 10:
-		setphase(value);
-		break;
-	};
+int Alienwah::getFb() {
+	return Pfb;
 }
-;
 
-int Alienwah::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Ppanning);
-		break;
-	case 2:
-		return (lfo.getPfreq());
-		break;
-	case 3:
-		return (lfo.getPrandomness());
-		break;
-	case 4:
-		return (lfo.getPlfOtype());
-		break;
-	case 5:
-		return (lfo.getPstereo());
-		break;
-	case 6:
-		return (Pdepth);
-		break;
-	case 7:
-		return (Pfb);
-		break;
-	case 8:
-		return (Pdelay);
-		break;
-	case 9:
-		return (Plrcross);
-		break;
-	case 10:
-		return (Pphase);
-		break;
-	default:
-		return (0);
-	};
-	return 0;
+int Alienwah::getVolume() {
+	return Pvolume;
 }
-;
+
+int Alienwah::getPanning() {
+	return Ppanning;
+}
+
+int Alienwah::getLrcross() {
+	return Plrcross;
+}
+
+int Alienwah::getPhase() {
+	return Pphase;
+}
+
+int Alienwah::getDelay() {
+	return Pdelay;
+}
+
+int Alienwah::getLfoPstereo() {
+	return lfo.getPstereo();
+}
+int Alienwah::getLfoPlfOtype() {
+	return lfo.getPlfOtype();
+}
+int Alienwah::getLfoPrandomness() {
+	return lfo.getPrandomness();
+}
+int Alienwah::getLfoPfreq() {
+	return lfo.getPfreq();
+}
+
+void Alienwah::setLfoPstereo(int value) {
+	lfo.setPstereo(value);
+}
+void Alienwah::setLfoPlfOtype(int value) {
+	lfo.setPlfOtype(value);
+}
+void Alienwah::setLfoPrandomness(int value) {
+	lfo.setPrandomness(value);
+}
+void Alienwah::setLfoPfreq(int value) {
+	lfo.setPfreq(value);
+}

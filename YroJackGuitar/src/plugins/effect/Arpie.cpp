@@ -28,10 +28,17 @@
 using namespace std;
 
 Arpie::Arpie() :
-		YroEffectPlugin("Arpie") {
+		YroEffectPlugin("Arpie", "Arpie 1: 67, 64, 35, 64, 30, 59, 0, 127, 4;"
+				"Arpie 2: 67, 64, 21, 64, 30, 59, 0, 64, 4;"
+				"Arpie 3: 67, 75, 60, 64, 30, 59, 10, 0, 4;"
+				"Simple Arpie: 67, 60, 44, 64, 30, 0, 0, 0, 4;"
+				"Canyon: 67, 60, 102, 50, 30, 82, 48, 0, 4;"
+				"Panning Arpie 1: 67, 64, 44, 17, 0, 82, 24, 0, 4;"
+				"Panning Arpie 2: 81, 60, 46, 118, 100, 68, 18, 0, 4;"
+				"Panning Arpie 3: 81, 60, 26, 100, 127, 67, 36, 0, 4;"
+				"Feedback Arpie: 62, 64, 28, 64, 100, 90, 55, 0, 4;") {
 
 	//default values
-	Ppreset = 0;
 	Pvolume = 50;
 	Ppanning = 64;
 	Pdelay = 60;
@@ -56,8 +63,8 @@ Arpie::Arpie() :
 	rdelay = new float[maxx_delay];
 	pattern = new int[MAXHARMS];
 
-	setpreset(Ppreset);
-	setpattern(0);
+	setPreset(0);
+	setPattern(0);
 	cleanup();
 }
 ;
@@ -209,7 +216,7 @@ void Arpie::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 /*
  * Parameter control
  */
-void Arpie::setvolume(int Pvolume) {
+void Arpie::setVolume(int Pvolume) {
 	this->Pvolume = Pvolume;
 	outvolume = (float) Pvolume / 127.0f;
 	if (Pvolume == 0)
@@ -218,19 +225,19 @@ void Arpie::setvolume(int Pvolume) {
 }
 ;
 
-void Arpie::setpanning(int Ppanning) {
+void Arpie::setPanning(int Ppanning) {
 	this->Ppanning = Ppanning;
 	panning = ((float) Ppanning + 0.5f) / 127.0f;
 }
 ;
 
-void Arpie::setreverse(int Preverse) {
+void Arpie::setReverse(int Preverse) {
 	this->Preverse = Preverse;
 	reverse = (float) Preverse / 127.0f;
 }
 ;
 
-void Arpie::setdelay(int Pdelay) {
+void Arpie::setDelay(int value) {
 	this->Pdelay = Pdelay;
 	if (Pdelay < 2)
 		Pdelay = 2;
@@ -240,9 +247,8 @@ void Arpie::setdelay(int Pdelay) {
 	initdelays();
 
 }
-;
 
-void Arpie::setlrdelay(int Plrdelay) {
+void Arpie::setLrdelay(int Plrdelay) {
 	float tmp;
 	this->Plrdelay = Plrdelay;
 	tmp = (powf(2.0, fabsf((float) Plrdelay - 64.0f) / 64.0f * 9.0f) - 1.0f)
@@ -254,25 +260,23 @@ void Arpie::setlrdelay(int Plrdelay) {
 }
 ;
 
-void Arpie::setlrcross(int Plrcross) {
+void Arpie::setLrcross(int Plrcross) {
 	this->Plrcross = Plrcross;
 	lrcross = (float) Plrcross / 127.0f * 1.0f;
 }
 ;
 
-void Arpie::setfb(int Pfb) {
+void Arpie::setFb(int Pfb) {
 	this->Pfb = Pfb;
 	fb = (float) Pfb / 128.0f;
 }
-;
 
-void Arpie::sethidamp(int Phidamp) {
+void Arpie::setHidamp(int Phidamp) {
 	this->Phidamp = Phidamp;
 	hidamp = 0.5f - (float) Phidamp / 254.0f;
 }
-;
 
-void Arpie::setpattern(int Ppattern) {
+void Arpie::setPattern(int Ppattern) {
 	this->Ppattern = Ppattern;
 
 	const int PATTERN_SIZE = MAXHARMS;
@@ -290,118 +294,50 @@ void Arpie::setpattern(int Ppattern) {
 }
 ;
 
-void Arpie::setpreset(int npreset) {
-	const int PRESET_SIZE = 9;
-	const int NUM_PRESETS = 9;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Arpie 1
-			{ 67, 64, 35, 64, 30, 59, 0, 127, 4 },
-			//Arpie 2
-			{ 67, 64, 21, 64, 30, 59, 0, 64, 4 },
-			//Arpie 3
-			{ 67, 75, 60, 64, 30, 59, 10, 0, 4 },
-			//Simple Arpie
-			{ 67, 60, 44, 64, 30, 0, 0, 0, 4 },
-			//Canyon
-			{ 67, 60, 102, 50, 30, 82, 48, 0, 4 },
-			//Panning Arpie 1
-			{ 67, 64, 44, 17, 0, 82, 24, 0, 4 },
-			//Panning Arpie 2
-			{ 81, 60, 46, 118, 100, 68, 18, 0, 4 },
-			//Panning Arpie 3
-			{ 81, 60, 26, 100, 127, 67, 36, 0, 4 },
-			//Feedback Arpie
-			{ 62, 64, 28, 64, 100, 90, 55, 0, 4 } };
-
-	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++) {
-			changepar(n, presets[npreset][n]);
-		}
-		preset = npreset;
+int Arpie::getHarms() {
+	return Pharms;
+}
+void Arpie::setHarms(int value) {
+	Pharms = value;
+	if ((Pharms < 2) && (Pharms >= MAXHARMS)) {
+		Pharms = 2;
 	}
 }
 
-void Arpie::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		setpanning(value);
-		break;
-	case 2:
-		setdelay(value);
-		break;
-	case 3:
-		setlrdelay(value);
-		break;
-	case 4:
-		setlrcross(value);
-		break;
-	case 5:
-		setfb(value);
-		break;
-	case 6:
-		sethidamp(value);
-		break;
-	case 7:
-		setreverse(value);
-		break;
-	case 8:
-		Pharms = value;
-		if ((Pharms < 2) && (Pharms >= MAXHARMS)) {
-			Pharms = 2;
-		}
-		break;
-	case 9:
-		setpattern(value);
-		break;
-	case 10:
-		Psubdiv = value;
-		subdiv = Psubdiv + 1;
-		setdelay(Pdelay);
-		break;
-
-	};
+int Arpie::getSubdiv() {
+	return Psubdiv;
 }
-;
-
-int Arpie::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Ppanning);
-		break;
-	case 2:
-		return (Pdelay);
-		break;
-	case 3:
-		return (Plrdelay);
-		break;
-	case 4:
-		return (Plrcross);
-		break;
-	case 5:
-		return (Pfb);
-		break;
-	case 6:
-		return (Phidamp);
-		break;
-	case 7:
-		return (Preverse);
-		break;
-	case 8:
-		return (Pharms);
-		break;
-	case 9:
-		return (Ppattern);
-		break;
-	case 10:
-		return (Psubdiv);
-		break;
-	};
-	return (0); //in case of bogus parameter number
+void Arpie::setSubdiv(int value) {
+	Psubdiv = value;
+	subdiv = Psubdiv + 1;
+	setDelay(Pdelay);
 }
-;
+
+int Arpie::getVolume() {
+	return Pvolume;
+}
+int Arpie::getPanning() {
+	return Ppanning;
+}
+int Arpie::getDelay() {
+	return Pdelay;
+}
+int Arpie::getLrdelay() {
+	return Plrdelay;
+}
+int Arpie::getLrcross() {
+	return Plrcross;
+}
+int Arpie::getFb() {
+	return Pfb;
+}
+int Arpie::getHidamp() {
+	return Phidamp;
+}
+int Arpie::getReverse() {
+	return Preverse;
+}
+int Arpie::getPattern() {
+	return Ppattern;
+}
+
