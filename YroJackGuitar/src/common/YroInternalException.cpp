@@ -19,7 +19,7 @@
  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  */
 
-#include <core/YroInternalException.h>
+#include <common/YroInternalException.h>
 
 YroInternalException::YroInternalException(const char * _message) {
 	message = strdup(_message);
@@ -29,7 +29,7 @@ YroInternalException::YroInternalException(const char *format, ...) {
 	message = new char[8192];
 	va_list ap;
 	va_start(ap, format);
-	memset((void *) message,0,sizeof(message));
+	memset((void *) message, 0, sizeof(message));
 	vsnprintf((char *) message, sizeof(message), format, ap);
 	va_end(ap);
 }

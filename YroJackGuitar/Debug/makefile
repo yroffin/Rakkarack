@@ -21,7 +21,7 @@ RM := rm -rf
 -include src/plugins/ampli/subdir.mk
 -include src/plugins/subdir.mk
 -include src/jack/subdir.mk
--include src/core/subdir.mk
+-include src/common/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
 -include objects.mk

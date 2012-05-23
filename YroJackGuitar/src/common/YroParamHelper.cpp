@@ -23,7 +23,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include <core/YroParamHelper.h>
+#include <common/YroParamHelper.h>
 
 YroParamHelper *YroParamHelper::__instance = 0;
 

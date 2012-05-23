@@ -20,7 +20,6 @@
  */
 
 #include <jack/jack.h>
-#include <core/YroObject.h>
 #include <jack/YroEffectFactory.h>
 #include <jack/YroAudioSampleFactory.h>
 

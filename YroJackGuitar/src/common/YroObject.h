@@ -26,8 +26,8 @@
 #include <time.h>
 #include <math.h>
 #include <utils/YroLogger.h>
-#include <core/YroParamHelper.h>
-#include <core/YroInternalException.h>
+#include <common/YroParamHelper.h>
+#include <common/YroInternalException.h>
 
 #ifndef YROOBJECT_H_
 #define YROOBJECT_H_

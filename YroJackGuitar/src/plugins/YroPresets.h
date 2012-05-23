@@ -24,7 +24,7 @@
 #ifndef YROPRESETS_H_
 #define YROPRESETS_H_
 
-#include <core/YroObject.h>
+#include <common/YroObject.h>
 #include <plugins/YroPreset.h>
 
 namespace std {

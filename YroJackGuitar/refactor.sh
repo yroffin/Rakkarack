@@ -109,7 +109,7 @@ normalizeHpp() {
 	echo replace hpp: $*
 }
 
-for effect in Shuffle
+for effect in Shifter
 do
 	export effect
 	export FILESED=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.sed

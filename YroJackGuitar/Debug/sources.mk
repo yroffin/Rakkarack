@@ -36,6 +36,6 @@ src/plugins/analyze \
 src/plugins/ampli \
 src/plugins \
 src/jack \
-src/core \
+src/common \
 src \
 

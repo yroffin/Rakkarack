@@ -108,7 +108,7 @@ void Shuffle::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 /*
  * Parameter control
  */
-void Shuffle::setvolume(int value) {
+void Shuffle::setVolume(int value) {
 	Pvolume = value;
 	outvolume = (float) Pvolume / 128.0f;
 }
@@ -169,7 +169,7 @@ void Shuffle::setGainH(int value) {
 	hr->setgain(volH);
 }
 
-void Shuffle::setPq(int int value) {
+void Shuffle::setPq(int value) {
 	PQ = value;
 	value += 64;
 	tmp = powf(30.0f, ((float) value - 64.0f) / 64.0f);
@@ -178,7 +178,7 @@ void Shuffle::setPq(int int value) {
 	mhr->setq(tmp);
 	hr->setq(tmp);
 }
-void Shuffle::setE(int int value) {
+void Shuffle::setE(int value) {
 	E = value;
 }
 
@@ -186,32 +186,32 @@ int Shuffle::getVolume() {
 	return Pvolume;
 }
 int Shuffle::getGainL() {
-	return PGainL;
+	return PvolL;
 }
 int Shuffle::getGainML() {
-	return PGainML;
+	return PvolML;
 }
 int Shuffle::getGainMH() {
-	return PGainMH;
+	return PvolMH;
 }
 int Shuffle::getGainH() {
-	return PGainH;
+	return PvolH;
 }
 int Shuffle::getCross1() {
-	return PCross1;
+	return Cross1;
 }
 int Shuffle::getCross2() {
-	return PCross2;
+	return Cross2;
 }
 int Shuffle::getCross3() {
-	return PCross3;
+	return Cross3;
 }
 int Shuffle::getCross4() {
-	return PCross4;
+	return Cross4;
 }
 int Shuffle::getPq() {
-	return Ppq;
+	return PQ;
 }
 int Shuffle::getE() {
-	return Pe;
+	return E;
 }

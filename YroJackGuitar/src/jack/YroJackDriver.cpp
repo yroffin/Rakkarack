@@ -27,7 +27,7 @@
 #include <signal.h>
 #include <unistd.h>
 
-#include <core/YroParamHelper.h>
+#include <common/YroParamHelper.h>
 #include <jack/YroEffectFactory.h>
 #include <jack/YroJackDriver.h>
 #include <plugins/YroEffectGenerator.h>

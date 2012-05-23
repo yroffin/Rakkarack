@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <core/YroInternalException.h>
+#include <common/YroInternalException.h>
 #include <jack/YroAudioSampleFactory.h>
 
 namespace std {

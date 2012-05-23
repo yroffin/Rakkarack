@@ -23,7 +23,6 @@
 #define YROEFFECTFACTORY_H_
 
 #include <jack/jack.h>
-#include <core/YroObject.h>
 #include <jack/YroAudioSampleFactory.h>
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/YroEffectGenerator.h>

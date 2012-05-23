@@ -9,7 +9,7 @@
 #define YRORESAMPLE_H_
 
 #include <samplerate.h>
-#include <core/YroObject.h>
+#include <common/YroObject.h>
 
 class YroResample: public std::YroObject {
 public:

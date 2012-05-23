@@ -25,8 +25,6 @@
 #ifndef WAVESHAPER_H_
 #define WAVESHAPER_H_
 
-#include <core/YroObject.h>
-#include <core/YroParamHelper.h>
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/filter/YroResample.h>
 

@@ -27,7 +27,11 @@
 using namespace std;
 
 Shifter::Shifter(long int Quality, int DS, int uq, int dq) :
-		YroEffectPlugin("Shifter") {
+		YroEffectPlugin("Shifter", "Fast: 0, 64, 64, 200, 200, -20, 2, 0, 0, 0;"
+				"Slowup: 0, 64, 64, 900, 200, -20, 2, 0, 0, 0;"
+				"Slowdown: 0, 64, 64, 900, 200, -20, 3, 1, 0, 0;"
+				"Chorus: 64, 64, 64, 0, 0, -20, 1, 0, 1, 22;"
+				"Trig Chorus: 64, 64, 64, 250, 100, -10, 0, 0, 0, 25;") {
 	hq = Quality;
 	adjust(DS);
 
@@ -48,12 +52,9 @@ Shifter::Shifter(long int Quality, int DS, int uq, int dq) :
 	tune = 0.0f;
 	Pupdown = 0;
 	Pinterval = 0;
-	Ppreset = 0;
-	setpreset(Ppreset);
+	setPreset(0);
 	cleanup();
-
 }
-;
 
 Shifter::~Shifter() {
 }
@@ -232,26 +233,26 @@ void Shifter::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 }
 ;
 
-void Shifter::setvolume(int value) {
+void Shifter::setVolume(int value) {
 	this->Pvolume = value;
 	outvolume = (float) Pvolume / 127.0f;
 }
 ;
 
-void Shifter::setpanning(int value) {
+void Shifter::setPanning(int value) {
 	this->Ppan = value;
 	panning = (float) Ppan / 127.0f;
 }
 ;
 
-void Shifter::setgain(int value) {
+void Shifter::setGain(int value) {
 	this->Pgain = value;
 	gain = (float) Pgain / 127.0f;
 	gain *= 2.0f;
 }
 ;
 
-void Shifter::setinterval(int value) {
+void Shifter::fixinterval(int value) {
 	interval = (float) value;
 	if ((Pmode == 0) && (Pinterval == 0))
 		interval = 1.0f;
@@ -262,110 +263,62 @@ void Shifter::setinterval(int value) {
 }
 ;
 
-void Shifter::setpreset(int npreset) {
-	const int PRESET_SIZE = 10;
-	const int NUM_PRESETS = 5;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Fast
-			{ 0, 64, 64, 200, 200, -20, 2, 0, 0, 0 },
-			//Slowup
-			{ 0, 64, 64, 900, 200, -20, 2, 0, 0, 0 },
-			//Slowdown
-			{ 0, 64, 64, 900, 200, -20, 3, 1, 0, 0 },
-			//Chorus
-			{ 64, 64, 64, 0, 0, -20, 1, 0, 1, 22 },
-			//Trig Chorus
-			{ 64, 64, 64, 250, 100, -10, 0, 0, 0, 25 } };
-
-	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
-	}
-	Ppreset = npreset;
-
+void Shifter::setAttack(int value) {
+	Pattack = value;
+	a_rate = 1000.0f / ((float) Pattack * nfSAMPLE_RATE);
 }
-;
-
-void Shifter::changepar(int npar, int value) {
-
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		setpanning(value);
-		break;
-	case 2:
-		setgain(value);
-		break;
-	case 3:
-		Pattack = value;
-		a_rate = 1000.0f / ((float) Pattack * nfSAMPLE_RATE);
-		break;
-	case 4:
-		Pdecay = value;
-		d_rate = 1000.0f / ((float) Pdecay * nfSAMPLE_RATE);
-		break;
-	case 5:
-		Pthreshold = value;
-		t_level = dB2rap ((float)Pthreshold);
-		td_level = t_level * .75f;
-		tz_level = t_level * .5f;
-		break;
-	case 6:
-		Pinterval = value;
-		setinterval(Pinterval);
-		break;
-	case 7:
-		Pupdown = value;
-		setinterval(Pinterval);
-		break;
-	case 8:
-		Pmode = value;
-		break;
-	case 9:
-		Pwhammy = value;
-		whammy = (float) value / 127.0f;
-		break;
-
-	}
-
+void Shifter::setDecay(int value) {
+	Pdecay = value;
+	d_rate = 1000.0f / ((float) Pdecay * nfSAMPLE_RATE);
 }
-;
-
-int Shifter::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Ppan);
-		break;
-	case 2:
-		return (Pgain);
-		break;
-	case 3:
-		return (Pattack);
-		break;
-	case 4:
-		return (Pdecay);
-		break;
-	case 5:
-		return (Pthreshold);
-		break;
-	case 6:
-		return (Pinterval);
-		break;
-	case 7:
-		return (Pupdown);
-		break;
-	case 8:
-		return (Pmode);
-		break;
-	case 9:
-		return (Pwhammy);
-	}
-
-	return (0);
+void Shifter::setThreshold(int value) {
+	Pthreshold = value;
+	t_level = dB2rap ((float)Pthreshold);
+	td_level = t_level * .75f;
+	tz_level = t_level * .5f;
 }
-;
+void Shifter::setInterval(int value) {
+	Pinterval = value;
+	fixinterval(Pinterval);
+}
+void Shifter::setUpdown(int value) {
+	Pupdown = value;
+	fixinterval(Pinterval);
+}
+void Shifter::setMode(int value) {
+	Pmode = value;
+}
+void Shifter::setWhammy(int value) {
+Pwhammy = value;
+whammy = (float) value / 127.0f;
+}
+int Shifter::getVolume() {
+	return Pvolume;
+}
+int Shifter::getPanning() {
+	return Ppan;
+}
+int Shifter::getGain() {
+	return Pgain;
+}
+int Shifter::getAttack() {
+	return Pattack;
+}
+int Shifter::getDecay() {
+	return Pdecay;
+}
+int Shifter::getThreshold() {
+	return Pthreshold;
+}
+int Shifter::getInterval() {
+	return Pinterval;
+}
+int Shifter::getUpdown() {
+	return Pupdown;
+}
+int Shifter::getMode() {
+	return Pmode;
+}
+int Shifter::getWhammy() {
+	return Pwhammy;
+}

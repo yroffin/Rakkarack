@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <jack/jack.h>
-#include <core/YroObject.h>
+#include <common/YroObject.h>
 
 #ifndef YROAUDIOSAMPLEFACTORY_H_
 #define YROAUDIOSAMPLEFACTORY_H_

@@ -10,7 +10,8 @@
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
 
-#include <core/YroObject.h>
+#include <common/YroParamHelper.h>
+#include <common/YroObject.h>
 #include <jack/jack.h>
 #include <jack/YroAudioSampleFactory.h>
 #include <plugins/YroPreset.h>
@@ -166,6 +167,8 @@ public:
 	virtual int  get18() {return 0;}; virtual void set18(int) {};
 	virtual int  get19() {return 0;}; virtual void set19(int) {};
 protected:
+	class YroParamHelper *helper;
+
 	map<wxSpinCtrl *, int> mapSpinCtrlIndex;
 	map<int, wxSpinCtrl *>  mapIndexSpinCtrl;
 	map<wxChoice *, int> mapChoiceIndex;

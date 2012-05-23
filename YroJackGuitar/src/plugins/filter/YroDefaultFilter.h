@@ -8,8 +8,8 @@
 #ifndef YRODEFAULTFILTER_H_
 #define YRODEFAULTFILTER_H_
 
-#include <core/YroObject.h>
-#include <core/YroParamHelper.h>
+#include <common/YroObject.h>
+#include <common/YroParamHelper.h>
 #include <plugins/YroEffectPlugin.h>
 
 class YroDefaultFilter : public std::YroObject {
