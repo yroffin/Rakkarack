@@ -40,33 +40,111 @@ public:
   MBDist();
   ~MBDist();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
-  float outvolume;
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _panning
+  , _lrcross
+  , _drive
+  , _level
+  , _typel
+  , _typem
+  , _typeh
+  , _voll
+  , _volm
+  , _volh
+  , _negate
+  , _cross1
+  , _cross2
+  , _stereo
+  };
 
-  float *efxoutl;
-  float *efxoutr;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getPanning();}
+  void set2(int value) {setPanning(value);}
+  int  get3() {return getLrcross();}
+  void set3(int value) {setLrcross(value);}
+  int  get4() {return getDrive();}
+  void set4(int value) {setDrive(value);}
+  int  get5() {return getLevel();}
+  void set5(int value) {setLevel(value);}
+  int  get6() {return getTypel();}
+  void set6(int value) {setTypel(value);}
+  int  get7() {return getTypem();}
+  void set7(int value) {setTypem(value);}
+  int  get8() {return getTypeh();}
+  void set8(int value) {setTypeh(value);}
+  int  get9() {return getVoll();}
+  void set9(int value) {setVoll(value);}
+  int  get10() {return getVolm();}
+  void set10(int value) {setVolm(value);}
+  int  get11() {return getVolh();}
+  void set11(int value) {setVolh(value);}
+  int  get12() {return getNegate();}
+  void set12(int value) {setNegate(value);}
+  int  get13() {return getCross1();}
+  void set13(int value) {setCross1(value);}
+  int  get14() {return getCross2();}
+  void set14(int value) {setCross2(value);}
+  int  get15() {return getStereo();}
+  void set15(int value) {setStereo(value);}
+
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getPanning();
+  void setPanning(int value);
+  int  getLrcross();
+  void setLrcross(int value);
+  int  getDrive();
+  void setDrive(int value);
+  int  getLevel();
+  void setLevel(int value);
+  int  getTypel();
+  void setTypel(int value);
+  int  getTypem();
+  void setTypem(int value);
+  int  getTypeh();
+  void setTypeh(int value);
+  int  getVoll();
+  void setVoll(int value);
+  int  getVolm();
+  void setVolm(int value);
+  int  getVolh();
+  void setVolh(int value);
+  int  getNegate();
+  void setNegate(int value);
+  int  getCross1();
+  void setCross1(int value);
+  int  getCross2();
+  void setCross2(int value);
+  int  getStereo();
+  void setStereo(int value);
+
+private:
   float *lowl;
   float *lowr;
   float *midl;
   float *midr;
   float *highl;
   float *highr;
-  
 
-private:
-
-  void setvolume (int Pvolume);
-  void setpanning (int Ppanning);
-  void setlrcross (int Plrcross);
-  void setCross1 (int value);
-  void setCross2 (int value);
-
-  //Parametrii
+  /**
+   * parameter
+   */
   int Pvolume;	//Volumul or E/R
   int Ppanning;	//Panning
   int Plrcross;	// L/R Mixing

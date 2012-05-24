@@ -27,7 +27,9 @@
 using namespace std;
 
 Looper::Looper(float size) :
-		YroEffectPlugin("Looper") {
+		YroEffectPlugin("Looper",
+				"Looper2seconds: 64,0,1,0,1,0,64,1,0,1,64,1,0,0;"
+						"Misc: 64,0,1,0,1,1,64,1,0,1,64,1,0,0;") {
 	//default values
 	Pclear = 1;
 	Pplay = 0;
@@ -41,9 +43,9 @@ Looper::Looper(float size) :
 	first_time2 = 1;
 	Pms = 0;
 	Ptempo = 120;
-	settempo(120);
+	setTempo(120);
 	Pbar = 2;
-	setbar(2);
+	setBar(2);
 	ticker.cleanup();
 
 	Srate_Attack_Coeff = 1.0f / (fSAMPLE_RATE * ATTACK);
@@ -55,7 +57,7 @@ Looper::Looper(float size) :
 	t2ldelay = new float[maxx_delay];
 	t2rdelay = new float[maxx_delay];
 
-	setpreset(Ppreset);
+	setPreset(0);
 	cleanup();
 }
 ;
@@ -203,13 +205,13 @@ void Looper::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
  * Parameter control
  */
 
-void Looper::setmvol(int value) {
+void Looper::setMvol(int value) {
 	mvol = 2.0f * (float) value / 100.0f;
 }
 
-void Looper::settempo(int value) {
+void Looper::setTempo(int value) {
 	Ptempo = value;
-	setbar(Pbar);
+	setBar(Pbar);
 	ticker.set_tempo(value);
 }
 
@@ -246,7 +248,7 @@ void Looper::timeposition(int value) {
 
 }
 
-void Looper::setbar(int value) {
+void Looper::setBar(int value) {
 
 	Pbar = value;
 	switch (value) {
@@ -295,7 +297,7 @@ void Looper::setbar(int value) {
 
 }
 
-void Looper::setfade() {
+void Looper::setFade() {
 	fade1 = (float) (Pfade1) / 64.0f;
 	fade2 = (float) (Pfade2) / 64.0f;
 	pregain1 = 1.015f / (fade1 + 0.015f); //this is so material being recorded mixes at the same level as what you hear
@@ -303,293 +305,6 @@ void Looper::setfade() {
 	fade1 *= track1gain;
 	fade2 *= track2gain;
 }
-;
-void Looper::setpreset(int npreset) {
-	const int PRESET_SIZE = 14;
-	const int NUM_PRESETS = 2;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Looper 2 seconds
-			{ 64, 0, 1, 0, 1, 0, 64, 1, 0, 1, 64, 1, 0, 0 }, { 64, 0, 1, 0, 1,
-					1, 64, 1, 0, 1, 64, 1, 0, 0 } };
-
-	if (npreset < NUM_PRESETS) {
-
-		for (int n = 0; n < PRESET_SIZE; n++)
-			loadpreset(n, presets[npreset][n]);
-	}
-	Ppreset = npreset;
-}
-;
-
-void Looper::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		Pvolume = value;
-		outvolume = (float) Pvolume / 127.0f;
-
-		break;
-
-	case 1: //Play at current pointer position
-
-		if (Pplay) {
-			Pplay = 0;
-		} else {
-			Pplay = (PT1 || PT2); //prevents accidental record state when niether track is active
-			if (!Pstop) { //if stop was pushed last time, then resume where it left off
-				if (PT1)
-					kl = 0;
-				if (PT2)
-					kl2 = 0;
-				ticker.cleanup();
-			}
-			Pstop = 0;
-		}
-		if (Pstop) {
-			Pstop = 0;
-			Pplay = 0;
-		}
-		Pclear = 0;
-
-		break;
-
-	case 2: //stop and reset pointer to 0
-		if (Pstop)
-			Pstop = 0;
-		else
-			Pstop = 1;
-		if (Precord) {
-			Pstop = 0;
-			if ((first_time1 && Prec1) && PT1) {
-				dl = set_len(kl);
-				//printf("dl %d\n",dl);
-				first_time1 = 0;
-				if (Plink) {
-					dl2 = dl;
-				}
-				kl = 0;
-				ticker.cleanup();
-
-			}
-			if ((first_time2 && Prec2) && PT2) {
-				dl2 = set_len(kl2);
-				first_time2 = 0;
-				if (Plink) {
-					dl = dl2;
-				}
-				kl2 = 0;
-				ticker.cleanup();
-			}
-
-			Precord = 0;
-			Pplay = 0;
-		}
-		break;
-	case 3: //Record at current position.  If first time (clear = true), then set end of loop, "dl"
-		if (Precord) {
-			if ((first_time1 && Prec1) && PT1) {
-				dl = set_len(kl);
-				first_time1 = 0;
-				if (Plink) {
-					dl2 = dl;
-				}
-				kl = 0;
-				ticker.cleanup();
-			}
-			if ((first_time2 && Prec2) && PT2) {
-				dl2 = set_len(kl2);
-				first_time2 = 0;
-				if (Plink) {
-					dl = dl2;
-				}
-				kl2 = 0;
-				ticker.cleanup();
-			}
-			Precord = 0;
-			Pplay = rplaystate;
-			if (Pautoplay)
-				Pplay = 1;
-			Pstop = 0;
-		} else {
-			Precord = 1;
-			rplaystate = Pplay;
-			if (Pautoplay) {
-				Pplay = 1;
-				if ((first_time1 && Prec1) || (first_time2 && Prec2))
-					ticker.cleanup();
-			} else
-				Pplay = 0;
-		}
-		Pstop = 0;
-		Pclear = 0;
-		break;
-	case 4:
-		Pclear = 1; //Clear everything and erase the loop
-		if (PT1)
-			first_time1 = 1;
-		if (PT2)
-			first_time2 = 1;
-		if ((PT1) && (PT2))
-			Pplay = 0;
-		Precord = 0;
-		if (PT1)
-			kl = 0;
-		if (PT2)
-			kl2 = 0;
-		ticker.cleanup();
-		initdelays();
-		break;
-	case 5:
-		Preverse = value; //Playback in reverse
-		break;
-	case 6:
-		Pfade1 = value;
-		setfade();
-		break;
-	case 7:
-		if (PT1) {
-			PT1 = 0;
-		} else {
-			PT1 = 1;
-			if (!Plink) {
-				if (first_time1)
-					initdelays();
-				PT2 = 0; //if they aren't linked in time, then you want to toggle 1&2
-				track2gain = 0.0f;
-				kl = 0;
-				ticker.cleanup();
-				setfade();
-			}
-
-		}
-		track1gain = (float) PT1;
-		setfade();
-		break;
-	case 8:
-		if (PT2) {
-			PT2 = 0;
-		} else {
-			PT2 = 1;
-			if (!Plink) {
-				PT1 = 0;
-				if (first_time2)
-					initdelays();
-				kl2 = 0;
-				ticker.cleanup();
-				track1gain = 0.0f;
-			}
-
-		}
-		track2gain = (float) PT2;
-		setfade();
-		break;
-	case 9:
-		Pautoplay = value;
-		break;
-	case 10:
-		Pfade2 = value;
-		setfade();
-		break;
-	case 11:
-		Prec1 = value;
-		break;
-	case 12:
-		Prec2 = value;
-		break;
-	case 13:
-		Plink = value;
-		if (Plink) {
-			if (Prec1)
-				dl2 = dl;
-			if (Prec2)
-				dl = dl2; //if both are true, then it is only a redundant assignment
-		}
-		break;
-	case 14:
-		settempo(value);
-		break;
-	case 15:
-		setbar(value);
-		break;
-	case 16:
-		Pmetro = value;
-		break;
-	case 17:
-		Pms = value;
-		if (Pms == 0)
-			setbar(Pbar);
-		if (Pms == 1)
-			ticker.set_meter(1);
-		if (Pms == 2)
-			ticker.set_meter(0);
-
-		break;
-
-	};
-
-}
-;
-
-int Looper::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Pplay);
-		break;
-	case 2:
-		return (Pstop);
-		break;
-	case 3:
-		return (Precord);
-		break;
-	case 4:
-		return (Pclear);
-		break;
-	case 5:
-		return (Preverse);
-		break;
-	case 6:
-		return (Pfade1);
-		break;
-	case 7:
-		return (PT1);
-		break;
-	case 8:
-		return (PT2);
-		break;
-	case 9:
-		return (Pautoplay);
-		break;
-	case 10:
-		return (Pfade2);
-		break;
-	case 11:
-		return (Prec1);
-		break;
-	case 12:
-		return (Prec2);
-		break;
-	case 13:
-		return (Plink);
-		break;
-	case 14:
-		return (Ptempo);
-		break;
-	case 15:
-		return (Pbar);
-		break;
-	case 16:
-		return (Pmetro);
-		break;
-	case 17:
-		return (Pms);
-		break;
-
-	};
-	return (0); //in case of bogus parameter number
-}
-;
 
 void Looper::getstate() {
 	progstate[0] = Pplay;
@@ -601,62 +316,7 @@ void Looper::getstate() {
 }
 ;
 
-void Looper::loadpreset(int npar, int value) {
-	switch (npar) {
-	case 0:
-		Pvolume = value;
-		outvolume = (float) Pvolume / 127.0f;
-
-		break;
-	case 1: //Play at current pointer position
-		Pplay = value;
-		break;
-	case 2: //stop and reset pointer to 0
-		Pstop = value;
-		break;
-	case 3: //Record at current position.  If first time (clear = true), then set end of loop, "dl"
-		Precord = value;
-		break;
-	case 4:
-		Pclear = 1; //Clear everything and erase the loop
-		initdelays();
-		break;
-	case 5:
-		Preverse = value; //Playback in reverse
-		break;
-	case 6:
-		Pfade1 = value;
-		setfade();
-		break;
-	case 7:
-		PT1 = value;
-		track1gain = (float) PT1;
-		setfade();
-		break;
-	case 8:
-		PT2 = value;
-		track2gain = (float) PT2;
-		setfade();
-		break;
-	case 9:
-		Pautoplay = value;
-		break;
-	case 10:
-		Pfade2 = value;
-		setfade();
-		break;
-	case 11:
-		Prec1 = value;
-		break;
-	case 12:
-		Prec2 = value;
-		break;
-	case 13:
-		Plink = value;
-		break;
-
-	};
-
+void Looper::clearAll() {
 	Pclear = 1; //Clear everything and erase the loop
 	if (PT1)
 		first_time1 = 1;
@@ -667,5 +327,259 @@ void Looper::loadpreset(int npar, int value) {
 	Precord = 0;
 	getstate();
 }
-;
 
+void Looper::setVolume(int value) {
+	Pvolume = value;
+	outvolume = (float) Pvolume / 127.0f;
+	clearAll();
+}
+void Looper::setMisc1(int value) {
+	if (Pplay) {
+		Pplay = 0;
+	} else {
+		Pplay = (PT1 || PT2); //prevents accidental record state when niether track is active
+		if (!Pstop) { //if stop was pushed last time, then resume where it left off
+			if (PT1)
+				kl = 0;
+			if (PT2)
+				kl2 = 0;
+			ticker.cleanup();
+		}
+		Pstop = 0;
+	}
+	if (Pstop) {
+		Pstop = 0;
+		Pplay = 0;
+	}
+	Pclear = 0;
+	clearAll();
+}
+void Looper::setMisc2(int value) {
+	if (Pstop)
+		Pstop = 0;
+	else
+		Pstop = 1;
+	if (Precord) {
+		Pstop = 0;
+		if ((first_time1 && Prec1) && PT1) {
+			dl = set_len(kl);
+			//printf("dl %dn",dl);
+			first_time1 = 0;
+			if (Plink) {
+				dl2 = dl;
+			}
+			kl = 0;
+			ticker.cleanup();
+		}
+		if ((first_time2 && Prec2) && PT2) {
+			dl2 = set_len(kl2);
+			first_time2 = 0;
+			if (Plink) {
+				dl = dl2;
+			}
+			kl2 = 0;
+			ticker.cleanup();
+		}
+		Precord = 0;
+		Pplay = 0;
+	}
+	clearAll();
+}
+void Looper::setMisc3(int value) {
+	if (Precord) {
+		if ((first_time1 && Prec1) && PT1) {
+			dl = set_len(kl);
+			first_time1 = 0;
+			if (Plink) {
+				dl2 = dl;
+			}
+			kl = 0;
+			ticker.cleanup();
+		}
+		if ((first_time2 && Prec2) && PT2) {
+			dl2 = set_len(kl2);
+			first_time2 = 0;
+			if (Plink) {
+				dl = dl2;
+			}
+			kl2 = 0;
+			ticker.cleanup();
+		}
+		Precord = 0;
+		Pplay = rplaystate;
+		if (Pautoplay)
+			Pplay = 1;
+		Pstop = 0;
+	} else {
+		Precord = 1;
+		rplaystate = Pplay;
+		if (Pautoplay) {
+			Pplay = 1;
+			if ((first_time1 && Prec1) || (first_time2 && Prec2))
+				ticker.cleanup();
+		} else
+			Pplay = 0;
+	}
+	Pstop = 0;
+	Pclear = 0;
+	clearAll();
+}
+void Looper::setMisc4(int value) {
+	Pclear = 1; //Clear everything and erase the loop
+	if (PT1)
+		first_time1 = 1;
+	if (PT2)
+		first_time2 = 1;
+	if ((PT1) && (PT2))
+		Pplay = 0;
+	Precord = 0;
+	if (PT1)
+		kl = 0;
+	if (PT2)
+		kl2 = 0;
+	ticker.cleanup();
+	initdelays();
+	clearAll();
+}
+void Looper::setReverse(int value) {
+	Preverse = value; //Playback in reverse
+	clearAll();
+}
+void Looper::setFade1(int value) {
+	Pfade1 = value;
+	setFade();
+	clearAll();
+}
+void Looper::setMisc5(int value) {
+	if (PT1) {
+		PT1 = 0;
+	} else {
+		PT1 = 1;
+		if (!Plink) {
+			if (first_time1)
+				initdelays();
+			PT2 = 0; //if they aren't linked in time, then you want to toggle 1&2
+			track2gain = 0.0f;
+			kl = 0;
+			ticker.cleanup();
+			setFade();
+		}
+	}
+	track1gain = (float) PT1;
+	setFade();
+	clearAll();
+}
+void Looper::setMisc6(int value) {
+	if (PT2) {
+		PT2 = 0;
+	} else {
+		PT2 = 1;
+		if (!Plink) {
+			PT1 = 0;
+			if (first_time2)
+				initdelays();
+			kl2 = 0;
+			ticker.cleanup();
+			track1gain = 0.0f;
+		}
+	}
+	track2gain = (float) PT2;
+	setFade();
+	clearAll();
+}
+void Looper::setAutoplay(int value) {
+	Pautoplay = value;
+	clearAll();
+}
+void Looper::setFade2(int value) {
+	Pfade2 = value;
+	setFade();
+	clearAll();
+}
+void Looper::setRec1(int value) {
+	Prec1 = value;
+	clearAll();
+}
+void Looper::setRec2(int value) {
+	Prec2 = value;
+	clearAll();
+}
+void Looper::setLink(int value) {
+	Plink = value;
+	if (Plink) {
+		if (Prec1)
+			dl2 = dl;
+		if (Prec2)
+			dl = dl2; //if both are true, then it is only a redundant assignment
+	}
+	clearAll();
+}
+void Looper::setMetro(int value) {
+	Pmetro = value;
+	clearAll();
+}
+void Looper::setMs(int value) {
+	Pms = value;
+	if (Pms == 0)
+		setBar(Pbar);
+	if (Pms == 1)
+		ticker.set_meter(1);
+	if (Pms == 2)
+		ticker.set_meter(0);
+	clearAll();
+}
+
+int Looper::getVolume() {
+	return Pvolume;
+}
+int Looper::getMisc1() {
+	return 0;
+}
+int Looper::getMisc2() {
+	return 0;
+}
+int Looper::getMisc3() {
+	return 0;
+}
+int Looper::getMisc4() {
+	return 0;
+}
+int Looper::getReverse() {
+	return Preverse;
+}
+int Looper::getFade1() {
+	return Pfade1;
+}
+int Looper::getMisc5() {
+	return 0;
+}
+int Looper::getMisc6() {
+	return 0;
+}
+int Looper::getAutoplay() {
+	return Pautoplay;
+}
+int Looper::getFade2() {
+	return Pfade2;
+}
+int Looper::getRec1() {
+	return Prec1;
+}
+int Looper::getRec2() {
+	return Prec2;
+}
+int Looper::getLink() {
+	return Plink;
+}
+int Looper::getTempo() {
+	return Ptempo;
+}
+int Looper::getBar() {
+	return Pbar;
+}
+int Looper::getMetro() {
+	return Pmetro;
+}
+int Looper::getMs() {
+	return Pms;
+}

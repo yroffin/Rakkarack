@@ -39,25 +39,71 @@ public:
   Pan();
    ~Pan();
   void render(jack_nframes_t nframes,float *smpsl, float *smpsr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _panning
+  , _lfofreq
+  , _lforandomness
+  , _lfotype
+  , _lfostereo
+  , _extra
+  , _autopan
+  , _extraon
+  };
 
-  int Ppreset;
-  float outvolume;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getPanning();}
+  void set2(int value) {setPanning(value);}
+  int  get3() {return getLfoFreq();}
+  void set3(int value) {setLfoFreq(value);}
+  int  get4() {return getLfoRandomness();}
+  void set4(int value) {setLfoRandomness(value);}
+  int  get5() {return getLfoType();}
+  void set5(int value) {setLfoType(value);}
+  int  get6() {return getLfoStereo();}
+  void set6(int value) {setLfoStereo(value);}
+  int  get7() {return getExtra();}
+  void set7(int value) {setExtra(value);}
+  int  get8() {return getAutoPan();}
+  void set8(int value) {setAutoPan(value);}
+  int  get9() {return getExtraOn();}
+  void set9(int value) {setExtraOn(value);}
 
-  float *efxoutl;
-  float *efxoutr;
-
-
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getPanning();
+  void setPanning(int value);
+  int  getLfoFreq();
+  void setLfoFreq(int value);
+  int  getLfoRandomness();
+  void setLfoRandomness(int value);
+  int  getLfoType();
+  void setLfoType(int value);
+  int  getLfoStereo();
+  void setLfoStereo(int value);
+  int  getExtra();
+  void setExtra(int value);
+  int  getAutoPan();
+  void setAutoPan(int value);
+  int  getExtraOn();
+  void setExtraOn(int value);
 
 private:
-
-  void setvolume (int Pvolume);
-  void setpanning (int Ppanning);
-  void setextra (int Pdepth);
 
   int Pvolume;
   int Ppanning;

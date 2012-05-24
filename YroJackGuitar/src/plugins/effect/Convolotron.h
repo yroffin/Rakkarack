@@ -35,19 +35,71 @@ public:
 	Convolotron(int DS, int uq, int dq);
 	~Convolotron();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
-	void setpreset(int npreset);
-	void changepar(int npar, int value);
-	int getpar(int npar);
 	void cleanup();
-	int setfile(int value);
 	void adjust(int DS);
 	void loaddefault();
 
-	int Ppreset;
+	/**
+	* member declaration
+	*/
+	enum functions {
+	_preset
+	, _volume
+	, _panning
+	, _safe
+	, _length
+	, _file
+	, _hidamp
+	, _level
+	, _user
+	, _fb
+	};
 
-	float *efxoutl;
-	float *efxoutr;
-	float outvolume;
+	/**
+	* setter and getter map
+	*/
+	int  get0() {return getPreset();}
+	void set0(int value) {setPreset(value);}
+	int  get1() {return getVolume();}
+	void set1(int value) {setVolume(value);}
+	int  get2() {return getPanning();}
+	void set2(int value) {setPanning(value);}
+	int  get3() {return getSafe();}
+	void set3(int value) {setSafe(value);}
+	int  get4() {return getLength();}
+	void set4(int value) {setLength(value);}
+	int  get5() {return getFile();}
+	void set5(int value) {setFile(value);}
+	int  get6() {return getHidamp();}
+	void set6(int value) {setHidamp(value);}
+	int  get7() {return getLevel();}
+	void set7(int value) {setLevel(value);}
+	int  get8() {return getUser();}
+	void set8(int value) {setUser(value);}
+	int  get9() {return getFb();}
+	void set9(int value) {setFb(value);}
+
+	/**
+	* setter and getter
+	*/
+	int  getVolume();
+	void setVolume(int value);
+	int  getPanning();
+	void setPanning(int value);
+	int  getSafe();
+	void setSafe(int value);
+	int  getLength();
+	void setLength(int value);
+	int  getFile();
+	void setFile(int value);
+	int  getHidamp();
+	void setHidamp(int value);
+	int  getLevel();
+	void setLevel(int value);
+	int  getUser();
+	void setUser(int value);
+	int  getFb();
+	void setFb(int value);
 
 	char Filename[128];
 

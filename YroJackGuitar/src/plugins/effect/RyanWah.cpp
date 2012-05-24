@@ -26,10 +26,12 @@
 using namespace std;
 
 RyanWah::RyanWah() :
-		YroEffectPlugin("RyanWah") {
-
-	Ppreset = 0;
-
+		YroEffectPlugin("RyanWah",
+				"WahPedal: 16,10,60,0,0,64,0,0,10,7,-16,40,-3,1,2000,450,1,1;"
+						"Mutron: 0,15,138,0,0,64,0,50,0,30,32,0,5,1,2000,60,0,1;"
+						"PhaseWah: 0,50,60,0,0,64,30,10,10,30,32,0,10,2,2000,350,1,1;"
+						"SucculentPhaser: 64,8,35,10,0,64,50,-10,53,35,28,-16,32,4,2600,300,1,1;"
+						"Quacky: 16,10,60,0,0,64,0,40,10,32,-16,40,-3,1,2000,400,1,1;") {
 	filterl = NULL;
 	filterr = NULL;
 
@@ -47,18 +49,15 @@ RyanWah::RyanWah() :
 	hpmix = 0.0f;
 	lpmix = 0.5f;
 	bpmix = 2.0f;
-	Ppreset = 0;
 	wahsmooth = 1.0f - expf(-1.0f / (0.02f * fSAMPLE_RATE)); //0.02 seconds
 
 	Fstages = 1;
 	Ftype = 1;
 	filterl = new RBFilter(0, 80.0f, 70.0f, 1);
 	filterr = new RBFilter(0, 80.0f, 70.0f, 1);
-	setpreset(Ppreset);
-
+	setPreset(0);
 	cleanup();
 }
-;
 
 RyanWah::~RyanWah() {
 }
@@ -144,19 +143,17 @@ void RyanWah::cleanup() {
  * Parameter control
  */
 
-void RyanWah::setwidth(int Pwidth) {
+void RyanWah::setWidth(int Pwidth) {
 	this->Pwidth = Pwidth;
 	depth = powf(((float) Pwidth / 127.0f), 2.0f);
 }
-;
 
-void RyanWah::setvolume(int Pvolume) {
+void RyanWah::setVolume(int Pvolume) {
 	this->Pvolume = Pvolume;
 	outvolume = (float) Pvolume / 127.0f;
 }
-;
 
-void RyanWah::setampsns(int Pp) {
+void RyanWah::setAmpsns(int Pp) {
 	Pampsns = Pp;
 	if (Pampsns > 0) {
 		ampsns = expf(0.083f * (float) Pampsns);
@@ -178,186 +175,119 @@ void RyanWah::reinitfilter() {
 }
 ;
 
-void RyanWah::setpreset(int npreset) {
-	const int PRESET_SIZE = 18;
-	const int NUM_PRESETS = 5;
-	int presets[NUM_PRESETS][PRESET_SIZE] =
-			{
-			//Wah Pedal
-					{ 16, 10, 60, 0, 0, 64, 0, 0, 10, 7, -16, 40, -3, 1, 2000,
-							450, 1, 1 },
-					//Mutron
-					{ 0, 15, 138, 0, 0, 64, 0, 50, 0, 30, 32, 0, 5, 1, 2000, 60,
-							0, 1 },
-					//Phase Wah
-					{ 0, 50, 60, 0, 0, 64, 30, 10, 10, 30, 32, 0, 10, 2, 2000,
-							350, 1, 1 },
-					//Succulent Phaser
-					{ 64, 8, 35, 10, 0, 64, 50, -10, 53, 35, 28, -16, 32, 4,
-							2600, 300, 1, 1 },
-					//Quacky
-					{ 16, 10, 60, 0, 0, 64, 0, 40, 10, 32, -16, 40, -3, 1, 2000,
-							400, 1, 1 }
-
-			};
-
-	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
-	}
-
-	Ppreset = npreset;
-
+void RyanWah::setQ(int value) {
+	Pq = value;
+	q = (float) Pq;
+}
+void RyanWah::setLfoFreq(int value) {
+	lfo.setPfreq(value);
+}
+void RyanWah::setLfoRandomness(int value) {
+	lfo.setPrandomness(0);
+}
+void RyanWah::setLfoType(int value) {
+	lfo.setPlfOtype(value);
+}
+void RyanWah::setLfoStereo(int value) {
+	lfo.setPstereo(value);
+}
+void RyanWah::setAmpsnsinv(int value) {
+	Pampsnsinv = value;
+	setAmpsns(Pampsns);
+}
+void RyanWah::setAmpsmooth(int value) {
+	Pampsmooth = value;
+	setAmpsns(Pampsns);
+}
+void RyanWah::setLp(int value) {
+	Plp = value;
+	lpmix = ((float) Plp) / 32.0f;
 	reinitfilter();
 }
-;
-
-void RyanWah::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		Pq = value;
-		q = (float) Pq;
-		break;
-	case 2:
-		lfo.setPfreq(value);
-
-		break;
-	case 3:
-		lfo.setPrandomness(0);
-
-		break;
-	case 4:
-		lfo.setPlfOtype(value);
-
-		break;
-	case 5:
-		lfo.setPstereo(value);
-
-		break;
-	case 6:
-		setwidth(value);
-		break;
-	case 7:
-		setampsns(value);
-		break;
-	case 8:
-		Pampsnsinv = value;
-		setampsns(Pampsns);
-		break;
-	case 9:
-		Pampsmooth = value;
-		setampsns(Pampsns);
-		break;
-	case 10:
-		Plp = value;
-		lpmix = ((float) Plp) / 32.0f;
-		reinitfilter();
-		break;
-	case 11:
-		Pbp = value;
-		bpmix = ((float) Pbp) / 32.0f;
-		reinitfilter();
-		break;
-	case 12:
-		Php = value;
-		hpmix = ((float) Php) / 32.0f;
-		reinitfilter();
-		break;
-	case 13:
-		Pstages = (value - 1);
-		filterl->setstages(Pstages);
-		filterr->setstages(Pstages);
-		cleanup();
-		break;
-	case 14:
-		Prange = value;
-		maxfreq = ((float) Prange);
-		break;
-	case 15:
-		Pminfreq = value;
-		minfreq = (float) value;
-		break;
-	case 16:
-		variq = value;
-		break;
-	case 17:
-		Pqm = value;
-		filterl->setmode(Pqm);
-		filterr->setmode(Pqm);
-		break;
-	case 18:
-		Ppreset = value;
-		break;
-
-	};
+void RyanWah::setBp(int value) {
+	Pbp = value;
+	bpmix = ((float) Pbp) / 32.0f;
+	reinitfilter();
 }
-;
-
-int RyanWah::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Pq);
-		break;
-	case 2:
-		return lfo.getPfreq();
-		break;
-	case 3:
-		return lfo.getPrandomness();
-		break;
-	case 4:
-		return lfo.getPlfOtype();
-		break;
-	case 5:
-		return lfo.getPstereo();
-		break;
-	case 6:
-		return (Pwidth);
-		break;
-	case 7:
-		return (Pampsns);
-		break;
-	case 8:
-		return (Pampsnsinv);
-		break;
-	case 9:
-		return (Pampsmooth);
-		break;
-	case 10:
-		return (Plp);
-		break;
-	case 11:
-		return (Pbp);
-		break;
-	case 12:
-		return (Php);
-		break;
-	case 13:
-		return (Pstages + 1);
-		break;
-	case 14:
-		return (Prange);
-		break;
-	case 15:
-		return (Pminfreq);
-		break;
-	case 16:
-		return (variq);
-		break;
-	case 17:
-		return (Pqm);
-		break;
-	case 18:
-		return (Ppreset);
-		break;
-	default:
-		return (0);
-	};
-
+void RyanWah::setHp(int value) {
+	Php = value;
+	hpmix = ((float) Php) / 32.0f;
+	reinitfilter();
 }
-;
+void RyanWah::setStages(int value) {
+	Pstages = (value - 1);
+	filterl->setstages(Pstages);
+	filterr->setstages(Pstages);
+	cleanup();
+}
+void RyanWah::setRange(int value) {
+	Prange = value;
+	maxfreq = ((float) Prange);
+}
+void RyanWah::setMinfreq(int value) {
+	Pminfreq = value;
+	minfreq = (float) value;
+}
+void RyanWah::setVariq(int value) {
+	variq = value;
+}
+void RyanWah::setQm(int value) {
+	Pqm = value;
+	filterl->setmode(Pqm);
+	filterr->setmode(Pqm);
+}
+
+int RyanWah::getVolume() {
+	return Pvolume;
+}
+int RyanWah::getQ() {
+	return Pq;
+}
+int RyanWah::getLfoFreq() {
+	return lfo.getPfreq();
+}
+int RyanWah::getLfoRandomness() {
+	return lfo.getPrandomness();
+}
+int RyanWah::getLfoType() {
+	return lfo.getPlfOtype();
+}
+int RyanWah::getLfoStereo() {
+	return lfo.getPstereo();
+}
+int RyanWah::getWidth() {
+	return Pwidth;
+}
+int RyanWah::getAmpsns() {
+	return Pampsns;
+}
+int RyanWah::getAmpsnsinv() {
+	return Pampsnsinv;
+}
+int RyanWah::getAmpsmooth() {
+	return Pampsmooth;
+}
+int RyanWah::getLp() {
+	return Plp;
+}
+int RyanWah::getBp() {
+	return Pbp;
+}
+int RyanWah::getHp() {
+	return Php;
+}
+int RyanWah::getStages() {
+	return Pstages;
+}
+int RyanWah::getRange() {
+	return Prange;
+}
+int RyanWah::getMinfreq() {
+	return Pminfreq;
+}
+int RyanWah::getVariq() {
+	return variq;
+}
+int RyanWah::getQm() {
+	return Pqm;
+}

@@ -32,7 +32,10 @@
 using namespace std;
 
 CompBand::CompBand() :
-		YroEffectPlugin("CompBand") {
+		YroEffectPlugin("CompBand"
+				"GoodStart: 0,16,16,16,16,0,0,0,0,1000,5000,10000,48;"
+				"Loudness: 0,16,2,2,4,-16,24,24,-8,140,1000,5000,48;"
+				"Loudness2: 64,16,2,2,2,-32,24,24,24,100,1000,5000,48;") {
 
 	lowl = (float *) malloc(sizeof(float) * iPERIOD);
 	lowr = (float *) malloc(sizeof(float) * iPERIOD);
@@ -67,10 +70,9 @@ CompBand::CompBand() :
 	CH->setPreset(5);
 
 	//default values
-	Ppreset = 0;
 	Pvolume = 50;
 
-	setpreset(Ppreset);
+	setPreset(0);
 	cleanup();
 }
 ;
@@ -148,52 +150,52 @@ void CompBand::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 /*
  * Parameter control
  */
-void CompBand::setvolume(int value) {
+void CompBand::setVolume(int value) {
 	Pvolume = value;
 	outvolume = (float) Pvolume / 128.0f;
 
 }
 ;
 
-void CompBand::setlevel(int value) {
+void CompBand::setLevel(int value) {
 	Plevel = value;
 	level = dB2rap (60.0f * (float)value / 127.0f - 36.0f);
 
 }
 ;
 
-void CompBand::setratio(int ch, int value) {
+void CompBand::setRatio(int ch, int value) {
 
 	switch (ch) {
 	case 0:
-		CL->Compressor_Change(2, value);
+		CL->setRatio(value);
 		break;
 	case 1:
-		CML->Compressor_Change(2, value);
+		CML->setRatio(value);
 		break;
 	case 2:
-		CMH->Compressor_Change(2, value);
+		CMH->setRatio(value);
 		break;
 	case 3:
-		CH->Compressor_Change(2, value);
+		CH->setRatio(value);
 		break;
 	}
 }
 
-void CompBand::setthres(int ch, int value) {
+void CompBand::setThreshold(int ch, int value) {
 
 	switch (ch) {
 	case 0:
-		CL->Compressor_Change(1, value);
+		CL->setThreshold(value);
 		break;
 	case 1:
-		CML->Compressor_Change(1, value);
+		CML->setThreshold(value);
 		break;
 	case 2:
-		CMH->Compressor_Change(1, value);
+		CMH->setThreshold(value);
 		break;
 	case 3:
-		CH->Compressor_Change(1, value);
+		CH->setThreshold(value);
 		break;
 	}
 }
@@ -228,128 +230,75 @@ void CompBand::setCross3(int value) {
 }
 ;
 
-void CompBand::setpreset(int npreset) {
-	const int PRESET_SIZE = 13;
-	const int NUM_PRESETS = 3;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Good Start
-			{ 0, 16, 16, 16, 16, 0, 0, 0, 0, 1000, 5000, 10000, 48 },
-
-			//Loudness
-			{ 0, 16, 2, 2, 4, -16, 24, 24, -8, 140, 1000, 5000, 48 },
-
-			//Loudness 2
-			{ 64, 16, 2, 2, 2, -32, 24, 24, 24, 100, 1000, 5000, 48 }
-
-	};
-
-	if (npreset < NUM_PRESETS) {
-
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
-	}
-	Ppreset = npreset;
-	cleanup();
+void CompBand::setLratio(int value) {
+	PLratio = value;
+	setRatio(0, value);
 }
-;
-
-void CompBand::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		PLratio = value;
-		setratio(0, value);
-		break;
-	case 2:
-		PMLratio = value;
-		setratio(1, value);
-		break;
-	case 3:
-		PMHratio = value;
-		setratio(2, value);
-		break;
-	case 4:
-		PHratio = value;
-		setratio(3, value);
-		break;
-	case 5:
-		PLthres = value;
-		setthres(0, value);
-		break;
-	case 6:
-		PMLthres = value;
-		setthres(1, value);
-		break;
-	case 7:
-		PMHthres = value;
-		setthres(2, value);
-		break;
-	case 8:
-		PHthres = value;
-		setthres(3, value);
-		break;
-	case 9:
-		setCross1(value);
-		break;
-	case 10:
-		setCross2(value);
-		break;
-	case 11:
-		setCross3(value);
-		break;
-	case 12:
-		setlevel(value);
-		break;
-
-	};
+void CompBand::setMLratio(int value) {
+	PMLratio = value;
+	setRatio(1, value);
 }
-;
-
-int CompBand::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (PLratio);
-		break;
-	case 2:
-		return (PMLratio);
-		break;
-	case 3:
-		return (PMHratio);
-		break;
-	case 4:
-		return (PHratio);
-		break;
-	case 5:
-		return (PLthres);
-		break;
-	case 6:
-		return (PMLthres);
-		break;
-	case 7:
-		return (PMHthres);
-		break;
-	case 8:
-		return (PHthres);
-		break;
-	case 9:
-		return (Cross1);
-		break;
-	case 10:
-		return (Cross2);
-		break;
-	case 11:
-		return (Cross3);
-		break;
-	case 12:
-		return (Plevel);
-		break;
-	};
-	return (0); //in case of bogus parameter number
+void CompBand::setMHratio(int value) {
+	PMHratio = value;
+	setRatio(2, value);
 }
-;
+void CompBand::setHratio(int value) {
+	PHratio = value;
+	setRatio(3, value);
+}
+void CompBand::setLthreshold(int value) {
+	PLthres = value;
+	setThreshold(0, value);
+}
+void CompBand::setMLthreshold(int value) {
+	PMLthres = value;
+	setThreshold(1, value);
+}
+void CompBand::setMHthreshold(int value) {
+	PMHthres = value;
+	setThreshold(2, value);
+}
+void CompBand::setHthreshold(int value) {
+	PHthres = value;
+	setThreshold(3, value);
+}
 
+int CompBand::getVolume() {
+	return Pvolume;
+}
+int CompBand::getLratio() {
+	return PLratio;
+}
+int CompBand::getMLratio() {
+	return PMLratio;
+}
+int CompBand::getMHratio() {
+	return PMHratio;
+}
+int CompBand::getHratio() {
+	return PHratio;
+}
+int CompBand::getLthreshold() {
+	return PLthres;
+}
+int CompBand::getMLthreshold() {
+	return PMLthres;
+}
+int CompBand::getMHthreshold() {
+	return PMHthres;
+}
+int CompBand::getHthreshold() {
+	return PHthres;
+}
+int CompBand::getCross1() {
+	return Cross1;
+}
+int CompBand::getCross2() {
+	return Cross2;
+}
+int CompBand::getCross3() {
+	return Cross3;
+}
+int CompBand::getLevel() {
+	return Plevel;
+}

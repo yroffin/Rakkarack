@@ -42,6 +42,7 @@ public:
 	 * member declaration
 	 */
 	enum functions {
+		_preset,
 		_volume,
 		_panning,
 		_LfoPfreq,
@@ -60,75 +61,81 @@ public:
 	 * setter and getter map
 	 */
 	int get0() {
-		return getVolume();
+		return getPreset();
 	}
 	void set0(int value) {
-		setVolume(value);
+		setPreset(value);
 	}
 	int get1() {
-		return getPanning();
+		return getVolume();
 	}
 	void set1(int value) {
-		setPanning(value);
+		setVolume(value);
 	}
 	int get2() {
-		return getLfoPfreq();
+		return getPanning();
 	}
 	void set2(int value) {
-		setLfoPfreq(value);
+		setPanning(value);
 	}
 	int get3() {
-		return getLfoPrandomness();
+		return getLfoPfreq();
 	}
 	void set3(int value) {
-		setLfoPrandomness(value);
+		setLfoPfreq(value);
 	}
 	int get4() {
-		return getLfoPlfOtype();
+		return getLfoPrandomness();
 	}
 	void set4(int value) {
-		setLfoPlfOtype(value);
+		setLfoPrandomness(value);
 	}
 	int get5() {
-		return getLfoPstereo();
+		return getLfoPlfOtype();
 	}
 	void set5(int value) {
-		setLfoPstereo(value);
+		setLfoPlfOtype(value);
 	}
 	int get6() {
-		return getDepth();
+		return getLfoPstereo();
 	}
 	void set6(int value) {
-		setDepth(value);
+		setLfoPstereo(value);
 	}
 	int get7() {
-		return getFb();
+		return getDepth();
 	}
 	void set7(int value) {
-		setFb(value);
+		setDepth(value);
 	}
 	int get8() {
-		return getStages();
+		return getFb();
 	}
 	void set8(int value) {
-		setStages(value);
+		setFb(value);
 	}
 	int get9() {
-		return getLrcross();
+		return getStages();
 	}
 	void set9(int value) {
-		setLrcross(value);
+		setStages(value);
 	}
 	int get10() {
-		return getOutsub();
+		return getLrcross();
 	}
 	void set10(int value) {
-		setOutsub(value);
+		setLrcross(value);
 	}
 	int get11() {
-		return getPhase();
+		return getOutsub();
 	}
 	void set11(int value) {
+		setOutsub(value);
+	}
+	int get12() {
+		return getPhase();
+	}
+	void set12(int value) {
 		setPhase(value);
 	}
 

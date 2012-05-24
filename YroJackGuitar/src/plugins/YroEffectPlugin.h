@@ -181,6 +181,7 @@ protected:
 	int active;
 
 	int preset;
+	float outvolume;
 	float *efxoutl;
 	float *efxoutr;
 	const char *name;

@@ -40,32 +40,85 @@ public:
   Reverbtron(int DS, int uq, int dq);
   ~Reverbtron();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
   int setfile (int value);
   void adjust(int DS);
 
-  int Ppreset;
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _fade
+  , _safe
+  , _length
+  , _user
+  , _idelay
+  , _hidamp
+  , _level
+  , _file
+  };
 
-  float *efxoutl;
-  float *efxoutr;
-  float outvolume;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getFade();}
+  void set2(int value) {setFade(value);}
+  int  get3() {return getSafe();}
+  void set3(int value) {setSafe(value);}
+  int  get4() {return getLength();}
+  void set4(int value) {setLength(value);}
+  int  get5() {return getUser();}
+  void set5(int value) {setUser(value);}
+  int  get6() {return getIdelay();}
+  void set6(int value) {setIdelay(value);}
+  int  get7() {return getHidamp();}
+  void set7(int value) {setHidamp(value);}
+  int  get8() {return getLevel();}
+  void set8(int value) {setLevel(value);}
+  int  get9() {return getFile();}
+  void set9(int value) {setFile(value);}
 
-  char Filename[128];
-
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getFade();
+  void setFade(int value);
+  int  getSafe();
+  void setSafe(int value);
+  int  getLength();
+  void setLength(int value);
+  int  getUser();
+  void setUser(int value);
+  int  getIdelay();
+  void setIdelay(int value);
+  int  getHidamp();
+  void setHidamp(int value);
+  int  getLevel();
+  void setLevel(int value);
+  int  getFile();
+  void setFile(int value);
 
 private:
+  char Filename[128];
 
-  void setvolume (int Pvolume);
-  void setpanning (int Ppanning);
-  void sethidamp (int Phidamp);
-  void setlpf (int Plpf);
-  void setfb(int value);
+  void setStretch(int value);
+  void setEs(int value);
+  void setRv(int value);
+  void setDiff(int value);
+  void setFb(int value);
+  void setLpf(int value);
+  void setPanning(int value);
+
   void convert_time();
   void loaddefault();
-
 
   //Parametrii
   int Pvolume;	//This is master wet/dry mix like other FX...but I am finding it is not useful

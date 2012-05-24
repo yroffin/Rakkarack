@@ -42,35 +42,76 @@ public:
   void render(jack_nframes_t nframes,float * smps_l, float * smps_r);
   void cleanup ();
 
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _pan
+  , _time
+  , _idelay
+  , _idelayfb
+  , _lpf
+  , _hpf
+  , _lohidamp
+  , _type
+  , _roomsize
+  };
 
-  int Ppreset;
-  float outvolume;		//this is the volume of effect and is public because need it in system effect. The out volume of su
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getPan();}
+  void set2(int value) {setPan(value);}
+  int  get3() {return getTime();}
+  void set3(int value) {setTime(value);}
+  int  get4() {return getIdelay();}
+  void set4(int value) {setIdelay(value);}
+  int  get5() {return getIdelayfb();}
+  void set5(int value) {setIdelayfb(value);}
+  int  get6() {return getLpf();}
+  void set6(int value) {setLpf(value);}
+  int  get7() {return getHpf();}
+  void set7(int value) {setHpf(value);}
+  int  get8() {return getLohidamp();}
+  void set8(int value) {setLohidamp(value);}
+  int  get9() {return getType();}
+  void set9(int value) {setType(value);}
+  int  get10() {return getRoomsize();}
+  void set10(int value) {setRoomsize(value);}
 
-  float *efxoutl;
-  float *efxoutr;
-
-
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getPan();
+  void setPan(int value);
+  int  getTime();
+  void setTime(int value);
+  int  getIdelay();
+  void setIdelay(int value);
+  int  getIdelayfb();
+  void setIdelayfb(int value);
+  int  getLpf();
+  void setLpf(int value);
+  int  getHpf();
+  void setHpf(int value);
+  int  getLohidamp();
+  void setLohidamp(int value);
+  int  getType();
+  void setType(int value);
+  int  getRoomsize();
+  void setRoomsize(int value);
 
 private:
-
-  void setvolume (int Pvolume);
-  void setpan (int Ppan);
-  void settime (int Ptime);
-  void setlohidamp (int Plohidamp);
-  void setidelay (int Pidelay);
-  void setidelayfb (int Pidelayfb);
-  void sethpf (int Phpf);
-  void setlpf (int Plpf);
-  void settype (int Ptype);
-  void setroomsize (int Proomsize);
   void processmono (int ch, float * output);
 
-
-
-  //Parametrii
   //Amount of the reverb,
   int Pvolume;
 

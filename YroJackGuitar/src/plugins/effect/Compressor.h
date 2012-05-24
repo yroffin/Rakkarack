@@ -37,17 +37,73 @@ public:
 	~Compressor();
 
 	void render(jack_nframes_t nframes, float * smps_l, float * smps_r);
-
-	void Compressor_Change(int np, int value);
-	void setPreset(int npreset);
-	int getpar(int npar);
 	void cleanup();
 
-	float *efxoutl;
-	float *efxoutr;
+	/**
+	* member declaration
+	*/
+	enum functions {
+	_preset
+	, _threshold
+	, _ratio
+	, _output
+	, _att
+	, _rel
+	, _out
+	, _knee
+	, _stereo
+	, _peak
+	};
 
-	// Compressor
+	/**
+	* setter and getter map
+	*/
+	int  get0() {return getPreset();}
+	void set0(int value) {setPreset(value);}
+	int  get1() {return getThreshold();}
+	void set1(int value) {setThreshold(value);}
+	int  get2() {return getRatio();}
+	void set2(int value) {setRatio(value);}
+	int  get3() {return getOutput();}
+	void set3(int value) {setOutput(value);}
+	int  get4() {return getAtt();}
+	void set4(int value) {setAtt(value);}
+	int  get5() {return getRel();}
+	void set5(int value) {setRel(value);}
+	int  get6() {return getOut();}
+	void set6(int value) {setOut(value);}
+	int  get7() {return getKnee();}
+	void set7(int value) {setKnee(value);}
+	int  get8() {return getStereo();}
+	void set8(int value) {setStereo(value);}
+	int  get9() {return getPeak();}
+	void set9(int value) {setPeak(value);}
 
+	/**
+	* setter and getter
+	*/
+	int  getThreshold();
+	void setThreshold(int value);
+	int  getRatio();
+	void setRatio(int value);
+	int  getOutput();
+	void setOutput(int value);
+	int  getAtt();
+	void setAtt(int value);
+	int  getRel();
+	void setRel(int value);
+	int  getOut();
+	void setOut(int value);
+	int  getKnee();
+	void setKnee(int value);
+	int  getStereo();
+	void setStereo(int value);
+	int  getPeak();
+	void setPeak(int value);
+
+	void compute();
+
+private:
 	int tatt; // attack time  (ms)
 	int trel; // release time (ms)
 	int tratio;

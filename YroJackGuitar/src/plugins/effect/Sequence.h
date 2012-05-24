@@ -38,22 +38,64 @@ public:
   ~Sequence();
    void cleanup (); 
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void changepar (int npar, int value);
-  int getpar (int npar);
-  void setpreset (int npreset);
-  void setranges(int value);
-  void settempo(int value);
   void adjust(int DS);
-    
-  int Ppreset;
 
-  float outvolume;
-  
-  float *efxoutl;
-  float *efxoutr;
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _tempo
+  };
+
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get7() {return getSequence();}
+  void set7(int value) {setSequence(value);}
+  int  get8() {return getVolume();}
+  void set8(int value) {setVolume(value);}
+  int  get9() {return getTempo();}
+  void set9(int value) {setTempo(value);}
+  int  get10() {return getQ();}
+  void set10(int value) {setQ(value);}
+  int  get11() {return getAmplitude();}
+  void set11(int value) {setAmplitude(value);}
+  int  get12() {return getStdiff();}
+  void set12(int value) {setStdiff(value);}
+  int  get13() {return getMode();}
+  void set13(int value) {setMode(value);}
+  int  get14() {return getRange();}
+  void set14(int value) {setRange(value);}
+
+  /**
+  * setter and getter
+  */
+  int  getSequence();
+  void setSequence(int value);
+  int  getVolume();
+  void setVolume(int value);
+  int  getTempo();
+  void setTempo(int value);
+  int  getQ();
+  void setQ(int value);
+  int  getAmplitude();
+  void setAmplitude(int value);
+  int  getStdiff();
+  void setStdiff(int value);
+  int  getMode();
+  void setMode(int value);
+  int  getRange();
+  void setRange(int value);
 
 private:
-  //Parametrii
+  void setRanges(int value);
+
+  /**
+   * parameters
+   */
   int Pvolume;	       //Output Level
   int Psequence[8];	//Sequence.  Each value is 0...127
   int Ptempo;           // Rate

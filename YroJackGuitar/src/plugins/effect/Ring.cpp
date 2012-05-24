@@ -27,7 +27,12 @@
 using namespace std;
 
 Ring::Ring() :
-		YroEffectPlugin("Ring") {
+		YroEffectPlugin("Ring", "Saw-Sin: -64,0,-64,64,35,1,0,20,0,40,0,64,1;"
+				"Estring: 0,0,0,64,100,82,0,100,0,0,0,64,0;"
+				"Astring: 0,0,0,64,100,110,0,0,100,50,0,64,0;"
+				"dissonance: 0,0,0,64,100,817,0,20,0,100,0,64,1;"
+				"FastBeat: 0,0,0,64,100,15,0,20,0,100,0,64,1;"
+				"RingAmp: 0,0,0,64,100,1,0,20,0,100,0,64,0;") {
 
 	sin_tbl = (float *) malloc(sizeof(float) * iSAMPLE_RATE);
 	tri_tbl = (float *) malloc(sizeof(float) * iSAMPLE_RATE);
@@ -39,7 +44,6 @@ Ring::Ring() :
 	offset = 0;
 
 	//default values
-	Ppreset = 0;
 	Pvolume = 50;
 	Plrcross = 40;
 	Plevel = 64;
@@ -51,7 +55,7 @@ Ring::Ring() :
 	saw = 0.0f;
 	squ = 0.0f;
 
-	setpreset(Ppreset);
+	setPreset(0);
 	cleanup();
 }
 ;
@@ -159,7 +163,7 @@ void Ring::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
  * Parameter control
  */
 
-void Ring::setpanning(int Ppan) {
+void Ring::setPanning(int Ppan) {
 	Ppanning = Ppan;
 	panning = (float) (Ppanning + 64) / 128.0f;
 // is Ok ... 
@@ -167,155 +171,110 @@ void Ring::setpanning(int Ppan) {
 }
 ;
 
-void Ring::setlrcross(int Plrc) {
+void Ring::setLrcross(int Plrc) {
 	Plrcross = Plrc;
 	lrcross = (float) (Plrcross + 64) / 128.0f;
 
 }
 ;
 
-void Ring::setscale() {
+void Ring::setScale() {
 	scale = sin + tri + saw + squ;
 	if (scale == 0.0)
 		scale = 1.0;
 	scale = 1.0 / scale;
 }
 
-void Ring::setpreset(int npreset) {
-	const int PRESET_SIZE = 13;
-	const int NUM_PRESETS = 6;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Saw-Sin
-			{ -64, 0, -64, 64, 35, 1, 0, 20, 0, 40, 0, 64, 1 },
-			//E string
-			{ 0, 0, 0, 64, 100, 82, 0, 100, 0, 0, 0, 64, 0 },
-			//A string
-			{ 0, 0, 0, 64, 100, 110, 0, 0, 100, 50, 0, 64, 0 },
-			//dissonance
-			{ 0, 0, 0, 64, 100, 817, 0, 20, 0, 100, 0, 64, 1 },
-			//Fast Beat
-			{ 0, 0, 0, 64, 100, 15, 0, 20, 0, 100, 0, 64, 1 },
-			//Ring Amp
-			{ 0, 0, 0, 64, 100, 1, 0, 20, 0, 100, 0, 64, 0 }, };
-
-	if (npreset < NUM_PRESETS ) {
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
+void Ring::setVolume(int value) {
+	Pvolume = value;
+	outvolume = (float) (64 + value) / 128.0f;
+}
+void Ring::setLevel(int value) {
+	Plevel = value;
+}
+void Ring::setDepthp(int value) {
+	Pdepthp = value;
+	depth = (float) Pdepthp / 100.0;
+	idepth = 1.0f - depth;
+}
+void Ring::setFreq(int value) {
+	if (value > 20000) //Make sure bad inputs can't cause buffer overflow
+			{
+		Pfreq = 20000;
+	} else if (value < 1) {
+		Pfreq = 1;
+	} else {
+		Pfreq = value;
 	}
-	Ppreset = npreset;
-	cleanup();
 }
-;
-
-void Ring::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		Pvolume = value;
-		outvolume = (float) (64 + value) / 128.0f;
-		break;
-	case 1:
-		setpanning(value);
-		break;
-	case 2:
-		setlrcross(value);
-		break;
-	case 3:
-		Plevel = value;
-		break;
-	case 4:
-		Pdepthp = value;
-		depth = (float) Pdepthp / 100.0;
-		idepth = 1.0f - depth;
-		break;
-	case 5:
-		if (value > 20000) //Make sure bad inputs can't cause buffer overflow
-				{
-			Pfreq = 20000;
-		} else if (value < 1) {
-			Pfreq = 1;
-		} else {
-			Pfreq = value;
-		}
-		break;
-	case 6:
-		if (value > 1)
-			value = 1;
-		Pstereo = value;
-		break;
-	case 7:
-		Psin = value;
-		sin = (float) Psin / 100.0;
-		setscale();
-		break;
-	case 8:
-		Ptri = value;
-		tri = (float) Ptri / 100.0;
-		setscale();
-		break;
-	case 9:
-		Psaw = value;
-		saw = (float) Psaw / 100.0;
-		setscale();
-		break;
-	case 10:
-		Psqu = value;
-		squ = (float) Psqu / 100.0;
-		setscale();
-		break;
-	case 11:
-		Pinput = value;
-		break;
-	case 12:
-		Pafreq = value;
-		break;
-
-	};
+void Ring::setStereo(int value) {
+	if (value > 1)
+		value = 1;
+	Pstereo = value;
 }
-;
-
-int Ring::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Ppanning);
-		break;
-	case 2:
-		return (Plrcross);
-		break;
-	case 3:
-		return (Plevel);
-		break;
-	case 4:
-		return (Pdepthp);
-		break;
-	case 5:
-		return (Pfreq);
-		break;
-	case 6:
-		return (Pstereo);
-		break;
-	case 7:
-		return (Psin);
-		break;
-	case 8:
-		return (Ptri);
-		break;
-	case 9:
-		return (Psaw);
-		break;
-	case 10:
-		return (Psqu);
-		break;
-	case 11:
-		return (Pinput);
-		break;
-	case 12:
-		return (Pafreq);
-
-	};
-	return (0); //in case of bogus parameter number
+void Ring::setSin(int value) {
+	Psin = value;
+	sin = (float) Psin / 100.0;
+	setScale();
 }
-;
+void Ring::setTri(int value) {
+	Ptri = value;
+	tri = (float) Ptri / 100.0;
+	setScale();
+}
+void Ring::setSaw(int value) {
+	Psaw = value;
+	saw = (float) Psaw / 100.0;
+	setScale();
+}
+void Ring::setSqu(int value) {
+	Psqu = value;
+	squ = (float) Psqu / 100.0;
+	setScale();
+}
+void Ring::setInput(int value) {
+	Pinput = value;
+}
+void Ring::setAfreq(int value) {
+	Pafreq = value;
+}
 
+int Ring::getVolume() {
+	return Pvolume;
+}
+int Ring::getPanning() {
+	return Ppanning;
+}
+int Ring::getLrcross() {
+	return Plrcross;
+}
+int Ring::getLevel() {
+	return Plevel;
+}
+int Ring::getDepthp() {
+	return Pdepthp;
+}
+int Ring::getFreq() {
+	return Pfreq;
+}
+int Ring::getStereo() {
+	return Pstereo;
+}
+int Ring::getSin() {
+	return Psin;
+}
+int Ring::getTri() {
+	return Ptri;
+}
+int Ring::getSaw() {
+	return Psaw;
+}
+int Ring::getSqu() {
+	return Psqu;
+}
+int Ring::getInput() {
+	return Pinput;
+}
+int Ring::getAfreq() {
+	return Pafreq;
+}

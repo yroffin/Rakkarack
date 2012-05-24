@@ -44,6 +44,7 @@ public:
 	 * member declaration
 	 */
 	enum functions {
+		_preset,
 		_volume,
 		_panning,
 		_delay,
@@ -59,57 +60,63 @@ public:
 	 * setter and getter map
 	 */
 	int get0() {
-		return getVolume();
+		return getPreset();
 	}
 	void set0(int value) {
-		setVolume(value);
+		setPreset(value);
 	}
 	int get1() {
-		return getPanning();
+		return getVolume();
 	}
 	void set1(int value) {
-		setPanning(value);
+		setVolume(value);
 	}
 	int get2() {
-		return getDelay();
+		return getPanning();
 	}
 	void set2(int value) {
-		setDelay(value);
+		setPanning(value);
 	}
 	int get3() {
-		return getLrdelay();
+		return getDelay();
 	}
 	void set3(int value) {
-		setLrdelay(value);
+		setDelay(value);
 	}
 	int get4() {
-		return getLrcross();
+		return getLrdelay();
 	}
 	void set4(int value) {
-		setLrcross(value);
+		setLrdelay(value);
 	}
 	int get5() {
-		return getFb();
+		return getLrcross();
 	}
 	void set5(int value) {
-		setFb(value);
+		setLrcross(value);
 	}
 	int get6() {
-		return getHidamp();
+		return getFb();
 	}
 	void set6(int value) {
-		setHidamp(value);
+		setFb(value);
 	}
 	int get7() {
-		return getReverse();
+		return getHidamp();
 	}
 	void set7(int value) {
-		setReverse(value);
+		setHidamp(value);
 	}
 	int get8() {
-		return getDirect();
+		return getReverse();
 	}
 	void set8(int value) {
+		setReverse(value);
+	}
+	int get9() {
+		return getDirect();
+	}
+	void set9(int value) {
 		setDirect(value);
 	}
 

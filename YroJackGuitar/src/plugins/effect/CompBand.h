@@ -43,17 +43,95 @@ public:
 	CompBand();
 	~CompBand();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
-	void setpreset(int npreset);
-	void changepar(int npar, int value);
-	int getpar(int npar);
 	void cleanup();
 
-	int Ppreset;
-	float outvolume;
-	float level;
+	/**
+	* member declaration
+	*/
+	enum functions {
+	_preset
+	, _volume
+	, _plratio
+	, _pmlratio
+	, _pmhratio
+	, _phratio
+	, _plthreshold
+	, _pmlthreshold
+	, _pmhthreshold
+	, _phthreshold
+	, _cross1
+	, _cross2
+	, _cross3
+	, _level
+	};
 
-	float *efxoutl;
-	float *efxoutr;
+	/**
+	* setter and getter map
+	*/
+	int  get0() {return getPreset();}
+	void set0(int value) {setPreset(value);}
+	int  get1() {return getVolume();}
+	void set1(int value) {setVolume(value);}
+	int  get2() {return getLratio();}
+	void set2(int value) {setLratio(value);}
+	int  get3() {return getMLratio();}
+	void set3(int value) {setMLratio(value);}
+	int  get4() {return getMHratio();}
+	void set4(int value) {setMHratio(value);}
+	int  get5() {return getHratio();}
+	void set5(int value) {setHratio(value);}
+	int  get6() {return getLthreshold();}
+	void set6(int value) {setLthreshold(value);}
+	int  get7() {return getMLthreshold();}
+	void set7(int value) {setMLthreshold(value);}
+	int  get8() {return getMHthreshold();}
+	void set8(int value) {setMHthreshold(value);}
+	int  get9() {return getHthreshold();}
+	void set9(int value) {setHthreshold(value);}
+	int  get10() {return getCross1();}
+	void set10(int value) {setCross1(value);}
+	int  get11() {return getCross2();}
+	void set11(int value) {setCross2(value);}
+	int  get12() {return getCross3();}
+	void set12(int value) {setCross3(value);}
+	int  get13() {return getLevel();}
+	void set13(int value) {setLevel(value);}
+
+	/**
+	* setter and getter
+	*/
+	int  getVolume();
+	void setVolume(int value);
+	int  getLratio();
+	void setLratio(int value);
+	int  getMLratio();
+	void setMLratio(int value);
+	int  getMHratio();
+	void setMHratio(int value);
+	int  getHratio();
+	void setHratio(int value);
+	int  getLthreshold();
+	void setLthreshold(int value);
+	int  getMLthreshold();
+	void setMLthreshold(int value);
+	int  getMHthreshold();
+	void setMHthreshold(int value);
+	int  getHthreshold();
+	void setHthreshold(int value);
+	int  getCross1();
+	void setCross1(int value);
+	int  getCross2();
+	void setCross2(int value);
+	int  getCross3();
+	void setCross3(int value);
+	int  getLevel();
+	void setLevel(int value);
+
+private:
+	void setRatio(int sel, int value);
+	void setThreshold(int sel, int value);
+
+	float level;
 	float *lowl;
 	float *lowr;
 	float *midll;
@@ -63,17 +141,9 @@ public:
 	float *highl;
 	float *highr;
 
-private:
-
-	void setvolume(int Pvolume);
-	void setlevel(int value);
-	void setratio(int ch, int value);
-	void setthres(int ch, int value);
-	void setCross1(int value);
-	void setCross2(int value);
-	void setCross3(int value);
-
-	//Parametrii
+	/**
+	 * parameters
+	 */
 	int Pvolume; //Volumul or E/R
 	int Plevel;
 	int PLratio;

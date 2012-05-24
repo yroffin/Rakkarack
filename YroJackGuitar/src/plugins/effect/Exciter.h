@@ -25,37 +25,70 @@
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/filter/HarmEnhancer.h>
 
-
-
-
 namespace std {
 
-class Exciter : public YroEffectPlugin
-
-{
+class Exciter : public YroEffectPlugin {
 public:
   Exciter();
   ~Exciter();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _lpf
+  , _hpf
+  };
 
-  float *efxoutl;
-  float *efxoutr;
-  float outvolume;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getLpf();}
+  void set2(int value) {setLpf(value);}
+  int  get3() {return getHpf();}
+  void set3(int value) {setHpf(value);}
+  int  get4() {return getHar(0);}
+  void set4(int value) {setHar(0, value);}
+  int  get5() {return getHar(1);}
+  void set5(int value) {setHar(1, value);}
+  int  get6() {return getHar(2);}
+  void set6(int value) {setHar(2, value);}
+  int  get7() {return getHar(3);}
+  void set7(int value) {setHar(3, value);}
+  int  get8() {return getHar(4);}
+  void set8(int value) {setHar(4, value);}
+  int  get9() {return getHar(5);}
+  void set9(int value) {setHar(5, value);}
+  int  get10() {return getHar(6);}
+  void set10(int value) {setHar(6, value);}
+  int  get11() {return getHar(7);}
+  void set11(int value) {setHar(7, value);}
+  int  get12() {return getHar(8);}
+  void set12(int value) {setHar(8, value);}
+  int  get13() {return getHar(9);}
+  void set13(int value) {setHar(9, value);}
+
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getLpf();
+  void setLpf(int value);
+  int  getHpf();
+  void setHpf(int value);
+  int  getHar(int sel);
+  void setHar(int sel, int value);
 
 private:
-
-  void setvolume (int value);
-  void setlpf (int value);
-  void sethpf (int value);
-  void sethar(int num, int value);
-
-
   int Prm[10];
   int Pvolume;
   int lpffreq;

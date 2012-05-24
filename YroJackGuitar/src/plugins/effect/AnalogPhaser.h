@@ -44,6 +44,7 @@ public:
 	 * member declaration
 	 */
 	enum functions {
+		_preset,
 		_volume,
 		_distortion,
 		_LfoPfreq,
@@ -63,100 +64,108 @@ public:
 	 * setter and getter map
 	 */
 	int get0() {
-		return getVolume();
+		return getPreset();
 	}
 
 	void set0(int value) {
-		setVolume(value);
+		setPreset(value);
 	}
 
 	int get1() {
-		return getDistortion();
+		return getVolume();
 	}
 
 	void set1(int value) {
-		setDistortion(value);
+		setVolume(value);
 	}
 
 	int get2() {
-		return getLfoPfreq();
+		return getDistortion();
 	}
 
 	void set2(int value) {
-		setLfoPfreq(value);
+		setDistortion(value);
 	}
 
 	int get3() {
-		return getLfoPrandomness();
+		return getLfoPfreq();
 	}
 
 	void set3(int value) {
-		setLfoPrandomness(value);
+		setLfoPfreq(value);
 	}
 
 	int get4() {
-		return getLfoPlfOtype();
+		return getLfoPrandomness();
 	}
 
 	void set4(int value) {
-		setLfoPlfOtype(value);
+		setLfoPrandomness(value);
 	}
 
 	int get5() {
-		return getLfoPstereo();
+		return getLfoPlfOtype();
 	}
 
 	void set5(int value) {
-		setLfoPstereo(value);
+		setLfoPlfOtype(value);
 	}
 
 	int get6() {
-		return getWidth();
+		return getLfoPstereo();
 	}
 
 	void set6(int value) {
-		setWidth(value);
+		setLfoPstereo(value);
 	}
 
 	int get7() {
-		return getFb();
+		return getWidth();
 	}
 
 	void set7(int value) {
-		setFb(value);
+		setWidth(value);
 	}
 
 	int get8() {
-		return getStages();
+		return getFb();
 	}
 
 	void set8(int value) {
-		setStages(value);
+		setFb(value);
 	}
 
 	int get9() {
-		return getOffset();
+		return getStages();
 	}
 
 	void set9(int value) {
+		setStages(value);
+	}
+
+	int get10() {
+		return getOffset();
+	}
+
+	void set10(int value) {
 		setOffset(value);
 	}
-	int get10() {
+	int get11() {
 		return getOutsub();
 	}
-	void set10(int value) {
+	void set11(int value) {
 		setOutsub(value);
 	}
-	int get11() {
+	int get12() {
 		return getDepth();
 	}
-	void set11(int value) {
+	void set12(int value) {
 		setDepth(value);
 	}
-	int get12() {
+	int get13() {
 		return getHyper();
 	}
-	void set12(int value) {
+	void set13(int value) {
 		setHyper(value);
 	}
 

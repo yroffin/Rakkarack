@@ -35,23 +35,70 @@ public:
   ShelfBoost();
   ~ShelfBoost();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
+  /**
+   * member declaration
+   */
+  enum functions {
+  	_preset, _volume, _q1, _freq1, _stereo, _level
+  };
 
-  int Ppreset;
+  /**
+   * setter and getter map
+   */
+  int get0() {
+  	return getPreset();
+  }
+  void set0(int value) {
+  	setPreset(value);
+  }
+  int get1() {
+  	return getVolume();
+  }
+  void set1(int value) {
+  	setVolume(value);
+  }
+  int get2() {
+  	return getQ1();
+  }
+  void set2(int value) {
+  	setQ1(value);
+  }
+  int get3() {
+  	return getFreq1();
+  }
+  void set3(int value) {
+  	setFreq1(value);
+  }
+  int get4() {
+  	return getStereo();
+  }
+  void set4(int value) {
+  	setStereo(value);
+  }
+  int get5() {
+  	return getLevel();
+  }
+  void set5(int value) {
+  	setLevel(value);
+  }
 
-  float outvolume;
-
-  float *efxoutl;
-  float *efxoutr;
+  /**
+   * setter and getter
+   */
+  int getVolume();
+  void setVolume(int value);
+  int getQ1();
+  void setQ1(int value);
+  int getFreq1();
+  void setFreq1(int value);
+  int getStereo();
+  void setStereo(int value);
+  int getLevel();
+  void setLevel(int value);
 
 private:
-
-  void setvolume (int value);
-
   int Pvolume;
   int Plevel;
   int Pq1;

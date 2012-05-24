@@ -33,27 +33,101 @@
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/misc/YroLowfrequencyOscillation.h>
 
-
-
 namespace std {
 
-class DualFlanger : public YroEffectPlugin
-
-{
+class DualFlanger : public YroEffectPlugin {
 public:
   DualFlanger();
   ~DualFlanger();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _wetdry
+  , _panning
+  , _lrcross
+  , _depth
+  , _width
+  , _off
+  , _fb
+  , _hidamp
+  , _subtract
+  , _zero
+  , _lfofreq
+  , _lfostereo
+  , _lfotype
+  , _lforandomness
+  };
 
-  float *efxoutl;
-  float *efxoutr;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getWetdry();}
+  void set1(int value) {setWetdry(value);}
+  int  get2() {return getPanning();}
+  void set2(int value) {setPanning(value);}
+  int  get3() {return getLrcross();}
+  void set3(int value) {setLrcross(value);}
+  int  get4() {return getDepth();}
+  void set4(int value) {setDepth(value);}
+  int  get5() {return getWidth();}
+  void set5(int value) {setWidth(value);}
+  int  get6() {return getOff();}
+  void set6(int value) {setOff(value);}
+  int  get7() {return getFb();}
+  void set7(int value) {setFb(value);}
+  int  get8() {return getHidamp();}
+  void set8(int value) {setHidamp(value);}
+  int  get9() {return getSubtract();}
+  void set9(int value) {setSubtract(value);}
+  int  get10() {return getZero();}
+  void set10(int value) {setZero(value);}
+  int  get11() {return getLfoFreq();}
+  void set11(int value) {setLfoFreq(value);}
+  int  get12() {return getLfoStereo();}
+  void set12(int value) {setLfoStereo(value);}
+  int  get13() {return getLfoType();}
+  void set13(int value) {setLfoType(value);}
+  int  get14() {return getLfoRandomness();}
+  void set14(int value) {setLfoRandomness(value);}
 
+  /**
+  * setter and getter
+  */
+  int  getWetdry();
+  void setWetdry(int value);
+  int  getPanning();
+  void setPanning(int value);
+  int  getLrcross();
+  void setLrcross(int value);
+  int  getDepth();
+  void setDepth(int value);
+  int  getWidth();
+  void setWidth(int value);
+  int  getOff();
+  void setOff(int value);
+  int  getFb();
+  void setFb(int value);
+  int  getHidamp();
+  void setHidamp(int value);
+  int  getSubtract();
+  void setSubtract(int value);
+  int  getZero();
+  void setZero(int value);
+  int  getLfoFreq();
+  void setLfoFreq(int value);
+  int  getLfoStereo();
+  void setLfoStereo(int value);
+  int  getLfoType();
+  void setLfoType(int value);
+  int  getLfoRandomness();
+  void setLfoRandomness(int value);
 
 private:
   //Parameters

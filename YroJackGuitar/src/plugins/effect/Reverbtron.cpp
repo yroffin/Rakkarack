@@ -27,10 +27,18 @@
 using namespace std;
 
 Reverbtron::Reverbtron(int DS, int uq, int dq) :
-		YroEffectPlugin("Reverbtron") {
+		YroEffectPlugin("Reverbtron",
+				"Spring: 64,0,1,500,0,0,99,70,0,0,0,64,0,0,20000,0;"
+						"ConcreteStair: 64,0,1,500,0,0,0,40,1,0,0,64,0,0,20000,0;"
+						"NiceHall: 64,0,1,500,0,0,60,15,2,0,0,64,0,0,20000,0;"
+						"Hall: 64,16,1,500,0,0,0,22,3,-17,0,64,0,0,20000,0;"
+						"Room: 64,0,1,1500,0,0,48,20,4,0,0,64,0,0,20000,0;"
+						"Hall: 88,0,1,1500,0,0,88,14,5,0,0,64,0,0,20000,0;"
+						"Guitar: 64,0,1,1500,0,0,30,34,6,0,0,64,0,0,20000,0;"
+						"Studio: 64,0,1,1500,0,0,30,20,7,0,0,64,0,0,20000,0;"
+						"Cathedral: 64,0,1,1500,0,30,0,40,9,0,0,64,0,0,20000,0;") {
 
 	//default values
-	Ppreset = 0;
 	Pvolume = 50;
 	Ppanning = 64;
 	Plrcross = 100;
@@ -78,7 +86,7 @@ Reverbtron::Reverbtron(int DS, int uq, int dq) :
 	U_Resample = new Resample(dq); //Downsample, uses sinc interpolation for bandlimiting to avoid aliasing
 	D_Resample = new Resample(uq);
 
-	setpreset(Ppreset);
+	setPreset(0);
 	cleanup();
 }
 ;
@@ -214,7 +222,7 @@ void Reverbtron::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 /*
  * Parameter control
  */
-void Reverbtron::setvolume(int Pvolume) {
+void Reverbtron::setVolume(int Pvolume) {
 	this->Pvolume = Pvolume;
 	outvolume = (float) Pvolume / 127.0f;
 	if (Pvolume == 0)
@@ -223,7 +231,7 @@ void Reverbtron::setvolume(int Pvolume) {
 }
 ;
 
-void Reverbtron::setpanning(int value) {
+void Reverbtron::setPanning(int value) {
 	Ppanning = value;
 	rpanning = ((float) Ppanning) / 64.0f;
 	lpanning = 2.0f - rpanning;
@@ -407,12 +415,12 @@ void Reverbtron::convert_time() {
 	roomsize = time[0] + (time[1] - time[0]) / 2; //to help stagger left/right reflection times
 	if (roomsize > imax)
 		roomsize = imax;
-	setfb(Pfb);
+	setFb(Pfb);
 
 }
 ;
 
-void Reverbtron::setlpf(int value) {
+void Reverbtron::setLpf(int value) {
 	Plpf = value;
 	float fr = (float) Plpf;
 	lpfl->setfreq(fr);
@@ -421,15 +429,15 @@ void Reverbtron::setlpf(int value) {
 }
 ;
 
-void Reverbtron::sethidamp(int Phidamp) {
+void Reverbtron::setHidamp(int Phidamp) {
 	this->Phidamp = Phidamp;
 	hidamp = 1.0f - (float) Phidamp / 127.1f;
 	alpha_hidamp = 1.0f - hidamp;
 }
 ;
 
-void Reverbtron::setfb(int value) {
-
+void Reverbtron::setFb(int value) {
+	Pfb = value;
 	if (Pfb <= 0)
 		fb = (float) value / 64.0f * 0.3f;
 	else
@@ -511,161 +519,79 @@ void Reverbtron::adjust(int DS) {
 	u_down = (double) iPERIOD / (double) nPERIOD;
 }
 
-void Reverbtron::setpreset(int npreset) {
-	const int PRESET_SIZE = 16;
-	const int NUM_PRESETS = 9;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Spring
-			{ 64, 0, 1, 500, 0, 0, 99, 70, 0, 0, 0, 64, 0, 0, 20000, 0 },
-			//Concrete Stair
-			{ 64, 0, 1, 500, 0, 0, 0, 40, 1, 0, 0, 64, 0, 0, 20000, 0 },
-			//Nice Hall
-			{ 64, 0, 1, 500, 0, 0, 60, 15, 2, 0, 0, 64, 0, 0, 20000, 0 },
-			//Hall
-			{ 64, 16, 1, 500, 0, 0, 0, 22, 3, -17, 0, 64, 0, 0, 20000, 0 },
-			//Room
-			{ 64, 0, 1, 1500, 0, 0, 48, 20, 4, 0, 0, 64, 0, 0, 20000, 0 },
-			//Hall
-			{ 88, 0, 1, 1500, 0, 0, 88, 14, 5, 0, 0, 64, 0, 0, 20000, 0 },
-			//Guitar
-			{ 64, 0, 1, 1500, 0, 0, 30, 34, 6, 0, 0, 64, 0, 0, 20000, 0 },
-			//Studio
-			{ 64, 0, 1, 1500, 0, 0, 30, 20, 7, 0, 0, 64, 0, 0, 20000, 0 },
-			//Cathedral
-			{ 64, 0, 1, 1500, 0, 30, 0, 40, 9, 0, 0, 64, 0, 0, 20000, 0 }
-
-	};
-
-	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
-	}
-	Ppreset = npreset;
+void Reverbtron::setFade(int value) {
+	Pfade = value;
+	ffade = ((float) value) / 127.0f;
+	convert_time();
 }
-;
+void Reverbtron::setSafe(int value) {
+	Psafe = value;
+}
+void Reverbtron::setLength(int value) {
+	Plength = value;
+	if ((Psafe) && (Plength > 400))
+		Plength = 400;
+	convert_time();
+}
+void Reverbtron::setUser(int value) {
+	Puser = value;
+}
+void Reverbtron::setIdelay(int value) {
+	Pidelay = value;
+	idelay = ((float) value) / 1000.0f;
+	convert_time();
+}
+void Reverbtron::setLevel(int value) {
+	Plevel = value;
+	level = 2.0f * dB2rap(60.0f * (float)Plevel / 127.0f - 40.0f);
+	levpanl = level * lpanning;
+	levpanr = level * rpanning;
+}
+void Reverbtron::setFile(int value) {
+	if (!setfile(value))
+		helper->setErrorNumber(2);
+}
+void Reverbtron::setStretch(int value) {
+	Pstretch = value;
+	fstretch = ((float) value) / 64.0f;
+	convert_time();
+}
+void Reverbtron::setEs(int value) {
+	Pes = value;
+}
+void Reverbtron::setRv(int value) {
+	Prv = value;
+}
+void Reverbtron::setDiff(int value) {
+	Pdiff = value;
+	diffusion = ((float) value) / 127.0f;
+	convert_time();
+}
 
-void Reverbtron::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		Pfade = value;
-		ffade = ((float) value) / 127.0f;
-		convert_time();
-		break;
-	case 2:
-		Psafe = value;
-		break;
-	case 3:
-		Plength = value;
-		if ((Psafe) && (Plength > 400))
-			Plength = 400;
-		convert_time();
-		break;
-	case 4:
-		Puser = value;
-		break;
-	case 5:
-		Pidelay = value;
-		idelay = ((float) value) / 1000.0f;
-		convert_time();
-		break;
-	case 6:
-		sethidamp(value);
-		break;
-	case 7:
-		Plevel = value;
-		level = 2.0f * dB2rap (60.0f * (float)Plevel / 127.0f - 40.0f);
-		levpanl = level * lpanning;
-		levpanr = level * rpanning;
-		break;
-	case 8:
-		if(!setfile(value)) helper->setErrorNumber(2);
-				break;
-			case 9:
-				Pstretch = value;
-				fstretch = ((float) value) / 64.0f;
-				convert_time();
-				break;
-			case 10:
-				Pfb = value;
-				setfb(value);
-				break;
-			case 11:
-				setpanning(value);
-				break;
-			case 12:
-				Pes = value;
-				break;
-			case 13:
-				Prv = value;
-				break;
-			case 14:
-				setlpf(value);
-				break;
-			case 15:
-				Pdiff = value;
-				diffusion = ((float) value) / 127.0f;
-				convert_time();
-				break;
-
-			};
-		}
-		;
-
-		int Reverbtron::getpar(int npar) {
-			switch (npar) {
-			case 0:
-				return (Pvolume);
-				break;
-			case 1:
-				return (Pfade);
-				break;
-			case 2:
-				return (Psafe);
-				break;
-			case 3:
-				return (Plength);
-				break;
-			case 8:
-				return (Filenum);
-				break;
-			case 5:
-				return (Pidelay);
-				break;
-			case 6:
-				return (Phidamp);
-				break;
-			case 7:
-				return (Plevel);
-				break;
-			case 4:
-				return (Puser);
-				break;
-			case 9:
-				return (Pstretch);
-				break;
-			case 10:
-				return (Pfb);
-				break;
-			case 11:
-				return (Ppanning);
-				break;
-			case 12:
-				return (Pes);
-				break;
-			case 13:
-				return (Prv);
-				break;
-			case 14:
-				return (Plpf);
-				break;
-			case 15:
-				return (Pdiff);
-				break;
-
-			};
-			return (0); //in case of bogus parameter number
-		}
-		;
+int Reverbtron::getVolume() {
+	return Pvolume;
+}
+int Reverbtron::getFade() {
+	return Pfade;
+}
+int Reverbtron::getSafe() {
+	return Psafe;
+}
+int Reverbtron::getLength() {
+	return Plength;
+}
+int Reverbtron::getUser() {
+	return Puser;
+}
+int Reverbtron::getIdelay() {
+	return Pidelay;
+}
+int Reverbtron::getHidamp() {
+	return Phidamp;
+}
+int Reverbtron::getLevel() {
+	return Plevel;
+}
+int Reverbtron::getFile() {
+	return 0;
+}

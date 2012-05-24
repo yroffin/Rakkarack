@@ -27,10 +27,12 @@
 using namespace std;
 
 Convolotron::Convolotron(int DS, int uq, int dq) :
-		YroEffectPlugin("Convolotron") {
-
+		YroEffectPlugin("Convolotron",
+				"Convolotron1: 67,64,1,100,0,64,30,20,0,0,0;"
+						"Convolotron2: 67,64,1,100,0,64,30,20,1,0,0;"
+						"Convolotron3: 67,75,1,100,0,64,30,20,2,0,0;"
+						"Convolotron4: 67,60,1,100,0,64,30,20,3,0,0;") {
 	//default values
-	Ppreset = 0;
 	Pvolume = 50;
 	Ppanning = 64;
 	Plrcross = 100;
@@ -58,10 +60,9 @@ Convolotron::Convolotron(int DS, int uq, int dq) :
 	U_Resample = new Resample(dq); //Downsample, uses sinc interpolation for bandlimiting to avoid aliasing
 	D_Resample = new Resample(uq);
 
-	setpreset(Ppreset);
+	setPreset(0);
 	cleanup();
 }
-;
 
 Convolotron::~Convolotron() {
 }
@@ -197,7 +198,7 @@ void Convolotron::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 /*
  * Parameter control
  */
-void Convolotron::setvolume(int Pvolume) {
+void Convolotron::setVolume(int Pvolume) {
 	this->Pvolume = Pvolume;
 	outvolume = (float) Pvolume / 127.0f;
 	if (Pvolume == 0)
@@ -206,7 +207,7 @@ void Convolotron::setvolume(int Pvolume) {
 }
 ;
 
-void Convolotron::setpanning(int Ppanning) {
+void Convolotron::setPanning(int Ppanning) {
 	this->Ppanning = Ppanning;
 	lpanning = ((float) Ppanning + 0.5f) / 127.0f;
 	rpanning = 1.0f - lpanning;
@@ -216,7 +217,7 @@ void Convolotron::setpanning(int Ppanning) {
 }
 ;
 
-int Convolotron::setfile(int value) {
+void Convolotron::setFile(int value) {
 	double sr_ratio;
 
 	offset = 0;
@@ -235,13 +236,13 @@ int Convolotron::setfile(int value) {
 	sfinfo.format = 0;
 	/**
 	 * TODO
-	if (!(infile = sf_open(Filename, SFM_READ, &sfinfo))) {
-		real_len = 1;
-		length = 1;
-		rbuf[0] = 1.0f;
-		process_rbuf();
-		return (0);
-	}
+	 if (!(infile = sf_open(Filename, SFM_READ, &sfinfo))) {
+	 real_len = 1;
+	 length = 1;
+	 rbuf[0] = 1.0f;
+	 process_rbuf();
+	 return (0);
+	 }
 	 */
 
 	if (sfinfo.frames > maxx_read)
@@ -265,8 +266,6 @@ int Convolotron::setfile(int value) {
 		memcpy(rbuf, buf, real_len * sizeof(float));
 
 	process_rbuf();
-
-	return (1);
 }
 ;
 
@@ -326,131 +325,52 @@ void Convolotron::process_rbuf() {
 
 }
 
-void Convolotron::sethidamp(int Phidamp) {
+void Convolotron::setHidamp(int Phidamp) {
 	this->Phidamp = Phidamp;
 	hidamp = 1.0f - (float) Phidamp / 127.1f;
 	alpha_hidamp = 1.0f - hidamp;
 }
 ;
 
-void Convolotron::setpreset(int npreset) {
-	const int PRESET_SIZE = 11;
-	const int NUM_PRESETS = 4;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Convolotron 1
-			{ 67, 64, 1, 100, 0, 64, 30, 20, 0, 0, 0 },
-			//Convolotron 2
-			{ 67, 64, 1, 100, 0, 64, 30, 20, 1, 0, 0 },
-			//Convolotron 3
-			{ 67, 75, 1, 100, 0, 64, 30, 20, 2, 0, 0 },
-			//Convolotron 4
-			{ 67, 60, 1, 100, 0, 64, 30, 20, 3, 0, 0 } };
-
-	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++) {
-			changepar(n, presets[npreset][n]);
-		}
-	}
-	Ppreset = npreset;
+void Convolotron::setSafe(int value) {
+	Psafe = value;
 }
-;
-
-void Convolotron::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		setpanning(value);
-		break;
-	case 2:
-		Psafe = value;
-		break;
-	case 3:
-		if (Psafe) {
-			if (value < helper->getMaxLength())
-				Plength = value;
-			else
-				Plength = helper->getMaxLength();
-		} else
+void Convolotron::setLength(int value) {
+	if (Psafe) {
+		if (value < helper->getMaxLength())
 			Plength = value;
-		convlength = ((float) Plength) / 1000.0f; //time in seconds
-		length = (int) (nfSAMPLE_RATE * convlength); //time in samples
-		process_rbuf();
-		break;
-	case 8:
-		/**
-		 * TODO handle this error_num !!!
-		if (!setfile(value))
-			error_num = 1;
-		 */
-		break;
-	case 5:
-		break;
-	case 6:
-		sethidamp(value);
-		break;
-	case 7:
-		Plevel = value;
-		level = dB2rap (60.0f * (float)Plevel / 127.0f - 40.0f);
-		levpanl = lpanning * level * 2.0f;
-		levpanr = rpanning * level * 2.0f;
-		break;
-	case 4:
-		Puser = value;
-		break;
-	case 9:
-		break;
-	case 10:
-		Pfb = value;
-		if (Pfb < 0) {
-			fb = (float) .1f * value / 250.0f * .15f;
-		} else {
-			fb = (float) .1f * value / 500.0f * .15f;
-		}
-		break;
-
-	};
+		else
+			Plength = helper->getMaxLength();
+	} else
+		Plength = value;
+	convlength = ((float) Plength) / 1000.0f; //time in seconds
+	length = (int) (nfSAMPLE_RATE * convlength); //time in samples
+	process_rbuf();
 }
-;
-
-int Convolotron::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Ppanning);
-		break;
-	case 2:
-		return (Psafe);
-		break;
-	case 3:
-		return (Plength);
-		break;
-	case 8:
-		return (Filenum);
-		break;
-	case 5:
-		return (0);
-		break;
-	case 6:
-		return (Phidamp);
-		break;
-	case 7:
-		return (Plevel);
-		break;
-	case 4:
-		return (Puser);
-		break;
-	case 9:
-		return (0);
-		break;
-	case 10:
-		return (Pfb);
-		break;
-
-	};
-	return (0); //in case of bogus parameter number
+void Convolotron::setLevel(int value) {
+	Plevel = value;
+	level = dB2rap (60.0f * (float)Plevel / 127.0f - 40.0f);
+	levpanl = lpanning * level * 2.0f;
+	levpanr = rpanning * level * 2.0f;
 }
-;
+void Convolotron::setUser(int value) {
+	Puser = value;
+}
+void Convolotron::setFb(int value) {
+	Pfb = value;
+	if (Pfb < 0) {
+		fb = (float) .1f * value / 250.0f * .15f;
+	} else {
+		fb = (float) .1f * value / 500.0f * .15f;
+	}
+}
+
+int  Convolotron::getVolume() {return Pvolume;}
+int  Convolotron::getPanning() {return Ppanning;}
+int  Convolotron::getSafe() {return Psafe;}
+int  Convolotron::getLength() {return Plength;}
+int  Convolotron::getFile() {return 0; /** TODO file ??? */}
+int  Convolotron::getHidamp() {return Phidamp;}
+int  Convolotron::getLevel() {return Plevel;}
+int  Convolotron::getUser() {return Puser;}
+int  Convolotron::getFb() {return Pfb;}

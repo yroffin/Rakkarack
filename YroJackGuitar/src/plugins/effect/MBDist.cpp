@@ -31,13 +31,15 @@ using namespace std;
  * Waveshape (this is called by OscilGen::waveshape and Distorsion::process)
  */
 
-
-
-MBDist::MBDist() : YroEffectPlugin("MBDist")
-{
-  
-  
-
+MBDist::MBDist() : YroEffectPlugin("MBDist",
+		"Saturation: 0,64,0,41,64,26,19,26,41,20,35,0,400,1200,0;"
+		"Dist1: 0,64,64,20,64,0,14,13,38,49,40,0,288,1315,0;"
+		"Soft: 0,64,0,32,64,6,13,6,50,70,50,0,400,1800,0;"
+		"Modulated: 0,64,0,36,64,18,17,18,40,70,30,0,500,2200,0;"
+		"Crunch: 0,64,0,24,64,19,14,19,30,80,30,0,800,1800,0;"
+		"Dist2: 0,64,0,64,64,22,27,22,25,50,25,0,440,1500,0;"
+		"Dist3: 0,64,0,64,64,27,22,27,50,69,50,0,800,1200,0;"
+		"Dist4: 0,64,0,30,64,19,25,26,20,51,83,0,329,800,0;") {
   lowl = (float *) malloc (sizeof (float) * iPERIOD);
   lowr = (float *) malloc (sizeof (float) * iPERIOD);
   midl = (float *) malloc (sizeof (float) * iPERIOD);
@@ -69,7 +71,6 @@ MBDist::MBDist() : YroEffectPlugin("MBDist")
   mbwshape3r = new WaveShaper();
   
   //default values
-  Ppreset = 0;
   Pvolume = 50;
   Plrcross = 40;
   Pdrive = 90;
@@ -83,7 +84,7 @@ MBDist::MBDist() : YroEffectPlugin("MBDist")
   Pnegate = 0;
   Pstereo = 0;
 
-  setpreset (Ppreset);
+  setPreset(0);
   cleanup ();
 };
 
@@ -209,14 +210,14 @@ if(volH> 0)  mbwshape3r->waveshapesmps (iPERIOD, highr, PtypeH, PdriveH, 1);
  * Parameter control
  */
 void
-MBDist::setvolume (int value)
+MBDist::setVolume (int value)
 {
   Pvolume = value;
   outvolume = (float)Pvolume / 127.0f;
 };
 
 void
-MBDist::setpanning (int Ppanning)
+MBDist::setPanning (int Ppanning)
 {
   this->Ppanning = Ppanning;
   panning = ((float)Ppanning + 0.5f) / 127.0f;
@@ -224,7 +225,7 @@ MBDist::setpanning (int Ppanning)
 
 
 void
-MBDist::setlrcross (int Plrcross)
+MBDist::setLrcross (int Plrcross)
 {
   this->Plrcross = Plrcross;
   lrcross = (float)Plrcross / 127.0f * 1.0f;
@@ -254,155 +255,58 @@ MBDist::setCross2 (int value)
   
 };
 
+void MBDist::setDrive(int value) {
+Pdrive = value;
+PdriveL = (int)((float)Pdrive*volL);
+PdriveM = (int)((float)Pdrive*volM);
+PdriveH = (int)((float)Pdrive*volH);
+}
+void MBDist::setLevel(int value) {
+Plevel = value;
+}
+void MBDist::setTypel(int value) {
+PtypeL = value;
+}
+void MBDist::setTypem(int value) {
+PtypeM = value;
+}
+void MBDist::setTypeh(int value) {
+PtypeH = value;
+}
+void MBDist::setVoll(int value) {
+PvolL = value;
+volL = (float) value /100.0;
+PdriveL = (int)((float)Pdrive*volL);
+}
+void MBDist::setVolm(int value) {
+PvolM = value;
+volM = (float) value /100.0;
+PdriveM = (int)((float)Pdrive*volM);
+}
+void MBDist::setVolh(int value) {
+PvolH = value;
+volH = (float) value /100.0;
+PdriveH = (int)((float)Pdrive*volH);
+}
+void MBDist::setNegate(int value) {
+Pnegate = value;
+}
+void MBDist::setStereo(int value) {
+Pstereo = value;
+}
 
-void
-MBDist::setpreset (int npreset)
-{
-  const int PRESET_SIZE = 15;
-  const int NUM_PRESETS = 8;
-  int presets[NUM_PRESETS][PRESET_SIZE] = {
-    //Saturation
-    {0, 64, 0, 41, 64, 26, 19, 26, 41, 20, 35, 0, 400, 1200, 0}, 
-    //Dist 1
-    {0, 64, 64, 20, 64, 0, 14, 13, 38, 49, 40, 0, 288, 1315, 0},
-    //Soft
-    {0, 64, 0, 32, 64, 6, 13, 6, 50, 70, 50, 0, 400, 1800, 0},
-    //Modulated
-    {0, 64, 0, 36, 64, 18, 17, 18, 40, 70, 30, 0, 500, 2200, 0},
-    //Crunch
-    {0, 64, 0, 24, 64, 19, 14, 19, 30, 80, 30, 0, 800, 1800, 0},
-    //Dist 2
-    {0, 64, 0, 64, 64, 22, 27, 22, 25, 50, 25, 0, 440, 1500, 0},
-    //Dist 3
-    {0, 64, 0, 64, 64, 27, 22, 27, 50, 69, 50, 0, 800, 1200, 0},
-    //Dist 4
-    {0, 64, 0, 30, 64, 19, 25, 26, 20, 51, 83, 0, 329, 800, 0}
-     
-  };
-  if(npreset<NUM_PRESETS)
-  {     
-
-  for (int n = 0; n < PRESET_SIZE; n++)
-    changepar (n, presets[npreset][n]);
-  }
-  Ppreset = npreset;
-  cleanup ();
-};
-
-
-void
-MBDist::changepar (int npar, int value)
-{
-  switch (npar)
-    {
-    case 0:
-      setvolume (value);
-      break;
-    case 1:
-      setpanning (value);
-      break;
-    case 2:
-      setlrcross (value);
-      break;
-    case 3:
-      Pdrive = value;
-      PdriveL = (int)((float)Pdrive*volL);
-      PdriveM = (int)((float)Pdrive*volM);
-      PdriveH = (int)((float)Pdrive*volH);
-      break;
-    case 4:
-      Plevel = value;
-      break;
-    case 5:
-      PtypeL = value;
-      break;
-    case 6:
-      PtypeM = value;
-      break;
-    case 7:
-      PtypeH = value;
-      break;
-    case 8:
-      PvolL = value;
-      volL = (float) value /100.0;
-      PdriveL = (int)((float)Pdrive*volL);
-      break;
-    case 9:
-      PvolM = value;
-      volM = (float) value /100.0;
-      PdriveM = (int)((float)Pdrive*volM);
-      break;
-    case 10:
-      PvolH = value;
-      volH = (float) value /100.0;
-      PdriveH = (int)((float)Pdrive*volH);
-      break;
-    case 11:
-      Pnegate = value;
-      break;
-    case 12:
-      setCross1 (value);
-      break;
-    case 13:
-      setCross2 (value);
-      break;
-    case 14:
-      Pstereo = value;
-      break;
-    };
-};
-
-int
-MBDist::getpar (int npar)
-{
-  switch (npar)
-    {
-    case 0:
-      return (Pvolume);
-      break;
-    case 1:
-      return (Ppanning);
-      break;
-    case 2:
-      return (Plrcross);
-      break;
-    case 3:
-      return (Pdrive);
-      break;
-    case 4:
-      return (Plevel);
-      break;
-    case 5:
-      return (PtypeL);
-      break;
-    case 6:
-      return (PtypeM);
-      break;
-    case 7:
-      return (PtypeH);
-      break;
-    case 8:
-      return (PvolL);
-      break;
-    case 9:
-      return (PvolM);
-      break;
-    case 10:
-      return (PvolH);
-      break;
-    case 11:
-      return (Pnegate);
-      break;
-    case 12:
-      return (Cross1);
-      break;
-    case 13:
-      return (Cross2);
-      break;
-    case 14:
-      return (Pstereo);
-      break;
-    };
-  return (0);			//in case of bogus parameter number
-};
-
+int  MBDist::getVolume() {return Pvolume;}
+int  MBDist::getPanning() {return Ppanning;}
+int  MBDist::getLrcross() {return Plrcross;}
+int  MBDist::getDrive() {return Pdrive;}
+int  MBDist::getLevel() {return Plevel;}
+int  MBDist::getTypel() {return PtypeL;}
+int  MBDist::getTypem() {return PtypeM;}
+int  MBDist::getTypeh() {return PtypeH;}
+int  MBDist::getVoll() {return PvolL;}
+int  MBDist::getVolm() {return PvolM;}
+int  MBDist::getVolh() {return PvolH;}
+int  MBDist::getNegate() {return Pnegate;}
+int  MBDist::getCross1() {return Cross1;}
+int  MBDist::getCross2() {return Cross2;}
+int  MBDist::getStereo() {return Pstereo;}

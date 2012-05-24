@@ -37,30 +37,99 @@ public:
   Ring();
   ~Ring();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
-  void setscale();
   void cleanup ();
-  void Create_Tables();
-  
-  int Ppreset;
-  int Pafreq;
-  int Pfreq;
 
-  float outvolume;
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _panning
+  , _lrcross
+  , _level
+  , _depthp
+  , _freq
+  , _stereo
+  , _sin
+  , _tri
+  , _saw
+  , _squ
+  , _input
+  , _afreq
+  };
 
-  float *efxoutl;
-  float *efxoutr;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getPanning();}
+  void set2(int value) {setPanning(value);}
+  int  get3() {return getLrcross();}
+  void set3(int value) {setLrcross(value);}
+  int  get4() {return getLevel();}
+  void set4(int value) {setLevel(value);}
+  int  get5() {return getDepthp();}
+  void set5(int value) {setDepthp(value);}
+  int  get6() {return getFreq();}
+  void set6(int value) {setFreq(value);}
+  int  get7() {return getStereo();}
+  void set7(int value) {setStereo(value);}
+  int  get8() {return getSin();}
+  void set8(int value) {setSin(value);}
+  int  get9() {return getTri();}
+  void set9(int value) {setTri(value);}
+  int  get10() {return getSaw();}
+  void set10(int value) {setSaw(value);}
+  int  get11() {return getSqu();}
+  void set11(int value) {setSqu(value);}
+  int  get12() {return getInput();}
+  void set12(int value) {setInput(value);}
+  int  get13() {return getAfreq();}
+  void set13(int value) {setAfreq(value);}
+
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getPanning();
+  void setPanning(int value);
+  int  getLrcross();
+  void setLrcross(int value);
+  int  getLevel();
+  void setLevel(int value);
+  int  getDepthp();
+  void setDepthp(int value);
+  int  getFreq();
+  void setFreq(int value);
+  int  getStereo();
+  void setStereo(int value);
+  int  getSin();
+  void setSin(int value);
+  int  getTri();
+  void setTri(int value);
+  int  getSaw();
+  void setSaw(int value);
+  int  getSqu();
+  void setSqu(int value);
+  int  getInput();
+  void setInput(int value);
+  int  getAfreq();
+  void setAfreq(int value);
 
 private:
+  void setScale();
+  void Create_Tables();
 
-  void setvolume (int Pvolume);
-  void setpanning (int Ppanning);
-  void setlrcross (int Plrcross);
-
-
-  //Parametrii
+  /**
+   * parameters
+   */
+  int Pafreq;
+  int Pfreq;
   int Pvolume;	//Volumul or E/R
   int Ppanning;	//Panning
   int Plrcross;	// L/R Mixing

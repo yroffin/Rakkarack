@@ -1,7 +1,78 @@
-StereoHarm
-StompBox
-Sustainer
-Synthfilter
-Valve
-Vibe
-Vocoder
+Detecting changpar at line 324
+Detecting members from 383 (head 60)
+Extract case from 383, 60
+void Looper::set0:(int value) {
+       setVolume(value);
+}
+void Looper::set1:(int value) {
+       setMisc1(value);
+}
+void Looper::set2:(int value) {
+       setMisc2(value);
+}
+void Looper::set3:(int value) {
+       setMisc3(value);
+}
+void Looper::set4:(int value) {
+       setMisc4(value);
+}
+void Looper::set5:(int value) {
+       setReverse(value);
+}
+void Looper::set6:(int value) {
+       setFade1(value);
+}
+void Looper::set7:(int value) {
+       setMisc5(value);
+}
+void Looper::set8:(int value) {
+       setMisc6(value);
+}
+void Looper::set9:(int value) {
+       setAutoplay(value);
+}
+void Looper::set10:(int value) {
+       setFade2(value);
+}
+void Looper::set11:(int value) {
+       setRec1(value);
+}
+void Looper::set12:(int value) {
+       setRec2(value);
+}
+void Looper::set13:(int value) {
+       setLink(value);
+}
+void Looper::set14:(int value) {
+       setTempo(value);
+}
+void Looper::set15:(int value) {
+       setBar(value);
+}
+void Looper::set16:(int value) {
+       setMetro(value);
+}
+void Looper::set17:(int value) {
+       setMs(value);
+}
+Extract from 383, 60
+Attribute[0]: Volume
+Attribute[1]: Misc1
+Attribute[2]: Case
+Attribute[3]: 2:
+Attribute[4]: //stop
+Attribute[5]: And
+Attribute[6]: Re
+Attribute[7]: Pointer
+Attribute[8]: To
+Attribute[9]: 0
+Attribute[10]: Misc2
+Attribute[11]: Case
+Attribute[12]: 3:
+Attribute[13]: //Record
+Attribute[14]: At
+Attribute[15]: Current
+Attribute[16]: Position.
+Attribute[17]: If
+Attribute[First]: 
+Rupture d'index

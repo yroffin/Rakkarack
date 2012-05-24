@@ -33,37 +33,98 @@
 
 namespace std {
 
-class NewDist: public YroEffectPlugin
-
-{
+class NewDist: public YroEffectPlugin {
 public:
 	NewDist();
 	~NewDist();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
-	void setpreset(int npreset);
-	void changepar(int npar, int value);
-	int getpar(int npar);
 	void cleanup();
 	void applyfilters(float * efxoutl, float * efxoutr);
 
-	int Ppreset;
-	float outvolume;
+	/**
+	* member declaration
+	*/
+	enum functions {
+	_preset
+	, _volume
+	, _panning
+	, _lrcross
+	, _drive
+	, _level
+	, _type
+	, _negate
+	, _lpf
+	, _hpf
+	, _rfreq
+	, _prefiltering
+	, _octave
+	};
 
-	float *efxoutl;
-	float *efxoutr;
+	/**
+	* setter and getter map
+	*/
+	int  get0() {return getPreset();}
+	void set0(int value) {setPreset(value);}
+	int  get1() {return getVolume();}
+	void set1(int value) {setVolume(value);}
+	int  get2() {return getPanning();}
+	void set2(int value) {setPanning(value);}
+	int  get3() {return getLrcross();}
+	void set3(int value) {setLrcross(value);}
+	int  get4() {return getDrive();}
+	void set4(int value) {setDrive(value);}
+	int  get5() {return getLevel();}
+	void set5(int value) {setLevel(value);}
+	int  get6() {return getType();}
+	void set6(int value) {setType(value);}
+	int  get7() {return getNegate();}
+	void set7(int value) {setNegate(value);}
+	int  get8() {return getLpf();}
+	void set8(int value) {setLpf(value);}
+	int  get9() {return getHpf();}
+	void set9(int value) {setHpf(value);}
+	int  get10() {return getRfreq();}
+	void set10(int value) {setRfreq(value);}
+	int  get11() {return getPrefiltering();}
+	void set11(int value) {setPrefiltering(value);}
+	int  get12() {return getOctave();}
+	void set12(int value) {setOctave(value);}
+
+	/**
+	* setter and getter
+	*/
+	int  getVolume();
+	void setVolume(int value);
+	int  getPanning();
+	void setPanning(int value);
+	int  getLrcross();
+	void setLrcross(int value);
+	int  getDrive();
+	void setDrive(int value);
+	int  getLevel();
+	void setLevel(int value);
+	int  getType();
+	void setType(int value);
+	int  getNegate();
+	void setNegate(int value);
+	int  getLpf();
+	void setLpf(int value);
+	int  getHpf();
+	void setHpf(int value);
+	int  getRfreq();
+	void setRfreq(int value);
+	int  getPrefiltering();
+	void setPrefiltering(int value);
+	int  getOctave();
+	void setOctave(int value);
+
+private:
 	float inpll[4096];
 	float inplr[4096];
 
-private:
-
-	void setvolume(int Pvolume);
-	void setpanning(int Ppanning);
-	void setlrcross(int Plrcross);
-	void setoctave(int Poctave);
-	void setlpf(int Plpf);
-	void sethpf(int Phpf);
-
-	//Parametrii
+	/**
+	 * parameters
+	 */
 	int Pvolume; //Volumul or E/R
 	int Ppanning; //Panning
 	int Plrcross; // L/R Mixing

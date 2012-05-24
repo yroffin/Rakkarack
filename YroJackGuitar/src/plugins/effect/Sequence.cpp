@@ -24,7 +24,20 @@
 using namespace std;
 
 Sequence::Sequence(long int Quality, int DS, int uq, int dq) :
-		YroEffectPlugin("Sequence") {
+		YroEffectPlugin("Sequence",
+		/**
+		 TODO * ignore up to 7th parameters
+		 */
+		"Jumpy: 20,100,10,50,25,120,60,127,0,90,40,0,0,0,3;"
+				"StairStep: 10,20,30,50,75,90,100,127,64,90,96,0,0,2,5;"
+				"Mild: 20,30,10,40,25,60,100,50,0,90,40,0,0,0,4;"
+				"WahWah: 11,55,15,95,12,76,11,36,30,80,110,0,4,1,2;"
+				"FilterPan: 28,59,94,127,120,80,50,24,64,180,107,0,3,0,8;"
+				"Stepper: 30,127,30,50,80,40,110,80,0,240,95,1,1,2,2;"
+				"Shifter: 0,0,127,127,0,0,127,127,64,114,64,1,0,3,0;"
+				"Tremor: 30,127,30,50,80,40,110,80,0,240,95,1,1,4,2;"
+				"Boogie: 0,40,50,60,70,60,40,0,0,220,64,0,0,5,0;"
+				"Chorus: 64,30,45,20,60,25,42,15,64,120,64,0,0,6,0;") {
 	hq = Quality;
 	adjust(DS);
 
@@ -43,7 +56,6 @@ Sequence::Sequence(long int Quality, int DS, int uq, int dq) :
 	MAXFREQ = 10000.0f;
 	MINFREQ = 100.0f;
 	fq = 75.0f;
-	Ppreset = 0;
 	scount = 0;
 	tcount = 0;
 	rndflag = 0;
@@ -52,7 +64,7 @@ Sequence::Sequence(long int Quality, int DS, int uq, int dq) :
 	filterr = new RBFilter(0, 80.0f, 40.0f, 2);
 	modfilterl = new RBFilter(0, 25.0f, 0.15f, 2);
 	modfilterr = new RBFilter(0, 25.0f, 0.15f, 2);
-	setpreset(Ppreset);
+	setPreset(0);
 
 	filterl->setmix(1, 0.33f, -1.0f, 0.25f);
 	filterr->setmix(1, 0.33f, -1.0f, 0.25f);
@@ -511,7 +523,7 @@ void Sequence::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
  * Parameter control
  */
 
-void Sequence::setranges(int value) {
+void Sequence::setRanges(int value) {
 
 	switch (value) {
 
@@ -631,7 +643,31 @@ void Sequence::adjust(int DS) {
 	u_down = (double) iPERIOD / (double) nPERIOD;
 }
 
-void Sequence::settempo(int value) {
+void Sequence::setSequence(int value) {
+	int testegg, i;
+	Psequence[7] = value;
+	fsequence[7] = (float) value / 127.0f;
+	seqpower = 0.0f;
+	for (i = 0; i < 8; i++)
+		seqpower += fsequence[i];
+	if (seqpower > 0.1f) {
+		seqpower = 15.0f / seqpower;
+		rndflag = 0;
+	}
+	testegg = 0;
+	for (i = 0; i < 8; i++)
+		testegg += Psequence[i];
+	if (testegg < 4) {
+		seqpower = 5.0f; //Easter egg
+		rndflag = 1;
+	}
+}
+void Sequence::setVolume(int value) {
+	Pvolume = value;
+	outvolume = (float) Pvolume / 127.0f;
+}
+void Sequence::setTempo(int value) {
+	Ptempo = value;
 	if ((Pmode == 3) || (Pmode == 5) || (Pmode == 6))
 		fperiod = nfSAMPLE_RATE * 60.0f / (subdiv * (float) value);
 	else
@@ -640,138 +676,31 @@ void Sequence::settempo(int value) {
 	ifperiod = 1.0f / fperiod;
 	intperiod = (int) fperiod;
 }
-
-void Sequence::setpreset(int npreset) {
-	const int PRESET_SIZE = 15;
-	const int NUM_PRESETS = 10;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Jumpy
-			{ 20, 100, 10, 50, 25, 120, 60, 127, 0, 90, 40, 0, 0, 0, 3 },
-			//Stair Step
-			{ 10, 20, 30, 50, 75, 90, 100, 127, 64, 90, 96, 0, 0, 2, 5 },
-			//Mild
-			{ 20, 30, 10, 40, 25, 60, 100, 50, 0, 90, 40, 0, 0, 0, 4 },
-			//WahWah
-			{ 11, 55, 15, 95, 12, 76, 11, 36, 30, 80, 110, 0, 4, 1, 2 },
-			//Filter Pan
-			{ 28, 59, 94, 127, 120, 80, 50, 24, 64, 180, 107, 0, 3, 0, 8 },
-			//Stepper
-			{ 30, 127, 30, 50, 80, 40, 110, 80, 0, 240, 95, 1, 1, 2, 2 },
-			//Shifter
-			{ 0, 0, 127, 127, 0, 0, 127, 127, 64, 114, 64, 1, 0, 3, 0 },
-			//Tremor
-			{ 30, 127, 30, 50, 80, 40, 110, 80, 0, 240, 95, 1, 1, 4, 2 },
-			//Boogie
-			{ 0, 40, 50, 60, 70, 60, 40, 0, 0, 220, 64, 0, 0, 5, 0 },
-			//Chorus
-			{ 64, 30, 45, 20, 60, 25, 42, 15, 64, 120, 64, 0, 0, 6, 0 }
-
-	};
-
-	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
-	}
-	Ppreset = npreset;
+void Sequence::setQ(int value) {
+	Pq = value;
+	panning = ((float) value + 64.0f) / 128.0;
+	fq = powf(60.0f, ((float) value - 64.0f) / 64.0f);
 }
-;
-
-void Sequence::changepar(int npar, int value) {
-	int testegg, i;
-	switch (npar) {
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-	case 7:
-		Psequence[npar] = value;
-		fsequence[npar] = (float) value / 127.0f;
-
-		seqpower = 0.0f;
-		for (i = 0; i < 8; i++)
-			seqpower += fsequence[i];
-		if (seqpower > 0.1f) {
-			seqpower = 15.0f / seqpower;
-			rndflag = 0;
-		}
-
-		testegg = 0;
-		for (i = 0; i < 8; i++)
-			testegg += Psequence[i];
-		if (testegg < 4) {
-			seqpower = 5.0f; //Easter egg
-			rndflag = 1;
-		}
-		break;
-	case 8:
-		Pvolume = value;
-		outvolume = (float) Pvolume / 127.0f;
-		break;
-	case 9:
-		Ptempo = value;
-		settempo(value);
-		break;
-	case 10:
-		Pq = value;
-		panning = ((float) value + 64.0f) / 128.0;
-		fq = powf(60.0f, ((float) value - 64.0f) / 64.0f);
-		break;
-	case 11:
-		Pamplitude = value;
-		break;
-	case 12:
-		Pstdiff = value;
-		break;
-	case 13:
-		Pmode = value;
-		settempo(Ptempo);
-		break;
-	case 14:
-		Prange = value;
-		setranges(Prange);
-		break;
-
-	};
+void Sequence::setAmplitude(int value) {
+	Pamplitude = value;
 }
-;
-
-int Sequence::getpar(int npar) {
-	switch (npar) {
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-	case 7:
-		return (Psequence[npar]);
-		break;
-	case 8:
-		return (Pvolume);
-		break;
-	case 9:
-		return (Ptempo);
-		break;
-	case 10:
-		return (Pq);
-		break;
-	case 11:
-		return (Pamplitude);
-		break;
-	case 12:
-		return (Pstdiff);
-		break;
-	case 13:
-		return (Pmode);
-		break;
-	case 14:
-		return (Prange);
-		break;
-	};
-	return (0); //in case of bogus parameter number
+void Sequence::setStdiff(int value) {
+	Pstdiff = value;
 }
-;
+void Sequence::setMode(int value) {
+	Pmode = value;
+	setTempo(Ptempo);
+}
+void Sequence::setRange(int value) {
+	Prange = value;
+	setRanges(Prange);
+}
+
+int  Sequence::getSequence() {return Psequence[7];}
+int  Sequence::getVolume() {return Pvolume;}
+int  Sequence::getTempo() {return Ptempo;}
+int  Sequence::getQ() {return Pq;}
+int  Sequence::getAmplitude() {return Pamplitude;}
+int  Sequence::getStdiff() {return Pstdiff;}
+int  Sequence::getMode() {return Pmode;}
+int  Sequence::getRange() {return Prange;}

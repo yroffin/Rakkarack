@@ -28,9 +28,11 @@
 using namespace std;
 
 Harmonizer::Harmonizer(long int Quality, int DS, int uq, int dq) :
-		YroEffectPlugin("Harmonizer") {
+		YroEffectPlugin("Harmonizer", "Plain: 64,64,64,12,6000,0,0,0,64,64,0;"
+				"Octavador: 64,64,64,0,6000,0,0,0,64,64,0;"
+				"3mdown: 64,64,64,9,6000,0,0,0,64,64,0;") {
 	hq = Quality;
-	adjust (DS);
+	adjust(DS);
 
 	templ = (float *) malloc(sizeof(float) * iPERIOD);
 	tempr = (float *) malloc(sizeof(float) * iPERIOD);
@@ -49,10 +51,9 @@ Harmonizer::Harmonizer(long int Quality, int DS, int uq, int dq) :
 	PS = new PitchShifter(window, hq, nfSAMPLE_RATE);
 	PS->ratio = 1.0f;
 
-	Ppreset = 0;
 	PMIDI = 0;
 	mira = 0;
-	setpreset(Ppreset);
+	setPreset(0);
 
 	cleanup();
 
@@ -71,7 +72,7 @@ void Harmonizer::cleanup() {
 ;
 
 void Harmonizer::applyfilters(float * efxoutl) {
-	pl->filterout(iPERIOD,fPERIOD,efxoutl);
+	pl->filterout(iPERIOD, fPERIOD, efxoutl);
 }
 ;
 
@@ -95,9 +96,9 @@ void Harmonizer::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 	}
 	/**
 	 * TODO handle r__ratio
-	float r__ratio[12];
-	if ((PMIDI) || (PSELECT))
-		PS->ratio = r__ratio[0];
+	 float r__ratio[12];
+	 if ((PMIDI) || (PSELECT))
+	 PS->ratio = r__ratio[0];
 	 */
 
 	if (Pinterval != 12) {
@@ -122,26 +123,23 @@ void Harmonizer::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 }
 ;
 
-void Harmonizer::setvolume(int value) {
+void Harmonizer::setVolume(int value) {
 	this->Pvolume = value;
 	outvolume = (float) Pvolume / 127.0f;
 }
-;
 
-void Harmonizer::setpanning(int value) {
+void Harmonizer::setPanning(int value) {
 	this->Ppan = value;
 	panning = (float) Ppan / 127.0f;
 }
-;
 
-void Harmonizer::setgain(int value) {
+void Harmonizer::setGain(int value) {
 	this->Pgain = value;
 	gain = (float) Pgain / 127.0f;
 	gain *= 2.0;
 }
-;
 
-void Harmonizer::setinterval(int value) {
+void Harmonizer::setInterval(int value) {
 
 	this->Pinterval = value;
 	interval = (float) Pinterval - 12.0f;
@@ -152,16 +150,14 @@ void Harmonizer::setinterval(int value) {
 		mira = 1;
 
 }
-;
 
-void Harmonizer::fsetfreq(int value) {
-
+void Harmonizer::setFfreq(int value) {
 	fPfreq = value;
 	float tmp = (float) value;
 	pl->setfreq(tmp);
 }
 
-void Harmonizer::fsetgain(int value) {
+void Harmonizer::setFgain(int value) {
 
 	float tmp;
 
@@ -171,8 +167,7 @@ void Harmonizer::fsetgain(int value) {
 
 }
 
-void Harmonizer::fsetq(int value) {
-
+void Harmonizer::setQ(int value) {
 	float tmp;
 	this->fPq = value;
 	tmp = powf(30.0f, ((float) value - 64.0f) / 64.0f);
@@ -180,8 +175,7 @@ void Harmonizer::fsetq(int value) {
 
 }
 
-void Harmonizer::setMIDI(int value) {
-
+void Harmonizer::setMidi(int value) {
 	this->PMIDI = value;
 }
 
@@ -265,109 +259,46 @@ void Harmonizer::adjust(int DS) {
 	u_down = (double) iPERIOD / (double) nPERIOD;
 }
 
-void Harmonizer::setpreset(int npreset) {
-	const int PRESET_SIZE = 11;
-	const int NUM_PRESETS = 3;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Plain
-			{ 64, 64, 64, 12, 6000, 0, 0, 0, 64, 64, 0 },
-			//Octavador
-			{ 64, 64, 64, 0, 6000, 0, 0, 0, 64, 64, 0 },
-			//3mdown
-			{ 64, 64, 64, 9, 6000, 0, 0, 0, 64, 64, 0 } };
-
-	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
-	}
-
-	Ppreset = npreset;
-
+void Harmonizer::setSelect(int value) {
+	PSELECT = value;
 }
-;
-
-void Harmonizer::changepar(int npar, int value) {
-
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		setpanning(value);
-		break;
-	case 2:
-		setgain(value);
-		break;
-	case 3:
-		setinterval(value);
-		break;
-	case 4:
-		fsetfreq(value);
-		break;
-	case 5:
-		PSELECT = value;
-		;
-		break;
-	case 6:
-		Pnote = value;
-		break;
-	case 7:
-		Ptype = value;
-		break;
-	case 8:
-		fsetgain(value);
-		break;
-	case 9:
-		fsetq(value);
-		break;
-	case 10:
-		setMIDI(value);
-		break;
-
-	}
-
+void Harmonizer::setNote(int value) {
+	Pnote = value;
 }
-;
-
-int Harmonizer::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Ppan);
-		break;
-	case 2:
-		return (Pgain);
-		break;
-	case 3:
-		return (Pinterval);
-		break;
-	case 4:
-		return (fPfreq);
-		break;
-	case 5:
-		return (PSELECT);
-		break;
-	case 6:
-		return (Pnote);
-		break;
-	case 7:
-		return (Ptype);
-		break;
-	case 8:
-		return (fPgain);
-		break;
-	case 9:
-		return (fPq);
-		break;
-	case 10:
-		return (PMIDI);
-		break;
-	default:
-		return (0);
-
-	}
-
+void Harmonizer::setType(int value) {
+	Ptype = value;
 }
-;
+
+int Harmonizer::getVolume() {
+	return Pvolume;
+}
+int Harmonizer::getPanning() {
+	return Ppan;
+}
+int Harmonizer::getGain() {
+	return Pgain;
+}
+int Harmonizer::getInterval() {
+	return Pinterval;
+}
+int Harmonizer::getFfreq() {
+	return fPfreq;
+}
+int Harmonizer::getSelect() {
+	return PSELECT;
+}
+int Harmonizer::getNote() {
+	return Pnote;
+}
+int Harmonizer::getType() {
+	return Ptype;
+}
+int Harmonizer::getFgain() {
+	return fPgain;
+}
+int Harmonizer::getQ() {
+	return fPq;
+}
+int Harmonizer::getMidi() {
+	return PMIDI;
+}

@@ -33,13 +33,20 @@
 using namespace std;
 
 DualFlanger::DualFlanger() :
-		YroEffectPlugin("DualFlanger") {
+		YroEffectPlugin("DualFlanger",
+				"Preset1: -32,0,0,110,800,10,-27,16000,1,0,24,64,1,10;"
+				"Flange-Wha: 0,0,64,500,3000,50,-40,8000,1,0,196,96,0,0;"
+				"FbFlange: 0,0,64,68,75,50,-50,8000,0,1,23,96,5,0;"
+				"SoftFlange: -32,0,64,60,10,100,20,16000,0,0,16,90,4,0;"
+				"Flanger: -32,0,64,170,1200,50,0,16000,1,0,68,127,0,0;"
+				"Chorus1: -15,0,0,42,12,50,-10,1500,0,0,120,0,0,20;"
+				"Chorus2: -40,0,0,35,9,67,12,4700,1,1,160,75,0,60;"
+				"Preset8: 0,0,0,0,0,0,0,0,0,0,0,0,0,0;"
+				"Preset9: 0,0,0,0,0,0,0,0,0,0,0,0,0,0;") {
 
 	period_const = 1.0f / fPERIOD;
 
 	//default values
-	Ppreset = 0;
-
 	ldelay = NULL;
 	rdelay = NULL;
 
@@ -56,12 +63,11 @@ DualFlanger::DualFlanger() :
 	base = 7.0f; //sets curve of modulation to frequency relationship
 	ibase = 1.0f / base;
 	//default values
-	Ppreset = 0;
 	rsA = 0.0f;
 	rsB = 0.0f;
 	lsA = 0.0f;
 	lsB = 0.0f;
-	setpreset(Ppreset);
+	setPreset(0);
 	cleanup();
 }
 ;
@@ -247,165 +253,84 @@ void DualFlanger::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 }
 ;
 
-/*
- * Parameter control
- */
-
-void DualFlanger::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		Pwetdry = value;
-		dry = (float) (Pwetdry + 64) / 128.0f;
-		wet = 1.0f - dry;
-		break;
-	case 1:
-		Ppanning = value;
-		if (value < 0) {
-			rpan = 1.0f + (float) Ppanning / 64.0;
-			lpan = 1.0f;
-		} else {
-			lpan = 1.0f - (float) Ppanning / 64.0;
-			rpan = 1.0f;
-		}
-		;
-		break;
-	case 2:
-		Plrcross = value;
-		flrcross = (float) Plrcross / 127.0;
-		frlcross = 1.0f - flrcross; //keep this out of the DSP loop
-		break;
-	case 3:
-		Pdepth = value;
-		fdepth = (float) Pdepth;
-		zcenter = (int) floor(0.5f * (fdepth + fwidth));
-
-		break;
-	case 4:
-		Pwidth = value;
-		fwidth = (float) Pwidth;
-		zcenter = (int) floor(0.5f * (fdepth + fwidth));
-
-		break;
-	case 5:
-		Poffset = value;
-		foffset = 0.5f + (float) Poffset / 255.0;
-		break;
-	case 6:
-		Pfb = value;
-		ffb = (float) Pfb / 64.5f;
-		break;
-	case 7:
-		Phidamp = value;
-		fhidamp = expf(-D_PI * (float) Phidamp / fSAMPLE_RATE);
-		break;
-	case 8:
-		Psubtract = value;
-		fsubtract = 0.5f;
-		if (Psubtract)
-			fsubtract = -0.5f; //In loop a mult by 0.5f is necessary, so this kills 2 birds with 1...
-		break;
-	case 9:
-		Pzero = value;
-		if (Pzero)
-			fzero = 1.0f;
-		break;
-	case 10:
-		lfo.setPfreq(value);
-
-		break;
-	case 11:
-		lfo.setPstereo(value);
-
-		break;
-	case 12:
-		lfo.setPlfOtype(value);
-
-		break;
-	case 13:
-		lfo.setPrandomness(value);
-
-		break;
-	};
+void DualFlanger::setWetdry(int value) {
+Pwetdry = value;
+dry = (float) (Pwetdry + 64) / 128.0f;
+wet = 1.0f - dry;
+}
+void DualFlanger::setPanning(int value) {
+Ppanning = value;
+if (value < 0) {
+rpan = 1.0f + (float) Ppanning / 64.0;
+lpan = 1.0f;
+} else {
+lpan = 1.0f - (float) Ppanning / 64.0;
+rpan = 1.0f;
 }
 ;
-
-int DualFlanger::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pwetdry);
-		break;
-	case 1:
-		return (Ppanning);
-		break;
-	case 2:
-		return (Plrcross);
-		break;
-	case 3:
-		return (Pdepth);
-		break;
-	case 4:
-		return (Pwidth);
-		break;
-	case 5:
-		return (Poffset);
-		break;
-	case 6:
-		return (Pfb);
-		break;
-	case 7:
-		return (Phidamp);
-		break;
-	case 8:
-		return (Psubtract);
-		break;
-	case 9:
-		return (Pzero);
-		break;
-	case 10:
-		return lfo.getPfreq();
-		break;
-	case 11:
-		return lfo.getPstereo();
-		break;
-	case 12:
-		return lfo.getPlfOtype();
-		break;
-	case 13:
-		return lfo.getPrandomness();
-		break;
-	};
-	return (0); //in case of bogus parameter number
 }
-;
-
-void DualFlanger::setpreset(int npreset) {
-	const int PRESET_SIZE = 14;
-	const int NUM_PRESETS = 9;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//Preset 1
-			{ -32, 0, 0, 110, 800, 10, -27, 16000, 1, 0, 24, 64, 1, 10 },
-			//Flange-Wha
-			{ 0, 0, 64, 500, 3000, 50, -40, 8000, 1, 0, 196, 96, 0, 0 },
-			//FbFlange
-			{ 0, 0, 64, 68, 75, 50, -50, 8000, 0, 1, 23, 96, 5, 0 },
-			//SoftFlange
-			{ -32, 0, 64, 60, 10, 100, 20, 16000, 0, 0, 16, 90, 4, 0 },
-			//Flanger
-			{ -32, 0, 64, 170, 1200, 50, 0, 16000, 1, 0, 68, 127, 0, 0 },
-			//Chorus 1
-			{ -15, 0, 0, 42, 12, 50, -10, 1500, 0, 0, 120, 0, 0, 20 },
-			//Chorus 2
-			{ -40, 0, 0, 35, 9, 67, 12, 4700, 1, 1, 160, 75, 0, 60 },
-			//Preset 8
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			//Preset 9
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, };
-
-	if (npreset < NUM_PRESETS) {
-
-		for (int n = 0; n < PRESET_SIZE; n++)
-			changepar(n, presets[npreset][n]);
-	}
-	Ppreset = npreset;
+void DualFlanger::setLrcross(int value) {
+Plrcross = value;
+flrcross = (float) Plrcross / 127.0;
+frlcross = 1.0f - flrcross; //keep this out of the DSP loop
 }
-;
+void DualFlanger::setDepth(int value) {
+Pdepth = value;
+fdepth = (float) Pdepth;
+zcenter = (int) floor(0.5f * (fdepth + fwidth));
+}
+void DualFlanger::setWidth(int value) {
+Pwidth = value;
+fwidth = (float) Pwidth;
+zcenter = (int) floor(0.5f * (fdepth + fwidth));
+}
+void DualFlanger::setOff(int value) {
+Poffset = value;
+foffset = 0.5f + (float) Poffset / 255.0;
+}
+void DualFlanger::setFb(int value) {
+Pfb = value;
+ffb = (float) Pfb / 64.5f;
+}
+void DualFlanger::setHidamp(int value) {
+Phidamp = value;
+fhidamp = expf(-D_PI * (float) Phidamp / fSAMPLE_RATE);
+}
+void DualFlanger::setSubtract(int value) {
+Psubtract = value;
+fsubtract = 0.5f;
+if (Psubtract)
+fsubtract = -0.5f; //In loop a mult by 0.5f is necessary, so this kills 2 birds with 1...
+}
+void DualFlanger::setZero(int value) {
+Pzero = value;
+if (Pzero)
+fzero = 1.0f;
+}
+void DualFlanger::setLfoFreq(int value) {
+lfo.setPfreq(value);
+}
+void DualFlanger::setLfoStereo(int value) {
+lfo.setPstereo(value);
+}
+void DualFlanger::setLfoType(int value) {
+lfo.setPlfOtype(value);
+}
+void DualFlanger::setLfoRandomness(int value) {
+lfo.setPrandomness(value);
+}
+
+int  DualFlanger::getWetdry() {return Pwetdry;}
+int  DualFlanger::getPanning() {return Ppanning;}
+int  DualFlanger::getLrcross() {return Plrcross;}
+int  DualFlanger::getDepth() {return Pdepth;}
+int  DualFlanger::getWidth() {return Pwidth;}
+int  DualFlanger::getOff() {return Poffset;}
+int  DualFlanger::getFb() {return Pfb;}
+int  DualFlanger::getHidamp() {return Phidamp;}
+int  DualFlanger::getSubtract() {return Psubtract;}
+int  DualFlanger::getZero() {return Pzero;}
+int  DualFlanger::getLfoFreq() {return lfo.getPfreq();}
+int  DualFlanger::getLfoStereo() {return lfo.getPstereo();}
+int  DualFlanger::getLfoType() {return lfo.getPlfOtype();}
+int  DualFlanger::getLfoRandomness() {return lfo.getPrandomness();}

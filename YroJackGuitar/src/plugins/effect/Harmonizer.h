@@ -41,15 +41,83 @@ public:
   Harmonizer(long int Quality, int DS, int uq, int dq);
    ~Harmonizer();
   void render(jack_nframes_t nframes,float *smpsl, float *smpsr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
   void applyfilters (float * efxoutl);
   void adjust(int DS);
 
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _panning
+  , _gain
+  , _interval
+  , _ffreq
+  , _select
+  , _note
+  , _type
+  , _fgain
+  , _fq
+  , _midi
+  };
 
-  int Ppreset;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getPanning();}
+  void set2(int value) {setPanning(value);}
+  int  get3() {return getGain();}
+  void set3(int value) {setGain(value);}
+  int  get4() {return getInterval();}
+  void set4(int value) {setInterval(value);}
+  int  get5() {return getFfreq();}
+  void set5(int value) {setFfreq(value);}
+  int  get6() {return getSelect();}
+  void set6(int value) {setSelect(value);}
+  int  get7() {return getNote();}
+  void set7(int value) {setNote(value);}
+  int  get8() {return getType();}
+  void set8(int value) {setType(value);}
+  int  get9() {return getFgain();}
+  void set9(int value) {setFgain(value);}
+  int  get10() {return getQ();}
+  void set10(int value) {setQ(value);}
+  int  get11() {return getMidi();}
+  void set11(int value) {setMidi(value);}
+
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getPanning();
+  void setPanning(int value);
+  int  getGain();
+  void setGain(int value);
+  int  getInterval();
+  void setInterval(int value);
+  int  getFfreq();
+  void setFfreq(int value);
+  int  getSelect();
+  void setSelect(int value);
+  int  getNote();
+  void setNote(int value);
+  int  getType();
+  void setType(int value);
+  int  getFgain();
+  void setFgain(int value);
+  int  getQ();
+  void setQ(int value);
+  int  getMidi();
+  void setMidi(int value);
+
+private:
   int Pinterval;
   int PMIDI;
   int PSELECT;
@@ -65,19 +133,11 @@ public:
   double u_down;
   float nfSAMPLE_RATE;
 
-
-  float *efxoutl;
-  float *efxoutr;
   float *outi;
   float *outo;
   float *templ, *tempr;
 
-  float outvolume;
-
-
-
 private:
-
   int Pvolume;
   int Pgain;
   int Ppan;
@@ -91,16 +151,6 @@ private:
   float panning;
   float gain;
   float interval;
-
-  void setvolume (int Pvolume);
-  void setpanning (int Ppan);
-  void setinterval (int Pinterval);
-  void setgain (int Pgain);
-  void setMIDI (int PMIDI);
-  void fsetfreq (int value);
-  void fsetgain (int value);
-  void fsetq (int value);
-
 
   AnalogFilter *pl;
 

@@ -25,10 +25,10 @@
 using namespace std;
 
 CoilCrafter::CoilCrafter() :
-		YroEffectPlugin("CoilCrafter") {
+		YroEffectPlugin("CoilCrafter", "HtoS: 32,6,1,3300,16,4400,42,20,0;"
+				"StoH: 32,1,6,4400,42,3300,16,20,0;") {
 
 	//default values
-	Ppreset = 0;
 	Pvolume = 50;
 	Ptone = 20;
 	att = 16.0f * powf(PI, fSAMPLE_RATE / 44100.0f);
@@ -70,10 +70,8 @@ CoilCrafter::CoilCrafter() :
 	RB2r = new AnalogFilter(2, 2000.0f, 1.0f, 0);
 
 	cleanup();
-
-	setpreset(Ppreset);
+	setPreset(0);
 }
-;
 
 CoilCrafter::~CoilCrafter() {
 }
@@ -133,158 +131,98 @@ void CoilCrafter::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 /*
  * Parameter control
  */
-void CoilCrafter::setvolume(int value) {
+void CoilCrafter::setVolume(int value) {
 	Pvolume = value;
 	outvolume = (1.0f + (float) Pvolume) / 127.0f;
 
 }
-;
 
-void CoilCrafter::setfreq1() {
+void CoilCrafter::setFreq1(int value) {
+	Pfreq1 = value;
+	freq1 = (float) value;
 	RB1l->setfreq(freq1);
 	RB1l->reversecoeffs();
 	RB1r->setfreq(freq1);
 	RB1r->reversecoeffs();
 }
 
-void CoilCrafter::setq1() {
+void CoilCrafter::setQ1(int value) {
+	Pq1 = value;
+	q1 = (float) value / 10.0f;
 	RB1l->setq(q1);
 	RB1l->reversecoeffs();
 	RB1r->setq(q1);
 	RB1r->reversecoeffs();
 }
 
-void CoilCrafter::setfreq2() {
-
+void CoilCrafter::setFreq2(int value) {
+	Pfreq2 = value;
+	freq2 = (float) value;
 	RB2l->setfreq(freq2);
 	RB2r->setfreq(freq2);
 }
 
-void CoilCrafter::setq2() {
-
+void CoilCrafter::setQ2(int value) {
+	Pq2 = value;
+	q2 = (float) value / 10.0f;
 	RB2l->setq(q2);
 	RB2r->setq(q2);
-
 }
 
-void CoilCrafter::sethpf(int value) {
+void CoilCrafter::setHpf(int value) {
 	harm->set_freqh(0, (float) Ptone);
 }
-;
 
-void CoilCrafter::setpreset(int npreset) {
-	const int PRESET_SIZE = 9;
-	const int NUM_PRESETS = 2;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//H to S
-			{ 32, 6, 1, 3300, 16, 4400, 42, 20, 0 },
-			//S to H
-			{ 32, 1, 6, 4400, 42, 3300, 16, 20, 0 },
-
-	};
-
-	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++) {
-			changepar(n, presets[npreset][n]);
-		}
-
-		Ppreset = npreset;
-		cleanup();
-
+void CoilCrafter::setPo(int value) {
+	Ppo = value;
+	if (Ppo > 0) {
+		freq1 = tfreqs[value];
+		setFreq1((int) freq1);
+		q1 = tqs[value];
+		setQ1((int) (q1 * 10.0f));
 	}
 }
-
-void CoilCrafter::changepar(int npar, int value) {
-	switch (npar) {
-	case 0:
-		setvolume(value);
-		break;
-	case 1:
-		Ppo = value;
-		if (Ppo > 0) {
-			freq1 = tfreqs[value];
-			Pfreq1 = (int) freq1;
-			setfreq1();
-			q1 = tqs[value];
-			Pq1 = (int) (q1 * 10.0f);
-			setq1();
-		}
-		break;
-	case 2:
-		Ppd = value;
-		if (Ppd > 0) {
-			freq2 = tfreqs[value];
-			Pfreq2 = (int) freq2;
-			setfreq2();
-			q2 = tqs[value];
-			Pq2 = (int) (q2 * 10.0f);
-			setq2();
-		}
-		break;
-	case 3:
-		Pfreq1 = value;
-		freq1 = (float) value;
-		setfreq1();
-		break;
-	case 4:
-		Pq1 = value;
-		q1 = (float) value / 10.0f;
-		setq1();
-		break;
-	case 5:
-		Pfreq2 = value;
-		freq2 = (float) value;
-		setfreq2();
-		break;
-	case 6:
-		Pq2 = value;
-		q2 = (float) value / 10.0f;
-		setq2();
-		break;
-	case 7:
-		Ptone = value;
-		sethpf(value);
-		break;
-	case 8:
-		Pmode = value;
-		break;
-
-	};
+void CoilCrafter::setPd(int value) {
+	Ppd = value;
+	if (Ppd > 0) {
+		freq2 = tfreqs[value];
+		setFreq2((int) freq2);
+		q2 = tqs[value];
+		setQ2((int) (q2 * 10.0f));
+	}
 }
-;
-
-int CoilCrafter::getpar(int npar) {
-	switch (npar) {
-	case 0:
-		return (Pvolume);
-		break;
-	case 1:
-		return (Ppo);
-		break;
-	case 2:
-		return (Ppd);
-		break;
-	case 3:
-		return (Pfreq1);
-		break;
-	case 4:
-		return (Pq1);
-		break;
-	case 5:
-		return (Pfreq2);
-		break;
-	case 6:
-		return (Pq2);
-		break;
-	case 7:
-		return (Ptone);
-		break;
-	case 8:
-		return (Pmode);
-		break;
-
-	};
-	return (0); //in case of bogus parameter number
+void CoilCrafter::setTone(int value) {
+	Ptone = value;
+	setHpf(value);
 }
-;
+void CoilCrafter::setMode(int value) {
+	Pmode = value;
+}
 
+int CoilCrafter::getVolume() {
+	return Pvolume;
+}
+int CoilCrafter::getPo() {
+	return Ppo;
+}
+int CoilCrafter::getPd() {
+	return Ppd;
+}
+int CoilCrafter::getFreq1() {
+	return Pfreq1;
+}
+int CoilCrafter::getQ1() {
+	return Pq1;
+}
+int CoilCrafter::getFreq2() {
+	return Pfreq2;
+}
+int CoilCrafter::getQ2() {
+	return Pq2;
+}
+int CoilCrafter::getTone() {
+	return Ptone;
+}
+int CoilCrafter::getMode() {
+	return Pmode;
+}

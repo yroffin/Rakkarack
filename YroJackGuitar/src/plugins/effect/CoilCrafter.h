@@ -27,38 +27,80 @@
 #include <plugins/filter/AnalogFilter.h>
 #include <plugins/filter/HarmEnhancer.h>
 
-
-
-
 namespace std {
 
-class CoilCrafter : public YroEffectPlugin
-
-{
+class CoilCrafter : public YroEffectPlugin {
 public:
   CoilCrafter();
   ~CoilCrafter();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _po
+  , _pd
+  , _freq1
+  , _q1
+  , _freq2
+  , _q2
+  , _tone
+  , _mode
+  };
 
-  int Ppreset;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getPo();}
+  void set2(int value) {setPo(value);}
+  int  get3() {return getPd();}
+  void set3(int value) {setPd(value);}
+  int  get4() {return getFreq1();}
+  void set4(int value) {setFreq1(value);}
+  int  get5() {return getQ1();}
+  void set5(int value) {setQ1(value);}
+  int  get6() {return getFreq2();}
+  void set6(int value) {setFreq2(value);}
+  int  get7() {return getQ2();}
+  void set7(int value) {setQ2(value);}
+  int  get8() {return getTone();}
+  void set8(int value) {setTone(value);}
+  int  get9() {return getMode();}
+  void set9(int value) {setMode(value);}
 
-  float *efxoutl;
-  float *efxoutr;
-  float outvolume;
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getPo();
+  void setPo(int value);
+  int  getPd();
+  void setPd(int value);
+  int  getFreq1();
+  void setFreq1(int value);
+  int  getQ1();
+  void setQ1(int value);
+  int  getFreq2();
+  void setFreq2(int value);
+  int  getQ2();
+  void setQ2(int value);
+  int  getTone();
+  void setTone(int value);
+  int  getMode();
+  void setMode(int value);
 
 private:
 
-  void setvolume (int value);
-  void sethpf (int value);
-  void setfreq1();
-  void setfreq2();
-  void setq1();
-  void setq2();
+  void setHpf (int value);
 
   int Pvolume;
   int Ppo;

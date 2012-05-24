@@ -39,17 +39,74 @@ public:
   RBEcho();
   ~RBEcho();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
-  float outvolume;
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _panning
+  , _delay
+  , _lrdelay
+  , _lrcross
+  , _fb
+  , _hidamp
+  , _reverse
+  , _subdiv
+  , _es
+  };
 
-  float *efxoutl;
-  float *efxoutr;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getPanning();}
+  void set2(int value) {setPanning(value);}
+  int  get3() {return getDelay();}
+  void set3(int value) {setDelay(value);}
+  int  get4() {return getLrdelay();}
+  void set4(int value) {setLrdelay(value);}
+  int  get5() {return getLrcross();}
+  void set5(int value) {setLrcross(value);}
+  int  get6() {return getFb();}
+  void set6(int value) {setFb(value);}
+  int  get7() {return getHidamp();}
+  void set7(int value) {setHidamp(value);}
+  int  get8() {return getReverse();}
+  void set8(int value) {setReverse(value);}
+  int  get9() {return getSubdiv();}
+  void set9(int value) {setSubdiv(value);}
+  int  get10() {return getEs();}
+  void set10(int value) {setEs(value);}
 
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getPanning();
+  void setPanning(int value);
+  int  getDelay();
+  void setDelay(int value);
+  int  getLrdelay();
+  void setLrdelay(int value);
+  int  getLrcross();
+  void setLrcross(int value);
+  int  getFb();
+  void setFb(int value);
+  int  getHidamp();
+  void setHidamp(int value);
+  int  getReverse();
+  void setReverse(int value);
+  int  getSubdiv();
+  void setSubdiv(int value);
+  int  getEs();
+  void setEs(int value);
 
 private:
 

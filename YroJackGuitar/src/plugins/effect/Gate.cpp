@@ -29,7 +29,9 @@
 using namespace std;
 
 Gate::Gate() :
-		YroEffectPlugin("Gate") {
+		YroEffectPlugin("Gate", "+00:   0, 0, 1, 2, 6703, 76, 2;"
+				"-10: 0, -10, 1, 2, 6703, 76, 2;"
+				"-20: 0, -20, 1, 2, 6703, 76, 2;") {
 	lpfl = new AnalogFilter(2, 22000, 1, 0);
 	lpfr = new AnalogFilter(2, 22000, 1, 0);
 	hpfl = new AnalogFilter(3, 20, 1, 0);
@@ -40,7 +42,6 @@ Gate::Gate() :
 	fs = fSAMPLE_RATE;
 	state = CLOSED;
 	hold_count = 0;
-
 }
 
 Gate::~Gate() {
@@ -53,107 +54,39 @@ void Gate::cleanup() {
 	hpfr->cleanup();
 }
 
-void Gate::setlpf(int value) {
+void Gate::setLpf(int value) {
 	Plpf = value;
 	float fr = (float) Plpf;
 	lpfl->setfreq(fr);
 	lpfr->setfreq(fr);
 }
-;
 
-void Gate::sethpf(int value) {
+void Gate::setHpf(int value) {
 	Phpf = value;
 	float fr = (float) Phpf;
 	hpfl->setfreq(fr);
 	hpfr->setfreq(fr);
 }
-;
 
-void Gate::Gate_Change(int np, int value) {
-
-	switch (np) {
-
-	case 1:
-		Pthreshold = value;
-		t_level = dB2rap ((float)Pthreshold);
-		break;
-	case 2:
-		Prange = value;
-		cut = dB2rap ((float)Prange);
-		break;
-	case 3:
-		Pattack = value;
-		a_rate = 1000.0f / ((float) Pattack * fs);
-		break;
-	case 4:
-		Pdecay = value;
-		d_rate = 1000.0f / ((float) Pdecay * fs);
-		break;
-	case 5:
-		setlpf(value);
-		break;
-	case 6:
-		sethpf(value);
-		break;
-	case 7:
-		Phold = value;
-		hold = (float) Phold;
-		break;
-
-	}
-
+void Gate::setThreshold(int value) {
+	Pthreshold = value;
+	t_level = dB2rap ((float)Pthreshold);
 }
-
-int Gate::getpar(int np) {
-
-	switch (np)
-
-	{
-	case 1:
-		return (Pthreshold);
-		break;
-	case 2:
-		return (Prange);
-		break;
-	case 3:
-		return (Pattack);
-		break;
-	case 4:
-		return (Pdecay);
-		break;
-	case 5:
-		return (Plpf);
-		break;
-	case 6:
-		return (Phpf);
-		break;
-	case 7:
-		return (Phold);
-		break;
-
-	}
-
-	return (0);
-
+void Gate::setRange(int value) {
+	Prange = value;
+	cut = dB2rap ((float)Prange);
 }
-
-void Gate::Gate_Change_Preset(int npreset) {
-
-	const int PRESET_SIZE = 7;
-	const int NUM_PRESETS = 3;
-	int presets[NUM_PRESETS][PRESET_SIZE] = {
-	//0
-			{ 0, 0, 1, 2, 6703, 76, 2 },
-			//-10
-			{ 0, -10, 1, 2, 6703, 76, 2 },
-			//-20
-			{ 0, -20, 1, 2, 6703, 76, 2 } };
-
-	if (npreset < NUM_PRESETS) {
-		for (int n = 0; n < PRESET_SIZE; n++)
-			Gate_Change(n + 1, presets[npreset][n]);
-	}
-
+void Gate::setAttack(int value) {
+	Pattack = value;
+	a_rate = 1000.0f / ((float) Pattack * fs);
+}
+void Gate::setDecay(int value) {
+	Pdecay = value;
+	d_rate = 1000.0f / ((float) Pdecay * fs);
+}
+void Gate::setHold(int value) {
+	Phold = value;
+	hold = (float) Phold;
 }
 
 void Gate::render(jack_nframes_t nframes, float *efxoutl, float *efxoutr) {
@@ -161,10 +94,10 @@ void Gate::render(jack_nframes_t nframes, float *efxoutl, float *efxoutr) {
 	int i;
 	float sum;
 
-	lpfl->filterout(iPERIOD,fPERIOD,efxoutl);
-	hpfl->filterout(iPERIOD,fPERIOD,efxoutl);
-	lpfr->filterout(iPERIOD,fPERIOD,efxoutr);
-	hpfr->filterout(iPERIOD,fPERIOD,efxoutr);
+	lpfl->filterout(iPERIOD, fPERIOD, efxoutl);
+	hpfl->filterout(iPERIOD, fPERIOD, efxoutl);
+	lpfr->filterout(iPERIOD, fPERIOD, efxoutr);
+	hpfr->filterout(iPERIOD, fPERIOD, efxoutr);
 
 	for (i = 0; i < iPERIOD; i++) {
 
@@ -209,4 +142,25 @@ void Gate::render(jack_nframes_t nframes, float *efxoutl, float *efxoutr) {
 	}
 
 }
-;
+
+int Gate::getThreshold() {
+	return Pthreshold;
+}
+int Gate::getRange() {
+	return Prange;
+}
+int Gate::getAttack() {
+	return Pattack;
+}
+int Gate::getDecay() {
+	return Pdecay;
+}
+int Gate::getLpf() {
+	return Plpf;
+}
+int Gate::getHpf() {
+	return Phpf;
+}
+int Gate::getHold() {
+	return Phold;
+}

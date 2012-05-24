@@ -38,34 +38,101 @@ public:
   MusicDelay();
   ~MusicDelay();
   void render(jack_nframes_t nframes,float * smpsl, float * smpr);
-  void setpreset (int npreset);
-  void changepar (int npar, int value);
-  int getpar (int npar);
   void cleanup ();
 
-  int Ppreset;
-  float outvolume;
+  /**
+  * member declaration
+  */
+  enum functions {
+  _preset
+  , _volume
+  , _panning1
+  , _delay1
+  , _delay3
+  , _lrcross
+  , _fb1
+  , _hidamp
+  , _panning2
+  , _delay2
+  , _fb2
+  , _tempo
+  , _gain1
+  , _gain2
+  };
 
-  float *efxoutl;
-  float *efxoutr;
+  /**
+  * setter and getter map
+  */
+  int  get0() {return getPreset();}
+  void set0(int value) {setPreset(value);}
+  int  get1() {return getVolume();}
+  void set1(int value) {setVolume(value);}
+  int  get2() {return getPanning1();}
+  void set2(int value) {setPanning1(value);}
+  int  get3() {return getDelay1();}
+  void set3(int value) {setDelay1(value);}
+  int  get4() {return getDelay3();}
+  void set4(int value) {setDelay3(value);}
+  int  get5() {return getLrcross();}
+  void set5(int value) {setLrcross(value);}
+  int  get6() {return getFb1();}
+  void set6(int value) {setFb1(value);}
+  int  get7() {return getHidamp();}
+  void set7(int value) {setHidamp(value);}
+  int  get8() {return getPanning2();}
+  void set8(int value) {setPanning2(value);}
+  int  get9() {return getDelay2();}
+  void set9(int value) {setDelay2(value);}
+  int  get10() {return getFb2();}
+  void set10(int value) {setFb2(value);}
+  int  get11() {return getTempo();}
+  void set11(int value) {setTempo(value);}
+  int  get12() {return getGain1();}
+  void set12(int value) {setGain1(value);}
+  int  get13() {return getGain2();}
+  void set13(int value) {setGain2(value);}
 
+  /**
+  * setter and getter
+  */
+  int  getVolume();
+  void setVolume(int value);
+  int  getPanning1();
+  void setPanning1(int value);
+  int  getDelay1();
+  void setDelay1(int value);
+  int  getDelay3();
+  void setDelay3(int value);
+  int  getLrcross();
+  void setLrcross(int value);
+  int  getFb1();
+  void setFb1(int value);
+  int  getHidamp();
+  void setHidamp(int value);
+  int  getPanning2();
+  void setPanning2(int value);
+  int  getDelay2();
+  void setDelay2(int value);
+  int  getFb2();
+  void setFb2(int value);
+  int  getTempo();
+  void setTempo(int value);
+  int  getGain1();
+  void setGain1(int value);
+  int  getGain2();
+  void setGain2(int value);
 
 private:
 
-  void setvolume (int Pvolume);
-  void setpanning (int num, int Ppanning);
-  void setdelay (int num, int Pdelay);
-  void setgain (int num, int Pgain);
-  void setlrdelay (int Plrdelay);
-  void setlrcross (int Plrcross);
-  void setfb (int num, int Pfb);
-  void sethidamp (int Phidamp);
-  void settempo (int Ptempo);
+  void setPanning (int num, int Ppanning);
+  void setDelay (int num, int Pdelay);
+  void setGain (int num, int Pgain);
+  void setFb (int num, int Pfb);
   void initdelays ();
 
-
-
-  //Parametrii
+  /**
+   * parameters
+   */
   int Pvolume;			//Volumul or E/R
   int Ppanning1;		//Panning
   int Ppanning2;

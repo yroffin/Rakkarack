@@ -1,14 +1,13 @@
-
 // Based in gate_1410.c LADSPA Swh-plugins
 
 /*
-  rakarrack - a guitar effects software
+ rakarrack - a guitar effects software
 
  Gate.h  -  Noise Gate Effect definitions
  Based on Steve Harris LADSPA gate.
  
-  Copyright (C) 2008 Josep Andreu
-  Author: Josep Andreu
+ Copyright (C) 2008 Josep Andreu
+ Author: Josep Andreu
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of version 2 of the GNU General Public License
@@ -24,8 +23,7 @@
  Foundation,
  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-*/
-
+ */
 
 #ifndef NOISEGATE_H
 #define NOISEGATE_H
@@ -33,67 +31,119 @@
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/filter/AnalogFilter.h>
 
-
-
 namespace std {
 
-class Gate : public YroEffectPlugin
-
-{
-
+class Gate: public YroEffectPlugin {
 public:
+	Gate();
+	~Gate();
+	void render(jack_nframes_t nframes, float * smps_l, float * smps_r);
+	void cleanup();
 
-  Gate();
-  ~Gate();
+	/**
+	 * member declaration
+	 */
+	enum functions {
+		_preset, _threshold, _range, _attack, _decay, _lpf, _hpf, _hold
+	};
 
-  void render(jack_nframes_t nframes,float * smps_l, float * smps_r);
+	/**
+	 * setter and getter map
+	 */
+	int get0() {
+		return getPreset();
+	}
+	void set0(int value) {
+		setPreset(value);
+	}
+	int get1() {
+		return getThreshold();
+	}
+	void set1(int value) {
+		setThreshold(value);
+	}
+	int get2() {
+		return getRange();
+	}
+	void set2(int value) {
+		setRange(value);
+	}
+	int get3() {
+		return getAttack();
+	}
+	void set3(int value) {
+		setAttack(value);
+	}
+	int get4() {
+		return getDecay();
+	}
+	void set4(int value) {
+		setDecay(value);
+	}
+	int get5() {
+		return getLpf();
+	}
+	void set5(int value) {
+		setLpf(value);
+	}
+	int get6() {
+		return getHpf();
+	}
+	void set6(int value) {
+		setHpf(value);
+	}
+	int get7() {
+		return getHold();
+	}
+	void set7(int value) {
+		setHold(value);
+	}
 
-  void Gate_Change (int np, int value);
-  void Gate_Change_Preset (int npreset);
-  void cleanup ();
-  int getpar (int npar);
-
-
-
-
-  // Compressor
-
-  int Pthreshold;		// attack time  (ms)
-  int Pattack;			// release time (ms)
-  int Ohold;
-  int Pdecay;
-  int Prange;
-  int Plpf;
-  int Phpf;
-  int Phold;
-
-  float *efxoutl;
-  float *efxoutr;
-
+	/**
+	 * setter and getter
+	 */
+	int getThreshold();
+	void setThreshold(int value);
+	int getRange();
+	void setRange(int value);
+	int getAttack();
+	void setAttack(int value);
+	int getDecay();
+	void setDecay(int value);
+	int getLpf();
+	void setLpf(int value);
+	int getHpf();
+	void setHpf(int value);
+	int getHold();
+	void setHold(int value);
 
 private:
+	int Pthreshold; // attack time  (ms)
+	int Pattack; // release time (ms)
+	int Ohold;
+	int Pdecay;
+	int Prange;
+	int Plpf;
+	int Phpf;
+	int Phold;
 
-  void setlpf (int Plpf);
-  void sethpf (int Phpf);
+	float *efxoutl;
+	float *efxoutr;
 
+private:
+	int hold_count;
+	int state;
+	float range;
+	float cut;
+	float t_level;
+	float a_rate;
+	float d_rate;
+	float env;
+	float gate;
+	float fs;
+	float hold;
 
-  int hold_count;
-  int state;
-  float range;
-  float cut;
-  float t_level;
-  float a_rate;
-  float d_rate;
-  float env;
-  float gate;
-  float fs;
-  float hold;
-
-
-
-  AnalogFilter *lpfl, *lpfr, *hpfl, *hpfr;
-  
-
+	AnalogFilter *lpfl, *lpfr, *hpfl, *hpfr;
 };
 
 }
