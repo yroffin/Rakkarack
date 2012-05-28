@@ -28,6 +28,9 @@
 YroParamHelper *YroParamHelper::__instance = 0;
 
 YroParamHelper::YroParamHelper() {
+	integerSampleRate = 0;
+	integerPeriod = 0;
+
 	/**
 	 * default value
 	 */
@@ -49,7 +52,18 @@ void YroParamHelper::setErrorNumber(int errorNumber) {
 	this->errorNumber = errorNumber;
 }
 
+YroParamHelper* YroParamHelper::instance() {
+	if (__instance == 0) {
+		__instance = new YroParamHelper();
+	}
+	return __instance;
+}
+
 int YroParamHelper::getBogomips() {
+	/**
+	 * re-activate this
+	 */
+	return 0;
 	float bogomips;
 	char temp[256];
 	char *tmp;

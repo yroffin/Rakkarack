@@ -26,8 +26,8 @@
 namespace std {
 
 YroPresets::YroPresets(const char *_data) {
-	char _preset[1024];
-	char _value[1024];
+	char _preset[16384];
+	char _value[16384];
 	int iPreset;
 	int iValue;
 	iPreset=0;

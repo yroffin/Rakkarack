@@ -26,11 +26,11 @@ YroEffectPlugin::YroEffectPlugin(const char *_name) {
  * @param const char *_name, name of this effect
  * @param const char *_preset, preset value
  */
-YroEffectPlugin::YroEffectPlugin(const char *_name, const char *_preset) {
+YroEffectPlugin::YroEffectPlugin(const char *_name, const char *_presets) {
 	/**
 	 * discover presets
 	 */
-	presets = new YroPresets(_preset);
+	presets = new YroPresets(_presets);
 	/**
 	 * fix name of this effect
 	 */

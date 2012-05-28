@@ -25,8 +25,12 @@ C_UPPER_DEPS :=
 SUBDIRS := \
 src/wx/custom \
 src/wx \
+src/utils/xml \
 src/utils \
+src/tests/xml \
+src/tests/utils \
 src/tests/effects \
+src/tests \
 src/plugins/noisegate \
 src/plugins/misc \
 src/plugins/filter \

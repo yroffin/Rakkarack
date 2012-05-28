@@ -44,30 +44,22 @@ struct cmp_str
 
 class YroObject {
 public:
-	YroObject() {
-		LOG = YroLogger::instance();
-		helper = YroParamHelper::instance();
-	};
-	virtual ~YroObject() {};
+	YroObject();
+	virtual ~YroObject();
 	virtual void toStringInit(const char *value) {
 		strcpy(_toString, value);
 	}
-	virtual void toStringCat(const char *format, ...) {
-		va_list ap;
-		va_start(ap, format);
-		memset(_toStringFormat,0,sizeof(_toStringFormat));
-		vsnprintf(_toStringFormat, sizeof(_toStringFormat), format, ap);
-		va_end(ap);
-		strcat(_toString, _toStringFormat);
-	}
-	virtual void toStringCompute() {
-	}
+	virtual void toStringCat(const char *format, ...);
+	virtual void toStringCompute() {}
 	virtual const char *toString() {
 		toStringCompute();
 		return _toString;
 	}
 	YroLogger *getLogger() {
 		return LOG;
+	}
+	YroParamHelper *getHelper() {
+		return helper;
 	}
 protected:
 	YroLogger *LOG;

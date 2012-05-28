@@ -24,12 +24,7 @@
 
 class YroParamHelper {
 public:
-	static YroParamHelper *instance() {
-		if (__instance == 0) {
-			__instance = new YroParamHelper();
-		}
-		return __instance;
-	}
+	static YroParamHelper *instance();
 	virtual ~YroParamHelper();
 
 	float getFloatPeriod() const;

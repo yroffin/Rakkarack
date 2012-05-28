@@ -81,14 +81,14 @@
 
 namespace std {
 
-class YroEffectPlugin: public std::YroObject {
+class YroEffectPlugin: public YroObject {
 public:
 	/**
 	 * TODO add instance adjustment to setup as many effect of the same type as we want
 	 * TODO add new parameter
 	 */
 	YroEffectPlugin(const char *_name);
-	YroEffectPlugin(const char *_name, const char *_preset);
+	YroEffectPlugin(const char *_name, const char *_presets);
 	virtual ~YroEffectPlugin();
 	virtual void cleanup () {
 	}
@@ -167,8 +167,6 @@ public:
 	virtual int  get18() {return 0;}; virtual void set18(int) {};
 	virtual int  get19() {return 0;}; virtual void set19(int) {};
 protected:
-	class YroParamHelper *helper;
-
 	map<wxSpinCtrl *, int> mapSpinCtrlIndex;
 	map<int, wxSpinCtrl *>  mapIndexSpinCtrl;
 	map<wxChoice *, int> mapChoiceIndex;

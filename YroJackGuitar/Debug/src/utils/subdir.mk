@@ -5,14 +5,17 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/utils/YroLogger.cpp \
+../src/utils/YroMd5.cpp \
 ../src/utils/YroProperties.cpp 
 
 OBJS += \
 ./src/utils/YroLogger.o \
+./src/utils/YroMd5.o \
 ./src/utils/YroProperties.o 
 
 CPP_DEPS += \
 ./src/utils/YroLogger.d \
+./src/utils/YroMd5.d \
 ./src/utils/YroProperties.d 
 
 
