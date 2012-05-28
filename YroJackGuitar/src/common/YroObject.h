@@ -65,8 +65,8 @@ protected:
 	YroLogger *LOG;
 	YroParamHelper *helper;
 private:
-	char _toStringFormat[1024];
-	char _toString[1024];
+	char _toStringFormat[4096];
+	char _toString[4096];
 };
 
 }

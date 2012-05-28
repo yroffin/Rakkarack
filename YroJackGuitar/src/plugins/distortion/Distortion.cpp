@@ -1,39 +1,38 @@
 /*
-  ZynAddSubFX - a software synthesizer
+ ZynAddSubFX - a software synthesizer
 
-  Distorsion.C - Distorsion effect
-  Copyright (C) 2002-2005 Nasca Octavian Paul
-  Author: Nasca Octavian Paul
+ Distorsion.C - Distorsion effect
+ Copyright (C) 2002-2005 Nasca Octavian Paul
+ Author: Nasca Octavian Paul
 
-  Modified for rakarrack by Josep Andreu & Ryan Billing
+ Modified for rakarrack by Josep Andreu & Ryan Billing
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of version 2 of the GNU General Public License
+ as published by the Free Software Foundation.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License (version 2) for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License (version 2) for more details.
 
-  You should have received a copy of the GNU General Public License (version 2)
-  along with this program; if not, write to the Free Software Foundation,
-  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-*/
+ You should have received a copy of the GNU General Public License (version 2)
+ along with this program; if not, write to the Free Software Foundation,
+ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ */
 
 #include <plugins/distortion/Distortion.h>
 
 using namespace std;
 
 Distortion::Distortion() :
-		YroEffectPlugin(
-				"Distortion",
-				"Overdrive 1: 84, 64,  35, 56, 40, 0, 0, 6703, 21, 0, 0;"
-				"Overdrive 2: 85, 64,  35, 29, 45, 1, 0, 25040, 21, 0, 0;"
-				"Distorsion 1: 0, 64,   0, 87, 14, 6, 0, 3134, 157, 0, 1;"
-				"Distorsion 2: 0, 64, 127, 87, 14, 0, 1, 3134, 102, 0, 0;"
-				"Distorsion 3: 0, 64, 127, 127, 12, 13, 0, 5078, 56, 0, 1;"
-				"Guitar Amp:  84, 64,  35,  63, 50,  2, 0,  824, 21, 0, 0;") {
+		YroEffectPlugin("Distortion",
+						"Distorsion 1: 0, 64,   0, 87, 14, 6, 0, 3134, 157, 0, 1;"
+						"Distorsion 2: 0, 64, 127, 87, 14, 0, 1, 3134, 102, 0, 0;"
+						"Distorsion 3: 0, 64, 127, 127, 12, 13, 0, 5078, 56, 0, 1;"
+						"Guitar Amp:  84, 64,  35,  63, 50,  2, 0,  824, 21, 0, 0;"
+						"Overdrive 1: 84, 64,  35, 56, 40, 0, 0, 6703, 21, 0, 0;"
+						"Overdrive 2: 85, 64,  35, 29, 45, 1, 0, 25040, 21, 0, 0;") {
 	/**
 	 * fix klass attribute
 	 */
@@ -87,8 +86,10 @@ Distortion::~Distortion() {
 	/**
 	 * cleanup allocated resources
 	 */
-	if(octoutl == 0) delete octoutl;
-	if(octoutr == 0) delete octoutr;
+	if (octoutl == 0)
+		delete octoutl;
+	if (octoutr == 0)
+		delete octoutr;
 }
 
 /*
@@ -131,13 +132,13 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 	 * TODO allocate if dynamicly and detect nframes adjustment on the fly
 	 * allocate
 	 */
-	if(octoutl == 0) {
+	if (octoutl == 0) {
 		octoutl = new jack_default_audio_sample_t[nframes];
-		memset(octoutl,0,sizeof(octoutl));
+		memset(octoutl, 0, sizeof(octoutl));
 	}
-	if(octoutr == 0) {
+	if (octoutr == 0) {
 		octoutr = new jack_default_audio_sample_t[nframes];
-		memset(octoutr,0,sizeof(octoutr));
+		memset(octoutr, 0, sizeof(octoutr));
 	}
 
 	float l = 0., r = 0., lout = 0., rout = 0.;
@@ -348,4 +349,9 @@ void Distortion::setPprefiltering(int pprefiltering) {
 	Pprefiltering = pprefiltering;
 	onChange(_prefiltering);
 }
+
+void std::Distortion::toStringCompute() {
+	toStringCat("Pprefiltering=%d\n", Pprefiltering);
+}
+
 

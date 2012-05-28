@@ -6,6 +6,8 @@
  */
 
 #include "YroEffectFactoryTest.h"
+#include <utils/xml/tinyxml.h>
+#include <utils/YroMd5.h>
 
 using namespace std;
 
@@ -17,7 +19,8 @@ void YroEffectFactoryTest::setUp() {
 	YroParamHelper::instance()->setIntegerSampleRate(22050);
 	YroEffectFactory::instance();
 	for (int i = 0; i < TABLE_SIZE; i++) {
-		sine[i] = .1f * (float) sin(((double) i / (double) TABLE_SIZE) * M_PI * 1.2f);
+		sine[i] = .1f
+				* (float) sin(((double) i / (double) TABLE_SIZE) * M_PI * 1.2f);
 	}
 	left_phase = 0;
 	right_phase = 0;
@@ -26,7 +29,8 @@ void YroEffectFactoryTest::setUp() {
 void YroEffectFactoryTest::tearDown() {
 }
 
-void YroEffectFactoryTest::init(jack_nframes_t nframes, jack_default_audio_sample_t *out1, jack_default_audio_sample_t *out2) {
+void YroEffectFactoryTest::init(jack_nframes_t nframes,
+		jack_default_audio_sample_t *out1, jack_default_audio_sample_t *out2) {
 	for (jack_nframes_t i = 0; i < nframes; i++) {
 		out1[i] = sine[left_phase]; /* left */
 		out2[i] = sine[right_phase]; /* right */
@@ -42,69 +46,128 @@ void YroEffectFactoryTest::init(jack_nframes_t nframes, jack_default_audio_sampl
 /**
  * dump this sample
  */
-void YroEffectFactoryTest::dump(const char *name, jack_nframes_t nframes,jack_default_audio_sample_t *in1) {
+void YroEffectFactoryTest::dump(const char *name, jack_nframes_t nframes,
+		jack_default_audio_sample_t *in1) {
 	printf("%s: ", name);
-	for(jack_nframes_t x=0;x<nframes;x++) {
-		if(x > 0) printf(", %f", in1[x]);
-		else printf("%f", in1[x]);
+	for (jack_nframes_t x = 0; x < nframes; x++) {
+		if (x > 0)
+			printf(", %f", in1[x]);
+		else
+			printf("%f", in1[x]);
 	}
 	printf("\n");
 }
 
-void YroEffectFactoryTest::compare(jack_nframes_t nframes,jack_default_audio_sample_t *out1, jack_default_audio_sample_t *out2) {
-	for(jack_nframes_t x=0;x<nframes;x++) {
-		CPPUNIT_ASSERT_EQUAL(int(out1[x] * 1000) % 1000, int(out2[x] * 1000) % 1000);
+void YroEffectFactoryTest::compare(jack_nframes_t nframes,
+		jack_default_audio_sample_t *out1, jack_default_audio_sample_t *out2) {
+	for (jack_nframes_t x = 0; x < nframes; x++) {
+		CPPUNIT_ASSERT_EQUAL(int(out1[x] * 1000) % 1000,
+				int(out2[x] * 1000) % 1000);
 	}
+}
+
+/**
+ * load this xml chunk
+ */
+int load(TiXmlDocument &xml, const char *filename) {
+	string line;
+	string data;
+	ifstream myfile(filename);
+	if (myfile.is_open()) {
+		while (myfile.good()) {
+			getline(myfile, line);
+			data += line;
+		}
+		myfile.close();
+	} else
+		cout << "Unable to open file";
+
+	xml.Parse(data.c_str());
+	return 0;
+}
+
+/**
+ * load this xml chunk
+ */
+int extract(TiXmlDocument &xml, float *left, float *right, int size,
+		int &preset, const char *hashl, const char *hashr, const char *ileft,
+		const char *iright) {
+	TiXmlNode* element = 0;
+	const char *name = strdup(
+			xml.FirstChildElement("elements")->Attribute("effect"));
+	preset = atoi(xml.FirstChildElement("elements")->Attribute("preset"));
+	const char *hashil = strdup(
+			xml.FirstChildElement("elements")->Attribute(hashl));
+	const char *hashir = strdup(
+			xml.FirstChildElement("elements")->Attribute(hashr));
+	cout << "name: " << name << "/" << preset << endl;
+	cout << hashl << " : " << hashil << endl;
+	cout << hashr << " : " << hashir << endl;
+	YroMd5 *myMd5 = new YroMd5();
+	while ((element = xml.FirstChildElement("elements")->IterateChildren(
+			element)) != 0) {
+		int index = atoi(element->ToElement()->Attribute("index"));
+		left[index] = atof(element->ToElement()->Attribute(ileft));
+		right[index] = atof(element->ToElement()->Attribute(iright));
+	}
+	const char *hashilComputed = myMd5->digestMemory((BYTE *) left,
+			size * sizeof(float));
+	cout << "computed left hash: " << hashilComputed << endl;
+	int checkl = (strcmp(hashil, hashilComputed) == 0);
+	const char *hashirComputed = myMd5->digestMemory((BYTE *) right,
+			size * sizeof(float));
+	cout << "computed right hash: " << hashirComputed << endl;
+	int checkr = (strcmp(hashir, hashirComputed) == 0);
+	return checkl && checkr;
 }
 
 /**
  * stress test basic
  */
 void YroEffectFactoryTest::testBasic() {
-	YroEffectFactory *factory = YroEffectFactory::instance();
-	factory->unload(0);
-	factory->addEffect("distortion#1",new std::Distortion());
-	jack_nframes_t nframes = 1024;
-	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
-
-	/**
-	 * first render simulation
-	 */
-	in1 = new jack_default_audio_sample_t[nframes];
-	in2 = new jack_default_audio_sample_t[nframes];
-	out1 = new jack_default_audio_sample_t[nframes];
-	out2 = new jack_default_audio_sample_t[nframes];
-
-	init(nframes, in1, in2);
-	init(nframes, out1, out2);
-
-	factory->render(in1, in2, out1, out2);
-
-	for (int exec = 0; exec < 1024; exec++) {
-		/**
-		 * second render simulation
-		 */
-		delete[] in1;
-		delete[] in2;
-		delete[] out1;
-		delete[] out2;
-
-		in1 = new jack_default_audio_sample_t[nframes];
-		in2 = new jack_default_audio_sample_t[nframes];
-		out1 = new jack_default_audio_sample_t[nframes];
-		out2 = new jack_default_audio_sample_t[nframes];
-
-		init(nframes, in1, in2);
-		init(nframes, out1, out2);
-
-		factory->render(in1, in2, out1, out2);
+	jack_default_audio_sample_t *left, *right;
+	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerPeriod();
+	left = new jack_default_audio_sample_t[nframes];
+	right = new jack_default_audio_sample_t[nframes];
+	int preset = 0;
+	TiXmlDocument xml;
+	load(xml, "src/tests/data/Distorsion-00000000.xml");
+	if (extract(xml, left, right, nframes, preset, "hashil", "hashir", "ileft", "iright")) {
+		float *oleft = new jack_default_audio_sample_t[nframes];
+		float *oright = new jack_default_audio_sample_t[nframes];
+		float *oleftCheck = new jack_default_audio_sample_t[nframes];
+		float *orightCheck = new jack_default_audio_sample_t[nframes];
+		cout << "result" << endl;
+		Distortion *efx = new std::Distortion();
+		efx->setPreset(0);
+		efx->setOutLeft(oleft);
+		efx->setOutRight(oright);
+		fprintf(stderr,"toString() = %s", efx->toString());
+		efx->render(nframes, left, right);
+		if (extract(xml, oleftCheck, orightCheck, nframes, preset, "hashol", "hashor", "oleft", "oright")) {
+			/**
+			 * check result
+			 */
+			for(int i=0;i<nframes;i++) {
+				if(oleftCheck[i] != oleft[i]) {
+					fprintf(stderr,"Error, while checking index %d, assert %f and was %f\n",i,oleftCheck[i],oleft[i]);
+				}
+				if(orightCheck[i] != oright[i]) {
+					fprintf(stderr,"Error, while checking index %d, assert %f and was %f\n",i,orightCheck[i],oright[i]);
+				}
+			}
+		}
+	} else {
+		cout << "wrong hash check ..." << endl;
 	}
 }
 
 void YroEffectFactoryTest::testDistortion() {
+	return;
 	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
 	factory->unload(0);
-	Distortion *eff = (Distortion *) factory->addEffect("distortion#2",new Distortion());
+	Distortion *eff = (Distortion *) factory->addEffect("distortion#2",
+			new Distortion());
 
 	/**
 	 * wet/dry    : -64 ... not used in Distortion ?
@@ -153,16 +216,17 @@ void YroEffectFactoryTest::testDistortion() {
 	dump("out1:", nframes, out1);
 	dump("out2:", nframes, out2);
 
-	for(jack_nframes_t x=0;x<nframes;x++) {
+	for (jack_nframes_t x = 0; x < nframes; x++) {
 		int c = (out1[x] != 0. && out2[x] != 0.);
 		CPPUNIT_ASSERT_EQUAL(1, c);
 	}
 }
 
 void YroEffectFactoryTest::testChorus() {
+	return;
 	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
 	factory->unload(0);
-	Chorus *eff = (Chorus *) factory->addEffect("chorus#2",new Chorus());
+	Chorus *eff = (Chorus *) factory->addEffect("chorus#2", new Chorus());
 
 	eff->setPlrcross(0);
 	eff->setPpanning(0);
@@ -188,9 +252,13 @@ void YroEffectFactoryTest::testChorus() {
 	dump("out1:", nframes, out1);
 	dump("out2:", nframes, out2);
 
-	float verif1[16] = {-0.001284, -0.003113, -0.003914, -0.004067, -0.004036, -0.003816, -0.003551, -0.003246, -0.002938, -0.002620, -0.002223, -0.001692, -0.000171, -0.000027, 0.000070, 0.000134};
+	float verif1[16] = { -0.001284, -0.003113, -0.003914, -0.004067, -0.004036,
+			-0.003816, -0.003551, -0.003246, -0.002938, -0.002620, -0.002223,
+			-0.001692, -0.000171, -0.000027, 0.000070, 0.000134 };
 	compare(nframes, out1, verif1);
-	float verif2[16] = {-0.324965, -0.787524, -0.990300, -1.029034, -1.021163, -0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343, -0.428202, -0.043322, -0.006895, 0.017683, 0.033956};
+	float verif2[16] = { -0.324965, -0.787524, -0.990300, -1.029034, -1.021163,
+			-0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343,
+			-0.428202, -0.043322, -0.006895, 0.017683, 0.033956 };
 	compare(nframes, out2, verif2);
 }
 
@@ -201,7 +269,7 @@ void YroEffectFactoryTest::testYroScope() {
 
 	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
 	factory->unload(0);
-	factory->addEffect("scope#2",new YroScope());
+	factory->addEffect("scope#2", new YroScope());
 
 	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
 
@@ -209,16 +277,22 @@ void YroEffectFactoryTest::testYroScope() {
 	 * first render simulation
 	 */
 	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerPeriod();
-	in1  = new jack_default_audio_sample_t[nframes];
-	in2  = new jack_default_audio_sample_t[nframes];
+	in1 = new jack_default_audio_sample_t[nframes];
+	in2 = new jack_default_audio_sample_t[nframes];
 	out1 = new jack_default_audio_sample_t[nframes];
 	out2 = new jack_default_audio_sample_t[nframes];
 
 	init(nframes, in1, in2);
 	init(nframes, out1, out2);
 
-	dump("left:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:left"));
-	dump("right:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:right"));
+	dump("left:", YroParamHelper::instance()->getIntegerSampleRate(),
+			YroAudioSampleFactory::instance()->allocate(
+					YroParamHelper::instance()->getIntegerSampleRate(), 0,
+					"extern:left"));
+	dump("right:", YroParamHelper::instance()->getIntegerSampleRate(),
+			YroAudioSampleFactory::instance()->allocate(
+					YroParamHelper::instance()->getIntegerSampleRate(), 0,
+					"extern:right"));
 
 	factory->render(in1, in2, out1, out2);
 
@@ -226,8 +300,14 @@ void YroEffectFactoryTest::testYroScope() {
 	dump("in2:", nframes, in2);
 	dump("out1:", nframes, out1);
 	dump("out2:", nframes, out2);
-	dump("left:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:left"));
-	dump("right:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:right"));
+	dump("left:", YroParamHelper::instance()->getIntegerSampleRate(),
+			YroAudioSampleFactory::instance()->allocate(
+					YroParamHelper::instance()->getIntegerSampleRate(), 0,
+					"extern:left"));
+	dump("right:", YroParamHelper::instance()->getIntegerSampleRate(),
+			YroAudioSampleFactory::instance()->allocate(
+					YroParamHelper::instance()->getIntegerSampleRate(), 0,
+					"extern:right"));
 
 	factory->render(in1, in2, out1, out2);
 	factory->render(in1, in2, out1, out2);
@@ -237,12 +317,22 @@ void YroEffectFactoryTest::testYroScope() {
 	dump("in2:", nframes, in2);
 	dump("out1:", nframes, out1);
 	dump("out2:", nframes, out2);
-	dump("left:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:left"));
-	dump("right:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:right"));
+	dump("left:", YroParamHelper::instance()->getIntegerSampleRate(),
+			YroAudioSampleFactory::instance()->allocate(
+					YroParamHelper::instance()->getIntegerSampleRate(), 0,
+					"extern:left"));
+	dump("right:", YroParamHelper::instance()->getIntegerSampleRate(),
+			YroAudioSampleFactory::instance()->allocate(
+					YroParamHelper::instance()->getIntegerSampleRate(), 0,
+					"extern:right"));
 
-	float verif1[16] = {-0.001284, -0.003113, -0.003914, -0.004067, -0.004036, -0.003816, -0.003551, -0.003246, -0.002938, -0.002620, -0.002223, -0.001692, -0.000171, -0.000027, 0.000070, 0.000134};
+	float verif1[16] = { -0.001284, -0.003113, -0.003914, -0.004067, -0.004036,
+			-0.003816, -0.003551, -0.003246, -0.002938, -0.002620, -0.002223,
+			-0.001692, -0.000171, -0.000027, 0.000070, 0.000134 };
 	compare(nframes, out1, verif1);
-	float verif2[16] = {-0.324965, -0.787524, -0.990300, -1.029034, -1.021163, -0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343, -0.428202, -0.043322, -0.006895, 0.017683, 0.033956};
+	float verif2[16] = { -0.324965, -0.787524, -0.990300, -1.029034, -1.021163,
+			-0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343,
+			-0.428202, -0.043322, -0.006895, 0.017683, 0.033956 };
 	compare(nframes, out2, verif2);
 }
 
@@ -253,7 +343,7 @@ void YroEffectFactoryTest::testExpander() {
 
 	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
 	factory->unload(0);
-	factory->addEffect("Expander#2",new Expander());
+	factory->addEffect("Expander#2", new Expander());
 
 	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
 
@@ -261,16 +351,22 @@ void YroEffectFactoryTest::testExpander() {
 	 * first render simulation
 	 */
 	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerPeriod();
-	in1  = new jack_default_audio_sample_t[nframes];
-	in2  = new jack_default_audio_sample_t[nframes];
+	in1 = new jack_default_audio_sample_t[nframes];
+	in2 = new jack_default_audio_sample_t[nframes];
 	out1 = new jack_default_audio_sample_t[nframes];
 	out2 = new jack_default_audio_sample_t[nframes];
 
 	init(nframes, in1, in2);
 	init(nframes, out1, out2);
 
-	dump("left:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:left"));
-	dump("right:", YroParamHelper::instance()->getIntegerSampleRate(), YroAudioSampleFactory::instance()->allocate(YroParamHelper::instance()->getIntegerSampleRate(),0,"extern:right"));
+	dump("left:", YroParamHelper::instance()->getIntegerSampleRate(),
+			YroAudioSampleFactory::instance()->allocate(
+					YroParamHelper::instance()->getIntegerSampleRate(), 0,
+					"extern:left"));
+	dump("right:", YroParamHelper::instance()->getIntegerSampleRate(),
+			YroAudioSampleFactory::instance()->allocate(
+					YroParamHelper::instance()->getIntegerSampleRate(), 0,
+					"extern:right"));
 
 	factory->render(in1, in2, out1, out2);
 
@@ -279,9 +375,13 @@ void YroEffectFactoryTest::testExpander() {
 	dump("out1:", nframes, out1);
 	dump("out2:", nframes, out2);
 
-	float verif1[16] = {-0.001284, -0.003113, -0.003914, -0.004067, -0.004036, -0.003816, -0.003551, -0.003246, -0.002938, -0.002620, -0.002223, -0.001692, -0.000171, -0.000027, 0.000070, 0.000134};
+	float verif1[16] = { -0.001284, -0.003113, -0.003914, -0.004067, -0.004036,
+			-0.003816, -0.003551, -0.003246, -0.002938, -0.002620, -0.002223,
+			-0.001692, -0.000171, -0.000027, 0.000070, 0.000134 };
 	compare(nframes, out1, verif1);
-	float verif2[16] = {-0.324965, -0.787524, -0.990300, -1.029034, -1.021163, -0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343, -0.428202, -0.043322, -0.006895, 0.017683, 0.033956};
+	float verif2[16] = { -0.324965, -0.787524, -0.990300, -1.029034, -1.021163,
+			-0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343,
+			-0.428202, -0.043322, -0.006895, 0.017683, 0.033956 };
 	compare(nframes, out2, verif2);
 }
 

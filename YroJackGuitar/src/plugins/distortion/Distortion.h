@@ -110,6 +110,8 @@ public:
 	int getPprefiltering() const;
 	void setPprefiltering(int pprefiltering);
 
+	void toStringCompute();
+
 private:
 	float outvolume;
 	float *octoutl;
