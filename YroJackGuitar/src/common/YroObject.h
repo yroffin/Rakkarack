@@ -61,9 +61,11 @@ public:
 	YroParamHelper *getHelper() {
 		return helper;
 	}
+	virtual const char *toXml() {return 0;}
 protected:
 	YroLogger *LOG;
 	YroParamHelper *helper;
+	char _toXml[4096];
 private:
 	char _toStringFormat[4096];
 	char _toString[4096];

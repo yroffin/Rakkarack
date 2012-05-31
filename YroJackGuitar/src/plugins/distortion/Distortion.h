@@ -35,6 +35,7 @@ public:
 	Distortion();
 	virtual ~Distortion();
 	virtual void render(jack_nframes_t nframes, float *smpsl, float *smpsr);
+	const char *toXml();
 
 	/**
 	 * setter

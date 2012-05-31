@@ -83,6 +83,35 @@ int load(TiXmlDocument &xml, const char *filename) {
 		cout << "Unable to open file";
 
 	xml.Parse(data.c_str());
+	fprintf(stderr, "Loading %s ok ...\n", filename);
+	return 0;
+}
+
+/**
+ * load this xml chunk
+ */
+int compareContexts(TiXmlDocument &reference, TiXmlDocument &current) {
+	TiXmlNode* element = 0;
+	while ((element =
+			reference.FirstChildElement("attributes")->IterateChildren(element))
+			!= 0) {
+		TiXmlNode* cmp = 0;
+		while ((cmp =
+				current.FirstChildElement("attributes")->IterateChildren(cmp))
+				!= 0) {
+			if(strcmp(element->ToElement()->Attribute("name"),cmp->ToElement()->Attribute("name"))==0) {
+				/**
+				 * find attribute, then compare
+				 */
+				if(strcmp(element->ToElement()->Attribute("value"),cmp->ToElement()->Attribute("value"))!=0) {
+					fprintf(stderr,"Attribute %s in error, expected %s, receive %s\n",
+							element->ToElement()->Attribute("name"),
+							element->ToElement()->Attribute("value"),
+							cmp->ToElement()->Attribute("value"));
+				}
+			}
+		}
+	}
 	return 0;
 }
 
@@ -90,8 +119,8 @@ int load(TiXmlDocument &xml, const char *filename) {
  * load this xml chunk
  */
 int extract(TiXmlDocument &xml, float *left, float *right, int size,
-		int &preset, const char *hashl, const char *hashr, const char *ileft,
-		const char *iright) {
+		unsigned int &real, int &preset, const char *hashl, const char *hashr,
+		const char *ileft, const char *iright) {
 	TiXmlNode* element = 0;
 	const char *name = strdup(
 			xml.FirstChildElement("elements")->Attribute("effect"));
@@ -104,18 +133,20 @@ int extract(TiXmlDocument &xml, float *left, float *right, int size,
 	cout << hashl << " : " << hashil << endl;
 	cout << hashr << " : " << hashir << endl;
 	YroMd5 *myMd5 = new YroMd5();
+	real = 0;
 	while ((element = xml.FirstChildElement("elements")->IterateChildren(
 			element)) != 0) {
 		int index = atoi(element->ToElement()->Attribute("index"));
 		left[index] = atof(element->ToElement()->Attribute(ileft));
 		right[index] = atof(element->ToElement()->Attribute(iright));
+		real++;
 	}
 	const char *hashilComputed = myMd5->digestMemory((BYTE *) left,
-			size * sizeof(float));
+			real * sizeof(float));
 	cout << "computed left hash: " << hashilComputed << endl;
 	int checkl = (strcmp(hashil, hashilComputed) == 0);
 	const char *hashirComputed = myMd5->digestMemory((BYTE *) right,
-			size * sizeof(float));
+			real * sizeof(float));
 	cout << "computed right hash: " << hashirComputed << endl;
 	int checkr = (strcmp(hashir, hashirComputed) == 0);
 	return checkl && checkr;
@@ -130,30 +161,43 @@ void YroEffectFactoryTest::testBasic() {
 	left = new jack_default_audio_sample_t[nframes];
 	right = new jack_default_audio_sample_t[nframes];
 	int preset = 0;
-	TiXmlDocument xml;
-	load(xml, "src/tests/data/Distorsion-00000000.xml");
-	if (extract(xml, left, right, nframes, preset, "hashil", "hashir", "ileft", "iright")) {
+	TiXmlDocument xmlBuffer, xmlContextReference, xmlContext;
+	load(xmlBuffer, "src/tests/data/Distorsion-00000000-buffer.xml");
+	load(xmlContextReference, "src/tests/data/Distorsion-00000000-context.xml");
+	unsigned int real = 0;
+	if (extract(xmlBuffer, left, right, nframes, real, preset, "hashil",
+			"hashir", "ileft", "iright")) {
 		float *oleft = new jack_default_audio_sample_t[nframes];
 		float *oright = new jack_default_audio_sample_t[nframes];
 		float *oleftCheck = new jack_default_audio_sample_t[nframes];
 		float *orightCheck = new jack_default_audio_sample_t[nframes];
-		cout << "result" << endl;
 		Distortion *efx = new std::Distortion();
-		efx->setPreset(0);
+		efx->setPreset(4);
 		efx->setOutLeft(oleft);
 		efx->setOutRight(oright);
-		fprintf(stderr,"toString() = %s", efx->toString());
 		efx->render(nframes, left, right);
-		if (extract(xml, oleftCheck, orightCheck, nframes, preset, "hashol", "hashor", "oleft", "oright")) {
+		unsigned int real = 0;
+		if (extract(xmlBuffer, oleftCheck, orightCheck, nframes, real, preset,
+				"hashol", "hashor", "oleft", "oright")) {
 			/**
 			 * check result
 			 */
-			for(int i=0;i<nframes;i++) {
-				if(oleftCheck[i] != oleft[i]) {
-					fprintf(stderr,"Error, while checking index %d, assert %f and was %f\n",i,oleftCheck[i],oleft[i]);
+			fprintf(stderr, "Checking contexts ...\n");
+			xmlContext.Parse(efx->toXml());
+			if (compareContexts(xmlContextReference, xmlContext) != 0) {
+				fprintf(stderr, "Contexts in errror ...\n");
+			}
+			fprintf(stderr, "Checking %d bytes ...\n", real);
+			for (unsigned int i = 0; i < real; i++) {
+				if (oleftCheck[i] != oleft[i]) {
+					fprintf(stderr,
+							"Error, while checking index %d, assert %f and was %f\n",
+							i, oleftCheck[i], oleft[i]);
 				}
-				if(orightCheck[i] != oright[i]) {
-					fprintf(stderr,"Error, while checking index %d, assert %f and was %f\n",i,orightCheck[i],oright[i]);
+				if (orightCheck[i] != oright[i]) {
+					fprintf(stderr,
+							"Error, while checking index %d, assert %f and was %f\n",
+							i, orightCheck[i], oright[i]);
 				}
 			}
 		}

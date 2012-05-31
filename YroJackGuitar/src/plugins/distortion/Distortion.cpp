@@ -27,22 +27,24 @@ using namespace std;
 
 Distortion::Distortion() :
 		YroEffectPlugin("Distortion",
-						"Distorsion 1: 0, 64,   0, 87, 14, 6, 0, 3134, 157, 0, 1;"
-						"Distorsion 2: 0, 64, 127, 87, 14, 0, 1, 3134, 102, 0, 0;"
-						"Distorsion 3: 0, 64, 127, 127, 12, 13, 0, 5078, 56, 0, 1;"
-						"Guitar Amp:  84, 64,  35,  63, 50,  2, 0,  824, 21, 0, 0;"
-						"Overdrive 1: 84, 64,  35, 56, 40, 0, 0, 6703, 21, 0, 0;"
-						"Overdrive 2: 85, 64,  35, 29, 45, 1, 0, 25040, 21, 0, 0;") {
+				"Distorsion 1: 0, 64,   0,  87, 14,  6, 0,  3134, 157, 0, 1;"
+						"Distorsion 2: 0, 64, 127,  87, 14,  0, 1,  3134, 102, 0, 0;"
+						"Distorsion 3: 0, 64, 127, 127, 12, 13, 0,  5078,  56, 0, 1;"
+						"Guitar Amp:  84, 64,  35,  63, 50,  2, 0,   824,  21, 0, 0;"
+						"Overdrive 1: 84, 64,  35,  56, 40,  0, 0,  6703,  21, 0, 0;"
+						"Overdrive 2: 85, 64,  35,  29, 45,  1, 0, 25040,  21, 0, 0;") {
 	/**
 	 * fix klass attribute
 	 */
 	klass = YroEffectPlugin::_Distortion;
 
 	/**
-	 * allocated during the first render
+	 * allocate octoutl and octoutr
 	 */
-	octoutl = 0;
-	octoutr = 0;
+	octoutl = new float[iPERIOD];
+	memset(octoutl, 0, iPERIOD * sizeof(float));
+	octoutr = new float[iPERIOD];
+	memset(octoutr, 0, iPERIOD * sizeof(float));
 
 	lpfl = new AnalogFilter(2, 22000, 1, 0);
 	lpfr = new AnalogFilter(2, 22000, 1, 0);
@@ -80,6 +82,7 @@ Distortion::Distortion() :
 	octmix = 0.0;
 
 	setPreset(0);
+	cleanup();
 }
 
 Distortion::~Distortion() {
@@ -104,7 +107,6 @@ void Distortion::cleanup() {
 	blockDCl->cleanup();
 	DCl->cleanup();
 	DCr->cleanup();
-
 }
 
 /*
@@ -128,55 +130,41 @@ void Distortion::applyFilters() {
  * @param float *smpsr right
  */
 void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
-	/**
-	 * TODO allocate if dynamicly and detect nframes adjustment on the fly
-	 * allocate
-	 */
-	if (octoutl == 0) {
-		octoutl = new jack_default_audio_sample_t[nframes];
-		memset(octoutl, 0, sizeof(octoutl));
-	}
-	if (octoutr == 0) {
-		octoutr = new jack_default_audio_sample_t[nframes];
-		memset(octoutr, 0, sizeof(octoutr));
-	}
-
-	float l = 0., r = 0., lout = 0., rout = 0.;
+	int i;
+	float l, r, lout, rout;
 
 	float inputvol = powf(5.0f, ((float) Pdrive - 32.0f) / 127.0f);
 	if (Pnegate != 0)
 		inputvol *= -1.0f;
 
 	if (Pstereo != 0) { //Stereo
-		for (jack_nframes_t i = 0; i < nframes; i++) {
+		for (i = 0; i < iPERIOD; i++) {
 			efxoutl[i] = smpsl[i] * inputvol * 2.0f;
 			efxoutr[i] = smpsr[i] * inputvol * 2.0f;
 		};
 	} else {
-		for (jack_nframes_t i = 0; i < nframes; i++) {
+		for (i = 0; i < iPERIOD; i++) {
 			efxoutl[i] = (smpsl[i] + smpsr[i]) * inputvol;
 		};
 	};
 
-	if (Pprefiltering != 0) {
+	if (Pprefiltering != 0)
 		applyFilters();
-	}
 
 	//no optimised, yet (no look table)
 
-	dwshapel->waveshapesmps(nframes, efxoutl, Ptype, Pdrive, 1);
+	dwshapel->waveshapesmps(iPERIOD, efxoutl, Ptype, Pdrive, 1);
 	if (Pstereo != 0)
-		dwshaper->waveshapesmps(nframes, efxoutr, Ptype, Pdrive, 1);
+		dwshaper->waveshapesmps(iPERIOD, efxoutr, Ptype, Pdrive, 1);
 
-	if (Pprefiltering == 0) {
+	if (Pprefiltering == 0)
 		applyFilters();
-	}
 
 	if (Pstereo == 0)
-		memcpy(efxoutr, efxoutl, nframes * sizeof(float));
+		memcpy(efxoutr, efxoutl, iPERIOD * sizeof(float));
 
 	if (octmix > 0.01f) {
-		for (jack_nframes_t i = 0; i < nframes; i++) {
+		for (i = 0; i < iPERIOD; i++) {
 			lout = efxoutl[i];
 			rout = efxoutr[i];
 
@@ -194,13 +182,13 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 			octoutr[i] = rout * toggler;
 		}
 
-		blockDCr->filterout(iPERIOD, fPERIOD, octoutr);
-		blockDCl->filterout(iPERIOD, fPERIOD, octoutl);
+		blockDCr->filterout(iPERIOD,fPERIOD,octoutr);
+		blockDCl->filterout(iPERIOD,fPERIOD,octoutl);
 	}
 
 	float level = dB2rap (60.0f * (float)Plevel / 127.0f - 40.0f);
 
-	for (jack_nframes_t i = 0; i < nframes; i++) {
+	for (i = 0; i < iPERIOD; i++) {
 		lout = efxoutl[i];
 		rout = efxoutr[i];
 
@@ -220,8 +208,8 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 
 	};
 
-	DCr->filterout(int(nframes), float(nframes), efxoutr);
-	DCl->filterout(int(nframes), float(nframes), efxoutl);
+	DCr->filterout(iPERIOD,fPERIOD,efxoutr);
+	DCl->filterout(iPERIOD,fPERIOD,efxoutl);
 }
 
 void Distortion::setPlrcross(int value) {
@@ -350,8 +338,60 @@ void Distortion::setPprefiltering(int pprefiltering) {
 	onChange(_prefiltering);
 }
 
+const char *Distortion::toXml() {
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "waveshapeUpQuality", helper->getWaveshapeUpQuality());
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "waveshapeDownQuality", helper->getWaveshapeDownQuality());
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pdrive", Pdrive);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Phpf", Phpf);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plevel", Plevel);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plpf", Plpf);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrcross", Plrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pnegate", Pnegate);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Poctave", Poctave);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pprefiltering", Pprefiltering);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pstereo", Pstereo);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ptype", Ptype);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "outvolume", outvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "panning", panning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lrcross", lrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "octave_memoryl", octave_memoryl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "togglel", togglel);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "octave_memoryr", octave_memoryr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "toggler", toggler);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "octmix", octmix);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
+}
+
 void std::Distortion::toStringCompute() {
 	toStringCat("Pprefiltering=%d\n", Pprefiltering);
 }
-
 

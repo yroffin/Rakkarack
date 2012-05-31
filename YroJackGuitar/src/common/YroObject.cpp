@@ -12,6 +12,7 @@ using namespace std;
 YroObject::YroObject() {
 	LOG = YroLogger::instance();
 	helper = YroParamHelper::instance();
+	memset(_toString,0,sizeof(_toString));
 }
 
 YroObject::~YroObject() {
