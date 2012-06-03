@@ -113,12 +113,12 @@ void Distortion::cleanup() {
  * Apply the filters
  */
 void Distortion::applyFilters() {
-	lpfl->filterout(iPERIOD, fPERIOD, efxoutl);
-	hpfl->filterout(iPERIOD, fPERIOD, efxoutl);
+	lpfl->filterout(efxoutl);
+	hpfl->filterout(efxoutl);
 
 	if (Pstereo != 0) { //stereo
-		lpfr->filterout(iPERIOD, fPERIOD, efxoutr);
-		hpfr->filterout(iPERIOD, fPERIOD, efxoutr);
+		lpfr->filterout(efxoutr);
+		hpfr->filterout(efxoutr);
 	};
 
 }
@@ -182,8 +182,8 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 			octoutr[i] = rout * toggler;
 		}
 
-		blockDCr->filterout(iPERIOD,fPERIOD,octoutr);
-		blockDCl->filterout(iPERIOD,fPERIOD,octoutl);
+		blockDCr->filterout(iPERIOD, fPERIOD, octoutr);
+		blockDCl->filterout(iPERIOD, fPERIOD, octoutl);
 	}
 
 	float level = dB2rap (60.0f * (float)Plevel / 127.0f - 40.0f);
@@ -205,11 +205,10 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 
 		efxoutl[i] = lout * 2.0f * level * panning;
 		efxoutr[i] = rout * 2.0f * level * (1.0f - panning);
+	}
 
-	};
-
-	DCr->filterout(iPERIOD,fPERIOD,efxoutr);
-	DCl->filterout(iPERIOD,fPERIOD,efxoutl);
+	DCr->filterout(efxoutr);
+	DCl->filterout(efxoutl);
 }
 
 void Distortion::setPlrcross(int value) {
@@ -341,11 +340,13 @@ void Distortion::setPprefiltering(int pprefiltering) {
 const char *Distortion::toXml() {
 	char _buffer[256];
 	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
-	char _formatf[] = { "<attribute name=\"%s\" value=\"%f\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
 	strcpy(_toXml, "<attributes>");
-	sprintf(_buffer, _formatd, "waveshapeUpQuality", helper->getWaveshapeUpQuality());
+	sprintf(_buffer, _formatd, "waveshapeUpQuality",
+			helper->getWaveshapeUpQuality());
 	strcat(_toXml, _buffer);
-	sprintf(_buffer, _formatd, "waveshapeDownQuality", helper->getWaveshapeDownQuality());
+	sprintf(_buffer, _formatd, "waveshapeDownQuality",
+			helper->getWaveshapeDownQuality());
 	strcat(_toXml, _buffer);
 	sprintf(_buffer, _formatd, "Pdrive", Pdrive);
 	strcat(_toXml, _buffer);

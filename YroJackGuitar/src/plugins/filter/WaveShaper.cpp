@@ -1,25 +1,25 @@
 /*
-  ZynAddSubFX - a software synthesizer
+ ZynAddSubFX - a software synthesizer
 
-  Waveshaper.C - Distortion effect
-  Copyright (C) 2002-2005 Nasca Octavian Paul
-  Author: Nasca Octavian Paul
+ Waveshaper.C - Distortion effect
+ Copyright (C) 2002-2005 Nasca Octavian Paul
+ Author: Nasca Octavian Paul
 
-  Modified and evolved for rakarrack by Josep Andreu and Ryan Billing
+ Modified and evolved for rakarrack by Josep Andreu and Ryan Billing
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of version 2 of the GNU General Public License
+ as published by the Free Software Foundation.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License (version 2) for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License (version 2) for more details.
 
-  You should have received a copy of the GNU General Public License (version 2)
-  along with this program; if not, write to the Free Software Foundation,
-  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-*/
+ You should have received a copy of the GNU General Public License (version 2)
+ along with this program; if not, write to the Free Software Foundation,
+ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ */
 
 #include <math.h>
 #include "WaveShaper.h"
@@ -50,8 +50,7 @@ WaveShaper::WaveShaper() {
 		break;
 	}
 
-	temps = (float *) malloc(
-			sizeof(float) * params->getIntegerPeriod() * period_coeff);
+	temps = new float[params->getIntegerPeriod() * period_coeff];
 	u_up = (double) period_coeff;
 	u_down = 1.0 / u_up;
 

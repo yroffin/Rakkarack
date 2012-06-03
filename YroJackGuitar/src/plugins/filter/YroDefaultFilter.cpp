@@ -11,7 +11,7 @@ YroDefaultFilter::YroDefaultFilter() {
 	iPERIOD = helper->getIntegerPeriod();
 	iSAMPLE_RATE = helper->getIntegerSampleRate();
 	fPERIOD = helper->getFloatPeriod();
-	fSAMPLE_RATE = helper->getFloatPeriod();
+	fSAMPLE_RATE = helper->getFloatSampleRate();
 	cSAMPLE_RATE = 1.0f / fSAMPLE_RATE;
 }
 

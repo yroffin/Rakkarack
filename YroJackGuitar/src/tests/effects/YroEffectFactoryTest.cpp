@@ -15,8 +15,8 @@ namespace test {
 
 void YroEffectFactoryTest::setUp() {
 	YroJackDriver::instance();
-	YroParamHelper::instance()->setIntegerPeriod(1024);
-	YroParamHelper::instance()->setIntegerSampleRate(22050);
+	YroParamHelper::instance()->setIntegerPeriod(128);
+	YroParamHelper::instance()->setIntegerSampleRate(48000);
 	YroEffectFactory::instance();
 	for (int i = 0; i < TABLE_SIZE; i++) {
 		sine[i] = .1f
@@ -88,7 +88,9 @@ int load(TiXmlDocument &xml, const char *filename) {
 }
 
 /**
- * load this xml chunk
+ * compare to contexts elements
+ * @param TiXmlDocument &reference, reference document
+ * @param  TiXmlDocument &current, the current element to compare
  */
 int compareContexts(TiXmlDocument &reference, TiXmlDocument &current) {
 	TiXmlNode* element = 0;
@@ -96,18 +98,22 @@ int compareContexts(TiXmlDocument &reference, TiXmlDocument &current) {
 			reference.FirstChildElement("attributes")->IterateChildren(element))
 			!= 0) {
 		TiXmlNode* cmp = 0;
-		while ((cmp =
-				current.FirstChildElement("attributes")->IterateChildren(cmp))
-				!= 0) {
-			if(strcmp(element->ToElement()->Attribute("name"),cmp->ToElement()->Attribute("name"))==0) {
+		while ((cmp = current.FirstChildElement("attributes")->IterateChildren(
+				cmp)) != 0) {
+			if (strcmp(element->ToElement()->Attribute("name"),
+					cmp->ToElement()->Attribute("name")) == 0) {
 				/**
 				 * find attribute, then compare
 				 */
-				if(strcmp(element->ToElement()->Attribute("value"),cmp->ToElement()->Attribute("value"))!=0) {
-					fprintf(stderr,"Attribute %s in error, expected %s, receive %s\n",
+				if (strcmp(element->ToElement()->Attribute("value"),
+						cmp->ToElement()->Attribute("value")) != 0) {
+					char message[1024];
+					sprintf(message,
+							"Attribute %s in error, expected %s, receive %s\n",
 							element->ToElement()->Attribute("name"),
 							element->ToElement()->Attribute("value"),
 							cmp->ToElement()->Attribute("value"));
+					CPPUNIT_FAIL(message);
 				}
 			}
 		}
@@ -188,17 +194,16 @@ void YroEffectFactoryTest::testBasic() {
 				fprintf(stderr, "Contexts in errror ...\n");
 			}
 			fprintf(stderr, "Checking %d bytes ...\n", real);
+			int checkByteError = 0;
 			for (unsigned int i = 0; i < real; i++) {
-				if (oleftCheck[i] != oleft[i]) {
-					fprintf(stderr,
-							"Error, while checking index %d, assert %f and was %f\n",
-							i, oleftCheck[i], oleft[i]);
-				}
-				if (orightCheck[i] != oright[i]) {
-					fprintf(stderr,
-							"Error, while checking index %d, assert %f and was %f\n",
-							i, orightCheck[i], oright[i]);
-				}
+				char message[1024];
+				sprintf(message, "While checking index (left) %d", i);
+				CPPUNIT_ASSERT_EQUAL_MESSAGE(message, oleftCheck[i], oleft[i]);
+				sprintf(message, "While checking index (right) %d", i);
+				CPPUNIT_ASSERT_EQUAL_MESSAGE(message, orightCheck[i], oright[i]);
+			}
+			if (checkByteError == 0) {
+				fprintf(stderr, "%d bytes checked ok ...\n", real);
 			}
 		}
 	} else {

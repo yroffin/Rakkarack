@@ -38,7 +38,14 @@ public:
 	/**
 	 * default function
 	 */
-	void filterout(int iPeriod, float fPeriod, float * smp);
+	/**
+	 * TODO supress this
+	 */
+	void filterout(int, float, float * smp) {
+		filterout(smp);
+	}
+	;
+	void filterout(float * smp);
 	void setfreq(float frequency);
 	void setfreq_and_q(float frequency, float q_);
 	void setq(float q_);
@@ -56,8 +63,8 @@ private:
 	} x[MAX_FILTER_STAGES + 1], y[MAX_FILTER_STAGES + 1], oldx[MAX_FILTER_STAGES
 			+ 1], oldy[MAX_FILTER_STAGES + 1];
 
-	void singlefilterout(int iPeriod, float fPeriod, float * smp, fstage & x,
-			fstage & y, float * c, float * d);
+	void singlefilterout(float * smp, fstage & x, fstage & y, float * c,
+			float * d);
 	float singlefilterout_s(float smp, fstage & x, fstage & y, float * c,
 			float * d);
 
@@ -78,6 +85,9 @@ private:
 	float oldc[3], oldd[3]; //old coefficients(used only if some filter paremeters changes very fast, and it needs interpolation)
 
 	float xd[3], yd[3]; //used if the filter is applied more times
+
+	float iiSAMPLE_RATE;
+	float ifSAMPLE_RATE;
 };
 
 }
