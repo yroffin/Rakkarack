@@ -34,6 +34,7 @@ YroPresets::YroPresets(const char *_data) {
 	memset(_preset,0,sizeof(_preset));
 	int inPresetName = 1;
 	int inDataValue = 0;
+	YroPreset *myPreset = 0;
 	for(int i=0;_data[i]!=0;i++) {
 		switch(_data[i]) {
 			case ':':
@@ -53,7 +54,9 @@ YroPresets::YroPresets(const char *_data) {
 				/**
 				 * add this value to current preset
 				 */
-				_presets[strdup(_preset)] = new YroPreset(_value);
+				myPreset = new YroPreset(_value);
+				_presetTabs.push_back(myPreset);
+				_presets[strdup(_preset)] = myPreset;
 				inPresetName = 1;
 				inDataValue = 0;
 				/**
@@ -97,12 +100,7 @@ YroPresets::~YroPresets() {
 }
 
 const YroPreset* YroPresets::get(int index) {
-	map<const char *, YroPreset *, cmp_str>::iterator it;
-	int i=0;
-	for(it=_presets.begin(); it!=_presets.end(); it++,i++) {
-		if(i == index) return it->second;
-	}
-	return 0;
+	return _presetTabs[index];
 }
 
 }

@@ -34,6 +34,7 @@ public:
 	AnalogFilter(unsigned char Ftype, float Ffreq, float Fq,
 			unsigned char Fstages);
 	virtual ~AnalogFilter();
+	void dumpStats(const char *where, float *_efxoutl);
 
 	/**
 	 * default function
@@ -58,6 +59,7 @@ public:
 	float filterout_s(float smp);
 	void setSR(unsigned int SR);
 private:
+	int statCounterSinglefilterout;
 	struct fstage {
 		float c1, c2;
 	} x[MAX_FILTER_STAGES + 1], y[MAX_FILTER_STAGES + 1], oldx[MAX_FILTER_STAGES

@@ -30,6 +30,7 @@
 #include <plugins/distortion/Distortion.h>
 #include <plugins/noisegate/Expander.h>
 #include <plugins/effect/Chorus.h>
+#include <plugins/effect/Echo.h>
 #include <plugins/analyze/YroScope.h>
 
 namespace std {

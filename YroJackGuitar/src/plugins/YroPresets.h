@@ -39,6 +39,7 @@ public:
 	}
 	const YroPreset *get(int index);
 private:
+	vector<YroPreset *> _presetTabs;
 	map<const char *, YroPreset *, cmp_str> _presets;
 };
 

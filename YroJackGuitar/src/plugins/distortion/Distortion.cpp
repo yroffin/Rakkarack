@@ -25,14 +25,17 @@
 
 using namespace std;
 
+/**
+ * TODO problem on Plevel & Ptype
+ */
 Distortion::Distortion() :
 		YroEffectPlugin("Distortion",
-				"Distorsion 1: 0, 64,   0,  87, 14,  6, 0,  3134, 157, 0, 1;"
-						"Distorsion 2: 0, 64, 127,  87, 14,  0, 1,  3134, 102, 0, 0;"
-						"Distorsion 3: 0, 64, 127, 127, 12, 13, 0,  5078,  56, 0, 1;"
-						"Guitar Amp:  84, 64,  35,  63, 50,  2, 0,   824,  21, 0, 0;"
-						"Overdrive 1: 84, 64,  35,  56, 40,  0, 0,  6703,  21, 0, 0;"
-						"Overdrive 2: 85, 64,  35,  29, 45,  1, 0, 25040,  21, 0, 0;") {
+						"Overdrive 1: 84, 64,  35,  56, 40,  0, 0,  6703,  21, 0, 0, 0;"
+						"Overdrive 2: 85, 64,  35,  29, 45,  1, 0, 25040,  21, 0, 0, 0;"
+						"Distorsion 1: 0, 64,   0,  87, 14,  6, 0,  3134, 157, 0, 1, 0;"
+						"Distorsion 2: 0, 64, 127,  87, 14,  0, 1,  3134, 102, 0, 0, 0;"
+						"Distorsion 3: 0, 64, 127, 127, 12, 13, 0,  5078,  56, 0, 1, 0;"
+						"Guitar Amp:  84, 64,  35,  63, 50,  2, 0,   824,  21, 0, 0, 0;") {
 	/**
 	 * fix klass attribute
 	 */
@@ -80,6 +83,7 @@ Distortion::Distortion() :
 	toggler = 1.0;
 	octave_memoryr = -1.0;
 	octmix = 0.0;
+	forcedCleanup = 1;
 
 	setPreset(0);
 	cleanup();
@@ -112,7 +116,7 @@ void Distortion::cleanup() {
 /*
  * Apply the filters
  */
-void Distortion::applyFilters() {
+void Distortion::applyFilters(float * efxoutl, float * efxoutr) {
 	lpfl->filterout(efxoutl);
 	hpfl->filterout(efxoutl);
 
@@ -149,7 +153,7 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 	};
 
 	if (Pprefiltering != 0)
-		applyFilters();
+		applyFilters(efxoutl, efxoutr);
 
 	//no optimised, yet (no look table)
 
@@ -158,7 +162,7 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 		dwshaper->waveshapesmps(iPERIOD, efxoutr, Ptype, Pdrive, 1);
 
 	if (Pprefiltering == 0)
-		applyFilters();
+		applyFilters(efxoutl, efxoutr);
 
 	if (Pstereo == 0)
 		memcpy(efxoutr, efxoutl, iPERIOD * sizeof(float));
@@ -182,8 +186,8 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 			octoutr[i] = rout * toggler;
 		}
 
-		blockDCr->filterout(iPERIOD, fPERIOD, octoutr);
-		blockDCl->filterout(iPERIOD, fPERIOD, octoutl);
+		blockDCr->filterout(octoutr);
+		blockDCl->filterout(octoutl);
 	}
 
 	float level = dB2rap (60.0f * (float)Plevel / 127.0f - 40.0f);
@@ -205,86 +209,14 @@ void Distortion::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 
 		efxoutl[i] = lout * 2.0f * level * panning;
 		efxoutr[i] = rout * 2.0f * level * (1.0f - panning);
-	}
+
+	};
 
 	DCr->filterout(efxoutr);
 	DCl->filterout(efxoutl);
 }
 
-void Distortion::setPlrcross(int value) {
-	this->Plrcross = value;
-	lrcross = (float) Plrcross / 127.0f * 1.0f;
-	onChange(_lrcross);
-}
-
-int Distortion::getPdrive() {
-	return Pdrive;
-}
-
-void Distortion::setPdrive(int pdrive) {
-	Pdrive = pdrive;
-	onChange(_drive);
-}
-
-int Distortion::getPhpf() const {
-	return Phpf;
-}
-
-void Distortion::setPhpf(int value) {
-	Phpf = value;
-	float fr = (float) Phpf;
-
-	hpfl->setfreq(fr);
-	hpfr->setfreq(fr);
-	//Prefiltering of 51 is approx 630 Hz. 50 - 60 generally good for OD pedal.
-}
-
-int Distortion::getPlevel() const {
-	return Plevel;
-}
-
-void Distortion::setPlevel(int plevel) {
-	Plevel = plevel;
-	onChange(_level);
-}
-
-int Distortion::getPlpf() const {
-	return Plpf;
-}
-
-void Distortion::setPlpf(int value) {
-	Plpf = value;
-	float fr = (float) Plpf;
-	lpfl->setfreq(fr);
-	lpfr->setfreq(fr);
-	onChange(_lpf);
-}
-
-int Distortion::getPoctave() const {
-	return Poctave;
-}
-
-void Distortion::setPoctave(int poctave) {
-	this->Poctave = poctave;
-	octmix = (float) (Poctave) / 127.0f;
-	onChange(_octave);
-}
-
-int Distortion::getPpanning() const {
-	return Ppanning;
-}
-
-void Distortion::setPpanning(int ppanning) {
-	this->Ppanning = ppanning;
-	panning = ((float) Ppanning + 0.5f) / 127.0f;
-	onChange(_panning);
-}
-
-int Distortion::getPvolume() const {
-	return Pvolume;
-}
-
-void Distortion::setPvolume(int pvolume) {
+void Distortion::setVolume(int pvolume) {
 	this->Pvolume = pvolume;
 
 	outvolume = (float) Pvolume / 127.0f;
@@ -293,48 +225,121 @@ void Distortion::setPvolume(int pvolume) {
 	onChange(_volume);
 }
 
-int Distortion::getPlrcross() const {
-	return Plrcross;
+void Distortion::setPanning(int ppanning) {
+	this->Ppanning = ppanning;
+	panning = ((float) Ppanning + 0.5f) / 127.0f;
+	onChange(_panning);
 }
 
-int Distortion::getPtype() const {
-	return Ptype;
+void Distortion::setLrcross(int value) {
+	this->Plrcross = value;
+	lrcross = (float) Plrcross / 127.0f * 1.0f;
+	onChange(_lrcross);
 }
 
-void Distortion::setPtype(int ptype) {
+int Distortion::getDrive() {
+	return Pdrive;
+}
+
+void Distortion::setLpf(int value) {
+	Plpf = value;
+	float fr = (float) Plpf;
+	lpfl->setfreq(fr);
+	lpfr->setfreq(fr);
+	onChange(_lpf);
+}
+
+void Distortion::setHpf(int value) {
+	Phpf = value;
+	float fr = (float) Phpf;
+
+	hpfl->setfreq(fr);
+	hpfr->setfreq(fr);
+	//Prefiltering of 51 is approx 630 Hz. 50 - 60 generally good for OD pedal.
+}
+
+void Distortion::setOctave(int poctave) {
+	this->Poctave = poctave;
+	octmix = (float) (Poctave) / 127.0f;
+	onChange(_octave);
+}
+
+void Distortion::setDrive(int pdrive) {
+	Pdrive = pdrive;
+	onChange(_drive);
+}
+
+void Distortion::setLevel(int plevel) {
+	Plevel = plevel;
+	onChange(_level);
+}
+
+void Distortion::setType(int ptype) {
 	Ptype = ptype;
 	onChange(_type);
 }
 
-int Distortion::getPnegate() const {
-	return Pnegate;
-}
-
-void Distortion::setPnegate(int value) {
+void Distortion::setNegate(int value) {
 	if (value > 1)
 		value = 1;
 	Pnegate = value;
 	onChange(_negate);
 }
 
-int Distortion::getPstereo() const {
-	return Pstereo;
-}
-
-void Distortion::setPstereo(int value) {
+void Distortion::setStereo(int value) {
 	if (value > 1)
 		value = 1;
 	Pstereo = value;
 	onChange(_stereo);
 }
 
-int Distortion::getPprefiltering() const {
-	return Pprefiltering;
-}
-
-void Distortion::setPprefiltering(int pprefiltering) {
+void Distortion::setPrefiltering(int pprefiltering) {
 	Pprefiltering = pprefiltering;
 	onChange(_prefiltering);
+}
+
+int Distortion::getHpf() const {
+	return Phpf;
+}
+
+int Distortion::getLevel() const {
+	return Plevel;
+}
+
+int Distortion::getLpf() const {
+	return Plpf;
+}
+
+int Distortion::getOctave() const {
+	return Poctave;
+}
+
+int Distortion::getPanning() const {
+	return Ppanning;
+}
+
+int Distortion::getVolume() const {
+	return Pvolume;
+}
+
+int Distortion::getLrcross() const {
+	return Plrcross;
+}
+
+int Distortion::getType() const {
+	return Ptype;
+}
+
+int Distortion::getNegate() const {
+	return Pnegate;
+}
+
+int Distortion::getStereo() const {
+	return Pstereo;
+}
+
+int Distortion::getPrefiltering() const {
+	return Pprefiltering;
 }
 
 const char *Distortion::toXml() {

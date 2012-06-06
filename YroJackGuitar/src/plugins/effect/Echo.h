@@ -1,6 +1,6 @@
 /*
  ZynAddSubFX - a software synthesizer
- 
+
  Echo.h - Echo Effect
  Copyright (C) 2002-2005 Nasca Octavian Paul
  Author: Nasca Octavian Paul
@@ -31,14 +31,13 @@
 
 namespace std {
 
-class Echo: public YroEffectPlugin
-
-{
+class Echo: public YroEffectPlugin {
 public:
 	Echo();
 	~Echo();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration
@@ -146,7 +145,7 @@ public:
 
 private:
 	float outvolume;
-	//Parametrii
+//Parametrii
 	int Pvolume; //Volumul or E/R
 	int Ppanning; //Panning
 	int Pdelay;
@@ -167,7 +166,7 @@ private:
 	void setreverse(int Preverse);
 	void setdirect(int Pdirect);
 
-	//Parametrii reali
+//Parametrii reali
 	void initdelays();
 
 	int dl, dr, delay, lrdelay;

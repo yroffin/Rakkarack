@@ -11,11 +11,11 @@ extractMember() {
 		exit 1
 	}
 
-	printf "char _toXml[4096];\n"
-	printf "const char *toXml() {\n"
+	#printf "char _toXml[4096];\n"
+	printf "/**\n * toXml member\n*/\nconst char *$effect::toXml() {\n"
 		printf "        char _buffer[256];\n"
 		printf "        char _formatd[] = {\"<attribute name=%s%%s%s value=%s%%d%s />\"};\n" '\"' '\"' '\"' '\"'
-		printf "        char _formatf[] = {\"<attribute name=%s%%s%s value=%s%%f%s />\"};\n" '\"' '\"' '\"' '\"'
+		printf "        char _formatf[] = {\"<attribute name=%s%%s%s value=%s%%9.40f%s />\"};\n" '\"' '\"' '\"' '\"'
 		printf "        strcpy(_toXml,%s<attributes>%s);\n" '"' '"'
 	for member in `grep 'int ' $FILEHPP | grep -v '(' | cut -f2- -d' ' | cut -f1 -d';' | sed 's!,! !g' | sort`
 	do
@@ -37,10 +37,10 @@ extractMember() {
 for effect in $*
 do
 	export effect
-	export FILESED=~/git/Rakkarack/YroJackGuitar/src/plugins/distortion/$effect.sed
-	export FILECPP=~/git/Rakkarack/YroJackGuitar/src/plugins/distortion/$effect.cpp
-	export FILEHPP=~/git/Rakkarack/YroJackGuitar/src/plugins/distortion/$effect.h
-	extractMember $effect $FILESED $FILECPP $FILEHPP
+	export FILESED=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.sed
+	export FILECPP=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.cpp
+	export FILEHPP=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.h
+	extractMember $effect $FILESED $FILECPP $FILEHPP >> $FILECPP
 done
 exit 0
 

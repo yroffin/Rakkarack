@@ -41,7 +41,7 @@ public:
 	 * setter
 	 */
 	void cleanup ();
-	void applyFilters();
+	void applyFilters(float * efxoutl, float * efxoutr);
 
 	enum functions {
 		_preset,
@@ -61,55 +61,55 @@ public:
 
 	int  get0() {return getPreset();};
 	void set0(int value) {setPreset(value);};
-	int  get1() {return getPvolume();};
-	void set1(int value) {setPvolume(value);};
-	int  get2() {return getPpanning();};
-	void set2(int value) {setPpanning(value);};
-	int  get3() {return getPlrcross();};
-	void set3(int value) {setPlrcross(value);};
-	int  get4() {return getPdrive();};
-	void set4(int value) {setPdrive(value);};
-	int  get5() {return getPlevel();};
-	void set5(int value) {setPlevel(value);};
-	int  get6() {return getPtype();};
-	void set6(int value) {setPtype(value);};
-	int  get7() {return getPnegate();};
-	void set7(int value) {setPnegate(value);};
-	int  get8() {return getPlpf();};
-	void set8(int value) {setPlpf(value);};
-	int  get9() {return getPhpf();};
-	void set9(int value) {setPhpf(value);};
-	int  get10() {return getPstereo();};
-	void set10(int value) {setPstereo(value);};
-	int  get11() {return getPprefiltering();};
-	void set11(int value) {setPprefiltering(value);};
-	int  get12() {return getPoctave();};
-	void set12(int value) {setPoctave(value);};
+	int  get1() {return getVolume();};
+	void set1(int value) {setVolume(value);};
+	int  get2() {return getPanning();};
+	void set2(int value) {setPanning(value);};
+	int  get3() {return getLrcross();};
+	void set3(int value) {setLrcross(value);};
+	int  get4() {return getDrive();};
+	void set4(int value) {setDrive(value);};
+	int  get5() {return getLevel();};
+	void set5(int value) {setLevel(value);};
+	int  get6() {return getType();};
+	void set6(int value) {setType(value);};
+	int  get7() {return getNegate();};
+	void set7(int value) {setNegate(value);};
+	int  get8() {return getLpf();};
+	void set8(int value) {setLpf(value);};
+	int  get9() {return getHpf();};
+	void set9(int value) {setHpf(value);};
+	int  get10() {return getStereo();};
+	void set10(int value) {setStereo(value);};
+	int  get11() {return getPrefiltering();};
+	void set11(int value) {setPrefiltering(value);};
+	int  get12() {return getOctave();};
+	void set12(int value) {setOctave(value);};
 
-	int getPdrive();
-	void setPdrive(int pdrive);
-	int getPhpf() const;
-	void setPhpf(int phpf);
-	int getPlevel() const;
-	void setPlevel(int plevel);
-	int getPlpf() const;
-	void setPlpf(int plpf);
-	int getPoctave() const;
-	void setPoctave(int poctave);
-	int getPpanning() const;
-	void setPpanning(int ppanning);
-	int getPvolume() const;
-	void setPvolume(int pvolume);
-	int getPlrcross() const;
-	void setPlrcross(int plrcross);
-	int getPtype() const;
-	void setPtype(int ptype);
-	int getPnegate() const;
-	void setPnegate(int pnegate);
-	int getPstereo() const;
-	void setPstereo(int pstereo);
-	int getPprefiltering() const;
-	void setPprefiltering(int pprefiltering);
+	int getDrive();
+	void setDrive(int pdrive);
+	int getHpf() const;
+	void setHpf(int phpf);
+	int getLevel() const;
+	void setLevel(int plevel);
+	int getLpf() const;
+	void setLpf(int plpf);
+	int getOctave() const;
+	void setOctave(int poctave);
+	int getPanning() const;
+	void setPanning(int ppanning);
+	int getVolume() const;
+	void setVolume(int pvolume);
+	int getLrcross() const;
+	void setLrcross(int plrcross);
+	int getType() const;
+	void setType(int ptype);
+	int getNegate() const;
+	void setNegate(int pnegate);
+	int getStereo() const;
+	void setStereo(int pstereo);
+	int getPrefiltering() const;
+	void setPrefiltering(int pprefiltering);
 
 	void toStringCompute();
 

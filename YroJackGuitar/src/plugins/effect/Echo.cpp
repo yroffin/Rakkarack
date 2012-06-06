@@ -30,15 +30,16 @@
 using namespace std;
 
 Echo::Echo() :
-		YroEffectPlugin("Echo", "Echo 1: 67, 64, 565, 64, 30, 59, 0, 127, 0;"
-				"Echo 2: 67, 64, 357, 64, 30, 59, 0, 64, 0;"
-				"Echo 3: 67, 75, 955, 64, 30, 59, 10, 0, 0;"
-				"Simple Echo: 67, 60, 705, 64, 30, 0, 0, 0, 0;"
-				"Canyon: 67, 60, 1610, 50, 30, 82, 48, 0, 0;"
-				"Panning Echo 1: 67, 64, 705, 17, 0, 82, 24, 0, 0;"
-				"Panning Echo 2: 81, 60, 737, 118, 100, 68, 18, 0, 0;"
-				"Panning Echo 3: 81, 60, 472, 100, 127, 67, 36, 0, 0;"
-				"Feedback Echo: 62, 64, 456, 64, 100, 90, 55, 0, 0;") {
+		YroEffectPlugin("Echo",
+				"Echo 1:         67, 64,  565,  64,  30, 59,  0, 127, 0;"
+				"Echo 2:         67, 64,  357,  64,  30, 59,  0,  64, 0;"
+				"Echo 3:         67, 75,  955,  64,  30, 59, 10,   0, 0;"
+				"Simple Echo:    67, 60,  705,  64,  30,  0,  0,   0, 0;"
+				"Canyon:         67, 60, 1610,  50,  30, 82, 48,   0, 0;"
+				"Panning Echo 1: 67, 64,  705,  17,   0, 82, 24,   0, 0;"
+				"Panning Echo 2: 81, 60,  737, 118, 100, 68, 18,   0, 0;"
+				"Panning Echo 3: 81, 60,  472, 100, 127, 67, 36,   0, 0;"
+				"Feedback Echo:  62, 64,  456,  64, 100, 90, 55,   0, 0;") {
 	//default values
 	Pvolume = 50;
 	Ppanning = 64;
@@ -222,10 +223,8 @@ void Echo::setReverse(int Preverse) {
 ;
 
 void Echo::Tempo2Delay(int value) {
-
 	Pdelay = 60.0f / (float) value * 1000.0f;
 	delay = (float) Pdelay / 1000.0f * fSAMPLE_RATE;
-	;
 	if ((unsigned int) delay > (iSAMPLE_RATE * MAX_DELAY))
 		delay = iSAMPLE_RATE * MAX_DELAY;
 	initdelays();
@@ -239,10 +238,8 @@ void Echo::setDelay(int Pdelay) {
 	if (delay > MAX_DELAY * 1000)
 		delay = 1000 * MAX_DELAY; //Constrains 10ms ... MAX_DELAY
 	delay = 1 + lrintf(((float) delay / 1000.0f) * fSAMPLE_RATE);
-
 	initdelays();
 }
-;
 
 void Echo::setLrdelay(int Plrdelay) {
 	float tmp;
@@ -254,11 +251,10 @@ void Echo::setLrdelay(int Plrdelay) {
 	lrdelay = lrintf(tmp);
 	initdelays();
 }
-;
 
-void Echo::setLrcross(int Plrcross) {
-	this->Plrcross = Plrcross;
-	lrcross = (float) Plrcross / 127.0f * 1.0f;
+void Echo::setLrcross(int value) {
+	this->Plrcross = value;
+	lrcross = (float) value / 127.0f * 1.0f;
 }
 ;
 
@@ -281,12 +277,102 @@ void Echo::setDirect(int Pdirect) {
 }
 ;
 
-int  Echo::getVolume() {return Pvolume;}
-int  Echo::getPanning() {return Ppanning;}
-int  Echo::getDelay() {return Pdelay;}
-int  Echo::getLrdelay() {return Plrdelay;}
-int  Echo::getLrcross() {return Plrcross;}
-int  Echo::getFb() {return Pfb;}
-int  Echo::getHidamp() {return Phidamp;}
-int  Echo::getReverse() {return Preverse;}
-int  Echo::getDirect() {return Pdirect;}
+int Echo::getVolume() {
+	return Pvolume;
+}
+int Echo::getPanning() {
+	return Ppanning;
+}
+int Echo::getDelay() {
+	return Pdelay;
+}
+int Echo::getLrdelay() {
+	return Plrdelay;
+}
+int Echo::getLrcross() {
+	return Plrcross;
+}
+int Echo::getFb() {
+	return Pfb;
+}
+int Echo::getHidamp() {
+	return Phidamp;
+}
+int Echo::getReverse() {
+	return Preverse;
+}
+int Echo::getDirect() {
+	return Pdirect;
+}
+
+/**
+ * toXml member
+ */
+const char *Echo::toXml() {
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "dl", dl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "dr", dr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "delay", delay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "lrdelay", lrdelay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "kl", kl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "kr", kr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "rvkl", rvkl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "rvkr", rvkr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "rvfl", rvfl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "rvfr", rvfr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "maxx_delay", maxx_delay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "fade", fade);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pdelay", Pdelay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pdirect", Pdirect);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pfb", Pfb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Phidamp", Phidamp);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrcross", Plrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrdelay", Plrdelay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Preverse", Preverse);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldl", oldl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldr", oldr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "outvolume", outvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "panning", panning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lrcross", lrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fb", fb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "hidamp", hidamp);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "reverse", reverse);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "Srate_Attack_Coeff", Srate_Attack_Coeff);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
+}

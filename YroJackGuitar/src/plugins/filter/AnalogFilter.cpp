@@ -34,6 +34,11 @@ AnalogFilter::AnalogFilter(unsigned char Ftype, float Ffreq, float Fq,
 	iiSAMPLE_RATE = iSAMPLE_RATE;
 	ifSAMPLE_RATE = fSAMPLE_RATE;
 
+	/**
+	 * internal counter
+	 */
+	statCounterSinglefilterout = 0;
+
 	stages = Fstages;
 	for (int i = 0; i < 3; i++) {
 		oldc[i] = 0.0;
@@ -348,7 +353,7 @@ void AnalogFilter::setfreq(float frequency) {
 void AnalogFilter::setSR(unsigned int value) {
 
 	iiSAMPLE_RATE = value;
-	ifSAMPLE_RATE = (float) value;
+	ifSAMPLE_RATE = (float) iiSAMPLE_RATE;
 	computefiltercoefs();
 
 }
@@ -392,14 +397,13 @@ void AnalogFilter::singlefilterout(float * smp, fstage & x, fstage & y,
 	float y0;
 	if (order == 1) { //First order filter
 		for (i = 0; i < iPERIOD; i++) {
-
 			y0 = smp[i] * c[0] + x.c1 * c[1] + y.c1 * d[1];
 			y.c1 = y0 + DENORMAL_GUARD;
 			x.c1 = smp[i];
 			//output
 			smp[i] = y0;
-		};
-	};
+		}
+	}
 	if (order == 2) { //Second order filter
 		for (i = 0; i < iPERIOD; i++) {
 			y0 = (smp[i] * c[0]) + (x.c1 * c[1]) + (x.c2 * c[2]) + (y.c1 * d[1])
@@ -410,10 +414,16 @@ void AnalogFilter::singlefilterout(float * smp, fstage & x, fstage & y,
 			x.c1 = smp[i];
 			//output
 			smp[i] = y0;
-		};
-	};
+		}
+	}
 }
-;
+
+void AnalogFilter::dumpStats(const char *where, float *_efxoutl) {
+	LOG->debug(
+			"[STATS] %-16.16s : %9.40f - %d\n%9.40f, %9.40f, %9.40f\n%9.40f, %9.40f, %9.40f\n",
+			where, _efxoutl[iPERIOD / 2], stages, c[0], c[1], c[2], d[0], d[1],
+			d[2]);
+}
 
 void AnalogFilter::filterout(float * smp) {
 	int i;
@@ -426,8 +436,9 @@ void AnalogFilter::filterout(float * smp) {
 			singlefilterout(ismp, oldx[i], oldy[i], oldc, oldd);
 	};
 
-	for (i = 0; i < stages + 1; i++)
+	for (i = 0; i < stages + 1; i++) {
 		singlefilterout(smp, x[i], y[i], c, d);
+	}
 
 	if (needsinterpolation != 0) {
 		for (i = 0; i < iPERIOD; i++) {

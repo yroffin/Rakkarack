@@ -35,6 +35,7 @@
 									<listOptionValue builtIn="false" value="_LARGE_FILES"/>
 									<listOptionValue builtIn="false" value="__WXGTK__"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.optimization.flags.514373188" superClass="gnu.cpp.compiler.option.optimization.flags" value="-msse2 -mfpmath=sse  -ffast-math -pipe -fsigned-char -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security -D_THREAD_SAFE -D_REENTRANT" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.167308754" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1209818925" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">

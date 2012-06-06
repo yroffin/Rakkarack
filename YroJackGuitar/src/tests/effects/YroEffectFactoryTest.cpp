@@ -92,12 +92,15 @@ int load(TiXmlDocument &xml, const char *filename) {
  * @param TiXmlDocument &reference, reference document
  * @param  TiXmlDocument &current, the current element to compare
  */
-int compareContexts(TiXmlDocument &reference, TiXmlDocument &current) {
+int compareContexts(TiXmlDocument &reference, TiXmlDocument &current, const char *filename) {
 	TiXmlNode* element = 0;
 	while ((element =
 			reference.FirstChildElement("attributes")->IterateChildren(element))
 			!= 0) {
 		TiXmlNode* cmp = 0;
+		int errors = 0;
+		char tokens[16384];
+		sprintf(tokens,"Errors, while checking members initialization (%s):",filename);
 		while ((cmp = current.FirstChildElement("attributes")->IterateChildren(
 				cmp)) != 0) {
 			if (strcmp(element->ToElement()->Attribute("name"),
@@ -107,15 +110,20 @@ int compareContexts(TiXmlDocument &reference, TiXmlDocument &current) {
 				 */
 				if (strcmp(element->ToElement()->Attribute("value"),
 						cmp->ToElement()->Attribute("value")) != 0) {
-					char message[1024];
-					sprintf(message,
+					fprintf(stderr,
 							"Attribute %s in error, expected %s, receive %s\n",
 							element->ToElement()->Attribute("name"),
 							element->ToElement()->Attribute("value"),
 							cmp->ToElement()->Attribute("value"));
-					CPPUNIT_FAIL(message);
+					char __token[1024];
+					sprintf(__token," %s[%s/%s ko]",element->ToElement()->Attribute("name"),element->ToElement()->Attribute("value"),cmp->ToElement()->Attribute("value"));
+					strcat(tokens,__token);
+					errors++;
 				}
 			}
+		}
+		if(errors > 0) {
+			CPPUNIT_FAIL(tokens);
 		}
 	}
 	return 0;
@@ -128,6 +136,8 @@ int extract(TiXmlDocument &xml, float *left, float *right, int size,
 		unsigned int &real, int &preset, const char *hashl, const char *hashr,
 		const char *ileft, const char *iright) {
 	TiXmlNode* element = 0;
+	int check = (xml.FirstChildElement("elements") != 0);
+	CPPUNIT_ASSERT_EQUAL(check,1);
 	const char *name = strdup(
 			xml.FirstChildElement("elements")->Attribute("effect"));
 	preset = atoi(xml.FirstChildElement("elements")->Attribute("preset"));
@@ -161,15 +171,15 @@ int extract(TiXmlDocument &xml, float *left, float *right, int size,
 /**
  * stress test basic
  */
-void YroEffectFactoryTest::testBasic() {
+void YroEffectFactoryTest::checkup(YroEffectPlugin *efx, const char *ctx,const char *buf) {
 	jack_default_audio_sample_t *left, *right;
 	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerPeriod();
 	left = new jack_default_audio_sample_t[nframes];
 	right = new jack_default_audio_sample_t[nframes];
 	int preset = 0;
 	TiXmlDocument xmlBuffer, xmlContextReference, xmlContext;
-	load(xmlBuffer, "src/tests/data/Distorsion-00000000-buffer.xml");
-	load(xmlContextReference, "src/tests/data/Distorsion-00000000-context.xml");
+	load(xmlBuffer, buf);
+	load(xmlContextReference, ctx);
 	unsigned int real = 0;
 	if (extract(xmlBuffer, left, right, nframes, real, preset, "hashil",
 			"hashir", "ileft", "iright")) {
@@ -177,8 +187,8 @@ void YroEffectFactoryTest::testBasic() {
 		float *oright = new jack_default_audio_sample_t[nframes];
 		float *oleftCheck = new jack_default_audio_sample_t[nframes];
 		float *orightCheck = new jack_default_audio_sample_t[nframes];
-		Distortion *efx = new std::Distortion();
-		efx->setPreset(4);
+		efx->setPreset(preset);
+		efx->cleanup();
 		efx->setOutLeft(oleft);
 		efx->setOutRight(oright);
 		efx->render(nframes, left, right);
@@ -190,16 +200,16 @@ void YroEffectFactoryTest::testBasic() {
 			 */
 			fprintf(stderr, "Checking contexts ...\n");
 			xmlContext.Parse(efx->toXml());
-			if (compareContexts(xmlContextReference, xmlContext) != 0) {
+			if (compareContexts(xmlContextReference, xmlContext, ctx) != 0) {
 				fprintf(stderr, "Contexts in errror ...\n");
 			}
 			fprintf(stderr, "Checking %d bytes ...\n", real);
 			int checkByteError = 0;
 			for (unsigned int i = 0; i < real; i++) {
 				char message[1024];
-				sprintf(message, "While checking index (left) %d", i);
+				sprintf(message, "While checking index (left) %d, espected %9.40f, result %9.40f, delta %9.40f", i, oleftCheck[i], oleft[i],oleftCheck[i] - oleft[i]);
 				CPPUNIT_ASSERT_EQUAL_MESSAGE(message, oleftCheck[i], oleft[i]);
-				sprintf(message, "While checking index (right) %d", i);
+				sprintf(message, "While checking index (right) %d, espected %9.40f, result %9.40f, delta %9.40f", i, orightCheck[i], oright[i], orightCheck[i] - oright[i]);
 				CPPUNIT_ASSERT_EQUAL_MESSAGE(message, orightCheck[i], oright[i]);
 			}
 			if (checkByteError == 0) {
@@ -212,63 +222,26 @@ void YroEffectFactoryTest::testBasic() {
 }
 
 void YroEffectFactoryTest::testDistortion() {
-	return;
-	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
-	factory->unload(0);
-	Distortion *eff = (Distortion *) factory->addEffect("distortion#2",
-			new Distortion());
+	YroEffectPlugin *efx = new std::Distortion();
+	checkup(efx, "src/tests/data/Distorsion-00000000-context.xml","src/tests/data/Distorsion-00000000-buffer.xml");
+	checkup(efx, "src/tests/data/Distorsion-00000001-context.xml","src/tests/data/Distorsion-00000001-buffer.xml");
+	checkup(efx, "src/tests/data/Distorsion-00000002-context.xml","src/tests/data/Distorsion-00000002-buffer.xml");
+	checkup(efx, "src/tests/data/Distorsion-00000003-context.xml","src/tests/data/Distorsion-00000003-buffer.xml");
+	checkup(efx, "src/tests/data/Distorsion-00000004-context.xml","src/tests/data/Distorsion-00000004-buffer.xml");
+	checkup(efx, "src/tests/data/Distorsion-00000005-context.xml","src/tests/data/Distorsion-00000005-buffer.xml");
+}
 
-	/**
-	 * wet/dry    : -64 ... not used in Distortion ?
-	 * L/R Cr.    : 0
-	 * Drive      : 127
-	 * Level      : 76
-	 * Type       : DynoFET
-	 * Neg        : true
-	 * Pre Filter : true
-	 * Stereo     : false
-	 * Pan        : 0
-	 * Sub Oct    : 0
-	 * LPF        : 2982
-	 * HPF        : 645
-	 */
-	eff->setPlrcross(0);
-	eff->setPdrive(127);
-	eff->setPlevel(76);
-	eff->setPtype(27);
-	eff->setPnegate(1);
-	eff->setPprefiltering(1);
-	eff->setPstereo(0);
-	eff->setPpanning(0);
-	eff->setPoctave(0);
-	eff->setPlpf(2982);
-	eff->setPhpf(645);
-
-	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
-
-	/**
-	 * first render simulation
-	 */
-	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerPeriod();
-	in1 = new jack_default_audio_sample_t[nframes];
-	in2 = new jack_default_audio_sample_t[nframes];
-	out1 = new jack_default_audio_sample_t[nframes];
-	out2 = new jack_default_audio_sample_t[nframes];
-
-	init(nframes, in1, in2);
-	init(nframes, out1, out2);
-
-	factory->render(in1, in2, out1, out2);
-
-	dump("in1:", nframes, in1);
-	dump("in2:", nframes, in2);
-	dump("out1:", nframes, out1);
-	dump("out2:", nframes, out2);
-
-	for (jack_nframes_t x = 0; x < nframes; x++) {
-		int c = (out1[x] != 0. && out2[x] != 0.);
-		CPPUNIT_ASSERT_EQUAL(1, c);
-	}
+void YroEffectFactoryTest::testEcho() {
+	YroEffectPlugin *efx = new std::Echo();
+	checkup(efx, "src/tests/data/Echo-00000000-context.xml","src/tests/data/Echo-00000000-buffer.xml");
+	checkup(efx, "src/tests/data/Echo-00000001-context.xml","src/tests/data/Echo-00000001-buffer.xml");
+	checkup(efx, "src/tests/data/Echo-00000002-context.xml","src/tests/data/Echo-00000002-buffer.xml");
+	checkup(efx, "src/tests/data/Echo-00000003-context.xml","src/tests/data/Echo-00000003-buffer.xml");
+	checkup(efx, "src/tests/data/Echo-00000004-context.xml","src/tests/data/Echo-00000004-buffer.xml");
+	checkup(efx, "src/tests/data/Echo-00000005-context.xml","src/tests/data/Echo-00000005-buffer.xml");
+	checkup(efx, "src/tests/data/Echo-00000006-context.xml","src/tests/data/Echo-00000006-buffer.xml");
+	checkup(efx, "src/tests/data/Echo-00000007-context.xml","src/tests/data/Echo-00000007-buffer.xml");
+	checkup(efx, "src/tests/data/Echo-00000008-context.xml","src/tests/data/Echo-00000008-buffer.xml");
 }
 
 void YroEffectFactoryTest::testChorus() {

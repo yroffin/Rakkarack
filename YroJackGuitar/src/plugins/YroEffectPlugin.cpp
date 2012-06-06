@@ -11,10 +11,11 @@ using namespace std;
 
 YroEffectPlugin::YroEffectPlugin(const char *_name) {
 	name = strdup(_name);
+	forcedCleanup = 0;
 	iPERIOD = helper->getIntegerPeriod();
 	iSAMPLE_RATE = helper->getIntegerSampleRate();
 	fPERIOD = helper->getFloatPeriod();
-	fSAMPLE_RATE = helper->getFloatPeriod();
+	fSAMPLE_RATE = helper->getFloatSampleRate();
 	cSAMPLE_RATE = 1.0f / fSAMPLE_RATE;
 	preset = 0;
 	audioSampleFactory = YroAudioSampleFactory::instance();
@@ -42,10 +43,11 @@ YroEffectPlugin::YroEffectPlugin(const char *_name, const char *_presets) {
 	/**
 	 * default initialization
 	 */
+	forcedCleanup = 0;
 	iPERIOD = helper->getIntegerPeriod();
 	iSAMPLE_RATE = helper->getIntegerSampleRate();
 	fPERIOD = helper->getFloatPeriod();
-	fSAMPLE_RATE = helper->getFloatPeriod();
+	fSAMPLE_RATE = helper->getFloatSampleRate();
 	cSAMPLE_RATE = 1.0f / fSAMPLE_RATE;
 	preset = 0;
 	setPreset(0);
@@ -59,7 +61,7 @@ YroEffectPlugin::~YroEffectPlugin() {
  * general setPReset method based
  * on getn member, be carefull about the declaration order
  */
-void YroEffectPlugin::setPreset(int _preset) {
+void YroEffectPlugin::setPreset(int _preset, int forceCleanup) {
  	if (_preset < presets->size()) {
  		int size = presets->get(_preset)->size();
  		for(int i=0;i<size;i++) {
@@ -70,7 +72,9 @@ void YroEffectPlugin::setPreset(int _preset) {
  			this->setInt(i+1, presets->get(_preset)->get(i));
  		}
  		preset = _preset;
- 		cleanup();
+ 		if(forceCleanup || forcedCleanup) {
+ 			cleanup();
+ 		}
  	}
 }
 

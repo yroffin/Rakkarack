@@ -23,7 +23,7 @@ namespace test {
 
 class YroEffectFactoryTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE( YroEffectFactoryTest );
-	CPPUNIT_TEST( testBasic );
+	CPPUNIT_TEST( testEcho );
 	CPPUNIT_TEST( testDistortion );
 	CPPUNIT_TEST( testChorus );
 	CPPUNIT_TEST( testYroScope );
@@ -34,7 +34,9 @@ public:
 	void setUp();
 	void tearDown();
 
-	void testBasic();
+	void checkup(std::YroEffectPlugin *efx, const char *ctx,const char *buf);
+
+	void testEcho();
 	void testDistortion();
 	void testChorus();
 	void testYroScope();

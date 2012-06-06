@@ -108,11 +108,20 @@ public:
 	virtual void render(float *inLeft, float *inRight) {
 		render(iPERIOD,inLeft,inRight);
 	}
-	virtual void setPreset(int npreset);
+	virtual void setPreset(int npreset, int forceCleanup = 0);
 	int getPreset() const {
 		return preset;
 	}
 
+	/**
+	 * internal debug
+	 */
+	void dumpStats(const char *where, float *l, float *r) {
+		LOG->debug("[STATS] %-16.16s : %9.40f, %9.40f\n",where,l[iPERIOD/2],r[iPERIOD/2]);
+	}
+	void dumpStats(const char *where) {
+		dumpStats(where,efxoutl,efxoutr);
+	}
 	/**
 	 * getter
 	 */
@@ -167,6 +176,7 @@ public:
 	virtual int  get18() {return 0;}; virtual void set18(int) {};
 	virtual int  get19() {return 0;}; virtual void set19(int) {};
 protected:
+    int forcedCleanup;
 	map<wxSpinCtrl *, int> mapSpinCtrlIndex;
 	map<int, wxSpinCtrl *>  mapIndexSpinCtrl;
 	map<wxChoice *, int> mapChoiceIndex;
