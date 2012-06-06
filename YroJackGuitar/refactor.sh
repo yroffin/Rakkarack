@@ -6,7 +6,6 @@ extractMember() {
 	FILECPP=$3
 	FILEHPP=$4
 
-	printf "Processing $4\n"
 	[ ! -f $FILEHPP ] && {
 		exit 1
 	}
@@ -37,9 +36,9 @@ extractMember() {
 for effect in $*
 do
 	export effect
-	export FILESED=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.sed
-	export FILECPP=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.cpp
-	export FILEHPP=~/git/Rakkarack/YroJackGuitar/src/plugins/effect/$effect.h
+	export FILESED=~/git/Rakkarack/YroJackGuitar/src/$effect.sed
+	export FILECPP=~/git/Rakkarack/YroJackGuitar/src/$effect.C
+	export FILEHPP=~/git/Rakkarack/YroJackGuitar/src/$effect.h
 	extractMember $effect $FILESED $FILECPP $FILEHPP >> $FILECPP
 done
 exit 0
