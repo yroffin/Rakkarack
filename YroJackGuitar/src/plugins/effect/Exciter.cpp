@@ -114,3 +114,24 @@ int Exciter::getHar(int sel) {
 		return 0;
 	return Prm[sel];
 }
+/**
+ * toXml member
+*/
+const char *Exciter::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"hpffreq",hpffreq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"lpffreq",lpffreq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Prm[10]",Prm[10]);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rm[10]",rm[10]);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

@@ -1,5 +1,5 @@
 /*
- 
+
  CompBand.h - 4 Bands Compressor
 
  Using Compressor and AnalogFilters by other authors.
@@ -44,87 +44,144 @@ public:
 	~CompBand();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	void cleanup();
+	const char *toXml();
 
 	/**
-	* member declaration
-	*/
-	enum functions {
-	_preset
-	, _volume
-	, _plratio
-	, _pmlratio
-	, _pmhratio
-	, _phratio
-	, _plthreshold
-	, _pmlthreshold
-	, _pmhthreshold
-	, _phthreshold
-	, _cross1
-	, _cross2
-	, _cross3
-	, _level
+	 * member declaration
+	 */
+enum functions {
+		_preset,
+		_volume,
+		_plratio,
+		_pmlratio,
+		_pmhratio,
+		_phratio,
+		_plthreshold,
+		_pmlthreshold,
+		_pmhthreshold,
+		_phthreshold,
+		_cross1,
+		_cross2,
+		_cross3,
+		_level
 	};
 
 	/**
-	* setter and getter map
-	*/
-	int  get0() {return getPreset();}
-	void set0(int value) {setPreset(value);}
-	int  get1() {return getVolume();}
-	void set1(int value) {setVolume(value);}
-	int  get2() {return getLratio();}
-	void set2(int value) {setLratio(value);}
-	int  get3() {return getMLratio();}
-	void set3(int value) {setMLratio(value);}
-	int  get4() {return getMHratio();}
-	void set4(int value) {setMHratio(value);}
-	int  get5() {return getHratio();}
-	void set5(int value) {setHratio(value);}
-	int  get6() {return getLthreshold();}
-	void set6(int value) {setLthreshold(value);}
-	int  get7() {return getMLthreshold();}
-	void set7(int value) {setMLthreshold(value);}
-	int  get8() {return getMHthreshold();}
-	void set8(int value) {setMHthreshold(value);}
-	int  get9() {return getHthreshold();}
-	void set9(int value) {setHthreshold(value);}
-	int  get10() {return getCross1();}
-	void set10(int value) {setCross1(value);}
-	int  get11() {return getCross2();}
-	void set11(int value) {setCross2(value);}
-	int  get12() {return getCross3();}
-	void set12(int value) {setCross3(value);}
-	int  get13() {return getLevel();}
-	void set13(int value) {setLevel(value);}
+	 * setter and getter map
+	 */
+	int get0() {
+		return getPreset();
+	}
+	void set0(int value) {
+		setPreset(value);
+	}
+	int get1() {
+		return getVolume();
+	}
+	void set1(int value) {
+		setVolume(value);
+	}
+	int get2() {
+		return getLratio();
+	}
+	void set2(int value) {
+		setLratio(value);
+	}
+	int get3() {
+		return getMLratio();
+	}
+	void set3(int value) {
+		setMLratio(value);
+	}
+	int get4() {
+		return getMHratio();
+	}
+	void set4(int value) {
+		setMHratio(value);
+	}
+	int get5() {
+		return getHratio();
+	}
+	void set5(int value) {
+		setHratio(value);
+	}
+	int get6() {
+		return getLthreshold();
+	}
+	void set6(int value) {
+		setLthreshold(value);
+	}
+	int get7() {
+		return getMLthreshold();
+	}
+	void set7(int value) {
+		setMLthreshold(value);
+	}
+	int get8() {
+		return getMHthreshold();
+	}
+	void set8(int value) {
+		setMHthreshold(value);
+	}
+	int get9() {
+		return getHthreshold();
+	}
+	void set9(int value) {
+		setHthreshold(value);
+	}
+	int get10() {
+		return getCross1();
+	}
+	void set10(int value) {
+		setCross1(value);
+	}
+	int get11() {
+		return getCross2();
+	}
+	void set11(int value) {
+		setCross2(value);
+	}
+	int get12() {
+		return getCross3();
+	}
+	void set12(int value) {
+		setCross3(value);
+	}
+	int get13() {
+		return getLevel();
+	}
+	void set13(int value) {
+		setLevel(value);
+	}
 
 	/**
-	* setter and getter
-	*/
-	int  getVolume();
+	 * setter and getter
+	 */
+	int getVolume();
 	void setVolume(int value);
-	int  getLratio();
+	int getLratio();
 	void setLratio(int value);
-	int  getMLratio();
+	int getMLratio();
 	void setMLratio(int value);
-	int  getMHratio();
+	int getMHratio();
 	void setMHratio(int value);
-	int  getHratio();
+	int getHratio();
 	void setHratio(int value);
-	int  getLthreshold();
+	int getLthreshold();
 	void setLthreshold(int value);
-	int  getMLthreshold();
+	int getMLthreshold();
 	void setMLthreshold(int value);
-	int  getMHthreshold();
+	int getMHthreshold();
 	void setMHthreshold(int value);
-	int  getHthreshold();
+	int getHthreshold();
 	void setHthreshold(int value);
-	int  getCross1();
+	int getCross1();
 	void setCross1(int value);
-	int  getCross2();
+	int getCross2();
 	void setCross2(int value);
-	int  getCross3();
+	int getCross3();
 	void setCross3(int value);
-	int  getLevel();
+	int getLevel();
 	void setLevel(int value);
 
 private:
@@ -159,7 +216,7 @@ private:
 	int Cross2;
 	int Cross3;
 
-	//Parametrii reali
+//Parametrii reali
 
 	AnalogFilter *lpf1l, *lpf1r, *hpf1l, *hpf1r;
 	AnalogFilter *lpf2l, *lpf2r, *hpf2l, *hpf2r;

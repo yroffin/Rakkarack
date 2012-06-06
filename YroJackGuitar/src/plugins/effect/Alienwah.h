@@ -1,6 +1,6 @@
 /*
  ZynAddSubFX - a software synthesizer
- 
+
  Alienwah.h - "AlienWah" effect
  Copyright (C) 2002-2005 Nasca Octavian Paul
  Author: Nasca Octavian Paul
@@ -41,7 +41,7 @@ public:
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_volume,
 		_panning,
@@ -157,6 +157,7 @@ public:
 	;
 
 	void cleanup();
+	const char *toXml();
 
 private:
 	float outvolume;
@@ -165,7 +166,7 @@ private:
 		float a, b;
 	};
 
-	//Parametrii Alienwah
+//Parametrii Alienwah
 	YroLowfrequencyOscillation lfo; //lfo-ul Alienwah
 	int Pvolume;
 	int Ppanning;
@@ -205,7 +206,7 @@ private:
 	void setLfoPrandomness(int);
 	void setLfoPfreq(int);
 
-	//Valorile interne
+//Valorile interne
 	float panning, fb, depth, lrcross, phase;
 	struct COMPLEXTYPE oldl[MAX_ALIENWAH_DELAY], oldr[MAX_ALIENWAH_DELAY];
 	COMPLEXTYPE oldclfol, oldclfor;

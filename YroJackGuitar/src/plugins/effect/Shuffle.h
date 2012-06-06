@@ -1,5 +1,5 @@
 /*
- 
+
  Shuffle.h - Stereo Shuffle
 
  Copyright (C) 2002-2005 Nasca Octavian Paul
@@ -40,11 +40,12 @@ public:
 	~Shuffle();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_volume,
 		_GainL,
@@ -166,7 +167,7 @@ private:
 	float *inputr;
 	float outvolume;
 
-	//Parametrii
+//Parametrii
 	int Pvolume; //Volumul or E/R
 	int PvolL;
 	int PvolML;
@@ -180,7 +181,7 @@ private:
 	int Cross3;
 	int Cross4;
 
-	//Parametrii reali
+//Parametrii reali
 	float tmp;
 	float volL, volML, volMH, volH;
 	AnalogFilter *lr, *hr;

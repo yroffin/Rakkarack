@@ -374,3 +374,74 @@ int  Convolotron::getHidamp() {return Phidamp;}
 int  Convolotron::getLevel() {return Plevel;}
 int  Convolotron::getUser() {return Puser;}
 int  Convolotron::getFb() {return Pfb;}
+/**
+ * toXml member
+*/
+const char *Convolotron::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"DS_state",DS_state);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Filenum",Filenum);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"maxx_size",maxx_size);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"maxx_read",maxx_read);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"real_len",real_len);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"length",length);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nPERIOD",nPERIOD);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nSAMPLE_RATE",nSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"offset",offset);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfb",Pfb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phidamp",Phidamp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plength",Plength);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plevel",Plevel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Psafe",Psafe);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Puser",Puser);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"level",level);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fb",fb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"feedback",feedback);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"levpanl",levpanl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"levpanr",levpanr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lpanning",lpanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rpanning",rpanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"hidamp",hidamp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"alpha_hidamp",alpha_hidamp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"convlength",convlength);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldl",oldl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"nfSAMPLE_RATE",nfSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

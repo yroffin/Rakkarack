@@ -212,3 +212,44 @@ void Alienwah::setLfoPrandomness(int value) {
 void Alienwah::setLfoPfreq(int value) {
 	lfo.setPfreq(value);
 }
+/**
+ * toXml member
+*/
+const char *Alienwah::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"oldk",oldk);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"oldpdelay",oldpdelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdelay",Pdelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdepth",Pdepth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfb",Pfb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pphase",Pphase);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fb",fb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"depth",depth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lrcross",lrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"phase",phase);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

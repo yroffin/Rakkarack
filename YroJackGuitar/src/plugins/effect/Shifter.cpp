@@ -322,3 +322,72 @@ int Shifter::getMode() {
 int Shifter::getWhammy() {
 	return Pwhammy;
 }
+/**
+ * toXml member
+*/
+const char *Shifter::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"DS_state",DS_state);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"hq",hq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nPERIOD",nPERIOD);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nSAMPLE_RATE",nSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pattack",Pattack);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdecay",Pdecay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pgain",Pgain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pinterval",Pinterval);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pmode",Pmode);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppan",Ppan);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pthreshold",Pthreshold);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pupdown",Pupdown);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pwhammy",Pwhammy);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"state",state);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"a_rate",a_rate);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"d_rate",d_rate);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"tune",tune);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"range",range);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"whammy",whammy);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"env",env);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"t_level",t_level);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"td_level",td_level);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"tz_level",tz_level);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gain",gain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"interval",interval);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"nfSAMPLE_RATE",nfSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

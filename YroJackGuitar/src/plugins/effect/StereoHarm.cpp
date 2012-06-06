@@ -371,3 +371,66 @@ int StereoHarm::getLrcross() {
 	return Plrcross;
 }
 
+/**
+ * toXml member
+*/
+const char *StereoHarm::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"DS_state",DS_state);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"hq",hq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"mira",mira);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nPERIOD",nPERIOD);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nSAMPLE_RATE",nSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pchromel",Pchromel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pchromer",Pchromer);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pgainl",Pgainl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pgainr",Pgainr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pintervall",Pintervall);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pintervalr",Pintervalr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PMIDI",PMIDI);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pnote",Pnote);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PSELECT",PSELECT);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ptype",Ptype);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"chromel",chromel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"chromer",chromer);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gainl",gainl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gainr",gainr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"intervall",intervall);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"intervalr",intervalr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lrcross",lrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"nfSAMPLE_RATE",nfSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

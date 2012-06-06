@@ -4,7 +4,7 @@
  Sustainer.h - Simple compressor/sustainer effect with easy interface, minimal controls
  Copyright (C) 2010 Ryan Billing
  Author: Ryan Billing
- 
+
  This program is free software; you can redistribute it and/or modify
  it under the terms of version 3 of the GNU General Public License
  as published by the Free Software Foundation.
@@ -34,6 +34,7 @@ public:
 	Sustainer();
 	~Sustainer();
 	void cleanup();
+	const char *toXml();
 
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 
@@ -74,7 +75,7 @@ public:
 	int getSustain();
 	void setSustain(int value);
 private:
-	//Parametrii
+//Parametrii
 	int Pvolume; //Output Level
 	int Psustain; //Compression amount
 

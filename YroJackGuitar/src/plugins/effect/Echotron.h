@@ -31,7 +31,6 @@
 
 #define  ECHOTRON_F_SIZE   128       //Allow up to 150 points in the file
 #define  ECHOTRON_MAXFILTERS  32      //filters available
-
 namespace std {
 
 class Echotron: public YroEffectPlugin {
@@ -40,102 +39,171 @@ public:
 	~Echotron();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	void cleanup();
+	const char *toXml();
 
 	/**
-	* member declaration
-	*/
-	enum functions {
-	_preset
-	, _volume
-	, _depth
-	, _width
-	, _length
-	, _user
-	, _tempo
-	, _hidamp
-	, _lrcross
-	, _file
-	, _lfostereo
-	, _fb
-	, _panning
-	, _moddly
-	, _modfilts
-	, _lfotype
-	, _filters
+	 * member declaration
+	 */
+enum functions {
+		_preset,
+		_volume,
+		_depth,
+		_width,
+		_length,
+		_user,
+		_tempo,
+		_hidamp,
+		_lrcross,
+		_file,
+		_lfostereo,
+		_fb,
+		_panning,
+		_moddly,
+		_modfilts,
+		_lfotype,
+		_filters
 	};
 
 	/**
-	* setter and getter map
-	*/
-	int  get0() {return getPreset();}
-	void set0(int value) {setPreset(value);}
-	int  get1() {return getVolume();}
-	void set1(int value) {setVolume(value);}
-	int  get2() {return getDepth();}
-	void set2(int value) {setDepth(value);}
-	int  get3() {return getWidth();}
-	void set3(int value) {setWidth(value);}
-	int  get4() {return getLength();}
-	void set4(int value) {setLength(value);}
-	int  get5() {return getUser();}
-	void set5(int value) {setUser(value);}
-	int  get6() {return getTempo();}
-	void set6(int value) {setTempo(value);}
-	int  get7() {return getHidamp();}
-	void set7(int value) {setHidamp(value);}
-	int  get8() {return getLrcross();}
-	void set8(int value) {setLrcross(value);}
-	int  get9() {return getFile();}
-	void set9(int value) {setFile(value);}
-	int  get10() {return getLfoStereo();}
-	void set10(int value) {setLfoStereo(value);}
-	int  get11() {return getFb();}
-	void set11(int value) {setFb(value);}
-	int  get12() {return getPanning();}
-	void set12(int value) {setPanning(value);}
-	int  get13() {return getModdly();}
-	void set13(int value) {setModdly(value);}
-	int  get14() {return getModfilts();}
-	void set14(int value) {setModfilts(value);}
-	int  get15() {return getLfoType();}
-	void set15(int value) {setLfoType(value);}
-	int  get16() {return getFilters();}
-	void set16(int value) {setFilters(value);}
+	 * setter and getter map
+	 */
+	int get0() {
+		return getPreset();
+	}
+	void set0(int value) {
+		setPreset(value);
+	}
+	int get1() {
+		return getVolume();
+	}
+	void set1(int value) {
+		setVolume(value);
+	}
+	int get2() {
+		return getDepth();
+	}
+	void set2(int value) {
+		setDepth(value);
+	}
+	int get3() {
+		return getWidth();
+	}
+	void set3(int value) {
+		setWidth(value);
+	}
+	int get4() {
+		return getLength();
+	}
+	void set4(int value) {
+		setLength(value);
+	}
+	int get5() {
+		return getUser();
+	}
+	void set5(int value) {
+		setUser(value);
+	}
+	int get6() {
+		return getTempo();
+	}
+	void set6(int value) {
+		setTempo(value);
+	}
+	int get7() {
+		return getHidamp();
+	}
+	void set7(int value) {
+		setHidamp(value);
+	}
+	int get8() {
+		return getLrcross();
+	}
+	void set8(int value) {
+		setLrcross(value);
+	}
+	int get9() {
+		return getFile();
+	}
+	void set9(int value) {
+		setFile(value);
+	}
+	int get10() {
+		return getLfoStereo();
+	}
+	void set10(int value) {
+		setLfoStereo(value);
+	}
+	int get11() {
+		return getFb();
+	}
+	void set11(int value) {
+		setFb(value);
+	}
+	int get12() {
+		return getPanning();
+	}
+	void set12(int value) {
+		setPanning(value);
+	}
+	int get13() {
+		return getModdly();
+	}
+	void set13(int value) {
+		setModdly(value);
+	}
+	int get14() {
+		return getModfilts();
+	}
+	void set14(int value) {
+		setModfilts(value);
+	}
+	int get15() {
+		return getLfoType();
+	}
+	void set15(int value) {
+		setLfoType(value);
+	}
+	int get16() {
+		return getFilters();
+	}
+	void set16(int value) {
+		setFilters(value);
+	}
 
 	/**
-	* setter and getter
-	*/
-	int  getVolume();
+	 * setter and getter
+	 */
+	int getVolume();
 	void setVolume(int value);
-	int  getDepth();
+	int getDepth();
 	void setDepth(int value);
-	int  getWidth();
+	int getWidth();
 	void setWidth(int value);
-	int  getLength();
+	int getLength();
 	void setLength(int value);
-	int  getUser();
+	int getUser();
 	void setUser(int value);
-	int  getTempo();
+	int getTempo();
 	void setTempo(int value);
-	int  getHidamp();
+	int getHidamp();
 	void setHidamp(int value);
-	int  getLrcross();
+	int getLrcross();
 	void setLrcross(int value);
-	int  getFile();
+	int getFile();
 	void setFile(int value);
-	int  getLfoStereo();
+	int getLfoStereo();
 	void setLfoStereo(int value);
-	int  getFb();
+	int getFb();
 	void setFb(int value);
-	int  getPanning();
+	int getPanning();
 	void setPanning(int value);
-	int  getModdly();
+	int getModdly();
 	void setModdly(int value);
-	int  getModfilts();
+	int getModfilts();
 	void setModfilts(int value);
-	int  getLfoType();
+	int getLfoType();
 	void setLfoType(int value);
-	int  getFilters();
+	int getFilters();
 	void setFilters(int value);
 
 private:
@@ -146,7 +214,7 @@ private:
 	void modulate_filters();
 	void loaddefault();
 
-	//User input parameters
+//User input parameters
 	YroLowfrequencyOscillation lfo;
 	YroLowfrequencyOscillation dlfo;
 	int Pvolume; //This is master wet/dry mix like other FX...but I am finding it is not useful
@@ -168,7 +236,7 @@ private:
 	int offset;
 	int maxx_size;
 
-	//arrays of parameters from text file:
+//arrays of parameters from text file:
 	float fPan[ECHOTRON_F_SIZE]; //1+Pan from text file
 	float fTime[ECHOTRON_F_SIZE];
 	float fLevel[ECHOTRON_F_SIZE];

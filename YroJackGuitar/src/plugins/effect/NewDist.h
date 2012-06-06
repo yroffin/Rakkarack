@@ -1,6 +1,6 @@
 /*
  ZynAddSubFX - a software synthesizer
- 
+
  Distorsion.h - Distorsion Effect
  Copyright (C) 2002-2005 Nasca Octavian Paul
  Author: Nasca Octavian Paul
@@ -39,83 +39,136 @@ public:
 	~NewDist();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	void cleanup();
+	const char *toXml();
 	void applyfilters(float * efxoutl, float * efxoutr);
 
 	/**
-	* member declaration
-	*/
-	enum functions {
-	_preset
-	, _volume
-	, _panning
-	, _lrcross
-	, _drive
-	, _level
-	, _type
-	, _negate
-	, _lpf
-	, _hpf
-	, _rfreq
-	, _prefiltering
-	, _octave
+	 * member declaration
+	 */
+enum functions {
+		_preset,
+		_volume,
+		_panning,
+		_lrcross,
+		_drive,
+		_level,
+		_type,
+		_negate,
+		_lpf,
+		_hpf,
+		_rfreq,
+		_prefiltering,
+		_octave
 	};
 
 	/**
-	* setter and getter map
-	*/
-	int  get0() {return getPreset();}
-	void set0(int value) {setPreset(value);}
-	int  get1() {return getVolume();}
-	void set1(int value) {setVolume(value);}
-	int  get2() {return getPanning();}
-	void set2(int value) {setPanning(value);}
-	int  get3() {return getLrcross();}
-	void set3(int value) {setLrcross(value);}
-	int  get4() {return getDrive();}
-	void set4(int value) {setDrive(value);}
-	int  get5() {return getLevel();}
-	void set5(int value) {setLevel(value);}
-	int  get6() {return getType();}
-	void set6(int value) {setType(value);}
-	int  get7() {return getNegate();}
-	void set7(int value) {setNegate(value);}
-	int  get8() {return getLpf();}
-	void set8(int value) {setLpf(value);}
-	int  get9() {return getHpf();}
-	void set9(int value) {setHpf(value);}
-	int  get10() {return getRfreq();}
-	void set10(int value) {setRfreq(value);}
-	int  get11() {return getPrefiltering();}
-	void set11(int value) {setPrefiltering(value);}
-	int  get12() {return getOctave();}
-	void set12(int value) {setOctave(value);}
+	 * setter and getter map
+	 */
+	int get0() {
+		return getPreset();
+	}
+	void set0(int value) {
+		setPreset(value);
+	}
+	int get1() {
+		return getVolume();
+	}
+	void set1(int value) {
+		setVolume(value);
+	}
+	int get2() {
+		return getPanning();
+	}
+	void set2(int value) {
+		setPanning(value);
+	}
+	int get3() {
+		return getLrcross();
+	}
+	void set3(int value) {
+		setLrcross(value);
+	}
+	int get4() {
+		return getDrive();
+	}
+	void set4(int value) {
+		setDrive(value);
+	}
+	int get5() {
+		return getLevel();
+	}
+	void set5(int value) {
+		setLevel(value);
+	}
+	int get6() {
+		return getType();
+	}
+	void set6(int value) {
+		setType(value);
+	}
+	int get7() {
+		return getNegate();
+	}
+	void set7(int value) {
+		setNegate(value);
+	}
+	int get8() {
+		return getLpf();
+	}
+	void set8(int value) {
+		setLpf(value);
+	}
+	int get9() {
+		return getHpf();
+	}
+	void set9(int value) {
+		setHpf(value);
+	}
+	int get10() {
+		return getRfreq();
+	}
+	void set10(int value) {
+		setRfreq(value);
+	}
+	int get11() {
+		return getPrefiltering();
+	}
+	void set11(int value) {
+		setPrefiltering(value);
+	}
+	int get12() {
+		return getOctave();
+	}
+	void set12(int value) {
+		setOctave(value);
+	}
 
 	/**
-	* setter and getter
-	*/
-	int  getVolume();
+	 * setter and getter
+	 */
+	int getVolume();
 	void setVolume(int value);
-	int  getPanning();
+	int getPanning();
 	void setPanning(int value);
-	int  getLrcross();
+	int getLrcross();
 	void setLrcross(int value);
-	int  getDrive();
+	int getDrive();
 	void setDrive(int value);
-	int  getLevel();
+	int getLevel();
 	void setLevel(int value);
-	int  getType();
+	int getType();
 	void setType(int value);
-	int  getNegate();
+	int getNegate();
 	void setNegate(int value);
-	int  getLpf();
+	int getLpf();
 	void setLpf(int value);
-	int  getHpf();
+	int getHpf();
 	void setHpf(int value);
-	int  getRfreq();
+	int getRfreq();
 	void setRfreq(int value);
-	int  getPrefiltering();
+	int getPrefiltering();
 	void setPrefiltering(int value);
-	int  getOctave();
+	int getOctave();
 	void setOctave(int value);
 
 private:
@@ -143,7 +196,7 @@ private:
 			octmix;
 	float *octoutl, *octoutr;
 
-	//Parametrii reali
+//Parametrii reali
 	AnalogFilter *lpfl, *lpfr, *hpfl, *hpfr, *blockDCl, *blockDCr, *DCl, *DCr;
 	WaveShaper *wshapel, *wshaper;
 

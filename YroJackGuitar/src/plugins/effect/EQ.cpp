@@ -173,3 +173,28 @@ float EQ::getfreqresponse(float freq) {
 	};
 	return (rap2dB (resp * outvolume));
 }
+/**
+ * toXml member
+*/
+const char *EQ::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatdi[] = {"<attribute name=\"%s\" value=\"%d\" instance=\"%d\" />"};
+        strcpy(_toXml,"<attributes>");
+        for(int i=0;i<MAX_EQ_BANDS;i++) {
+			sprintf(_buffer,_formatdi,"Ptype",filter[i].Ptype,i);
+			strcat(_toXml,_buffer);
+			sprintf(_buffer,_formatdi,"Pfreq",filter[i].Pfreq,i);
+			strcat(_toXml,_buffer);
+			sprintf(_buffer,_formatdi,"Pgain",filter[i].Pgain,i);
+			strcat(_toXml,_buffer);
+			sprintf(_buffer,_formatdi,"Pq",filter[i].Pq,i);
+			strcat(_toXml,_buffer);
+			sprintf(_buffer,_formatdi,"Pstages",filter[i].Pstages,i);
+			strcat(_toXml,_buffer);
+        }
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

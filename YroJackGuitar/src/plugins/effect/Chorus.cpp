@@ -205,7 +205,6 @@ int Chorus::getPlrcross() {
 	return Plrcross;
 }
 
-
 void Chorus::setPdepth(int Pdepth) {
 	this->Pdepth = Pdepth;
 	depth = (powf(8.0f, ((float) Pdepth / 127.0f) * 2.0f) - 1.0f) / 1000.0f; //seconds
@@ -242,3 +241,64 @@ void Chorus::setPlrcross(int Plrcross) {
 	onChange(_lrcross);
 }
 
+/**
+ * toXml member
+*/
+const char *Chorus::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"dlk",dlk);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"drk",drk);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"dlhi",dlhi);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"dlhi2",dlhi2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"maxdelay",maxdelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfb",Pfb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pflangemode",Pflangemode);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Poutsub",Poutsub);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"depth",depth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"delay",delay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fb",fb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lrcross",lrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dl1",dl1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dl2",dl2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dr1",dr1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dr2",dr2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lfol",lfol);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lfor",lfor);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dllo",dllo);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"mdel",mdel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

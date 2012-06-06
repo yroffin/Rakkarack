@@ -1,6 +1,6 @@
 /*
  ZynAddSubFX - a software synthesizer
- 
+
  EQ.h - EQ Effect
  Copyright (C) 2002-2005 Nasca Octavian Paul
  Author: Nasca Octavian Paul
@@ -38,11 +38,12 @@ public:
 	~EQ();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_volume,
 		_type0,
@@ -155,9 +156,9 @@ private:
 
 	int Pvolume; //Volumul
 	struct {
-		//parameters
+//parameters
 		int Ptype, Pfreq, Pgain, Pq, Pstages;
-		//internal values
+//internal values
 		AnalogFilter *l, *r;
 	} filter[MAX_EQ_BANDS];
 

@@ -370,3 +370,72 @@ int  Valve::getQq() {return Q_q;}
 int  Valve::getEd() {return Ped;}
 int  Valve::getPresence() {return Presence;}
 
+/**
+ * toXml member
+*/
+const char *Valve::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Pdrive",Pdrive);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ped",Ped);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phpf",Phpf);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plevel",Plevel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plpf",Plpf);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pnegate",Pnegate);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pprefiltering",Pprefiltering);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Presence",Presence);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pstereo",Pstereo);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Q_q",Q_q);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"coef",coef);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fdist",fdist);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"inputvol",inputvol);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lrcross",lrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"q",q);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dist",dist);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"otml",otml);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"otmr",otmr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"itml",itml);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"itmr",itmr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"factor",factor);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"atk",atk);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"qcoef",qcoef);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rm[10]",rm[10]);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

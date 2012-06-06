@@ -36,75 +36,116 @@ public:
 	~Convolotron();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	void cleanup();
+	const char *toXml();
 	void adjust(int DS);
 	void loaddefault();
 
 	/**
-	* member declaration
-	*/
-	enum functions {
-	_preset
-	, _volume
-	, _panning
-	, _safe
-	, _length
-	, _file
-	, _hidamp
-	, _level
-	, _user
-	, _fb
+	 * member declaration
+	 */
+enum functions {
+		_preset,
+		_volume,
+		_panning,
+		_safe,
+		_length,
+		_file,
+		_hidamp,
+		_level,
+		_user,
+		_fb
 	};
 
 	/**
-	* setter and getter map
-	*/
-	int  get0() {return getPreset();}
-	void set0(int value) {setPreset(value);}
-	int  get1() {return getVolume();}
-	void set1(int value) {setVolume(value);}
-	int  get2() {return getPanning();}
-	void set2(int value) {setPanning(value);}
-	int  get3() {return getSafe();}
-	void set3(int value) {setSafe(value);}
-	int  get4() {return getLength();}
-	void set4(int value) {setLength(value);}
-	int  get5() {return getFile();}
-	void set5(int value) {setFile(value);}
-	int  get6() {return getHidamp();}
-	void set6(int value) {setHidamp(value);}
-	int  get7() {return getLevel();}
-	void set7(int value) {setLevel(value);}
-	int  get8() {return getUser();}
-	void set8(int value) {setUser(value);}
-	int  get9() {return getFb();}
-	void set9(int value) {setFb(value);}
+	 * setter and getter map
+	 */
+	int get0() {
+		return getPreset();
+	}
+	void set0(int value) {
+		setPreset(value);
+	}
+	int get1() {
+		return getVolume();
+	}
+	void set1(int value) {
+		setVolume(value);
+	}
+	int get2() {
+		return getPanning();
+	}
+	void set2(int value) {
+		setPanning(value);
+	}
+	int get3() {
+		return getSafe();
+	}
+	void set3(int value) {
+		setSafe(value);
+	}
+	int get4() {
+		return getLength();
+	}
+	void set4(int value) {
+		setLength(value);
+	}
+	int get5() {
+		return getFile();
+	}
+	void set5(int value) {
+		setFile(value);
+	}
+	int get6() {
+		return getHidamp();
+	}
+	void set6(int value) {
+		setHidamp(value);
+	}
+	int get7() {
+		return getLevel();
+	}
+	void set7(int value) {
+		setLevel(value);
+	}
+	int get8() {
+		return getUser();
+	}
+	void set8(int value) {
+		setUser(value);
+	}
+	int get9() {
+		return getFb();
+	}
+	void set9(int value) {
+		setFb(value);
+	}
 
 	/**
-	* setter and getter
-	*/
-	int  getVolume();
+	 * setter and getter
+	 */
+	int getVolume();
 	void setVolume(int value);
-	int  getPanning();
+	int getPanning();
 	void setPanning(int value);
-	int  getSafe();
+	int getSafe();
 	void setSafe(int value);
-	int  getLength();
+	int getLength();
 	void setLength(int value);
-	int  getFile();
+	int getFile();
 	void setFile(int value);
-	int  getHidamp();
+	int getHidamp();
 	void setHidamp(int value);
-	int  getLevel();
+	int getLevel();
 	void setLevel(int value);
-	int  getUser();
+	int getUser();
 	void setUser(int value);
-	int  getFb();
+	int getFb();
 	void setFb(int value);
 
 	char Filename[128];
 
 private:
-	//Parametrii
+//Parametrii
 	int Pvolume; //This is master wet/dry mix like other FX...but I am finding it is not useful
 	int Ppanning; //Panning
 	int Plrcross; // L/R Mixing  // This is a mono effect, so lrcross and panning are pointless
@@ -140,7 +181,7 @@ private:
 	SNDFILE *infile;
 	SF_INFO sfinfo;
 
-	//Parametrii reali
+//Parametrii reali
 
 	class Resample *M_Resample;
 	class Resample *U_Resample;

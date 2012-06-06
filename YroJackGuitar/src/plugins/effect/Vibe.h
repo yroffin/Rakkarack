@@ -41,11 +41,12 @@ public:
 
 	void render(jack_nframes_t nframes, float * smpsl, float * smpsr);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_width,
 		_LfoPfreq,
@@ -182,7 +183,7 @@ private:
 	public:
 		float x1;
 		float y1;
-		//filter coefficients
+//filter coefficients
 		float n0;
 		float n1;
 		float d0;

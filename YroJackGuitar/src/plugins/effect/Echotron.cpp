@@ -516,19 +516,152 @@ void Echotron::setFilters(int value) {
 	Pfilters = value; //Pfilters
 }
 
-int  Echotron::getVolume() {return Pvolume;}
-int  Echotron::getDepth() {return Pdepth;}
-int  Echotron::getWidth() {return Pwidth;}
-int  Echotron::getLength() {return Plength;}
-int  Echotron::getUser() {return Puser;}
-int  Echotron::getTempo() {return Ptempo;}
-int  Echotron::getHidamp() {return Phidamp;}
-int  Echotron::getLrcross() {return Plrcross;}
-int  Echotron::getFile() {return 0; /** TODO PFILE */}
-int  Echotron::getLfoStereo() {return lfo.getPstereo();}
-int  Echotron::getFb() {return Pfb;}
-int  Echotron::getPanning() {return Ppanning;}
-int  Echotron::getModdly() {return Pmoddly;}
-int  Echotron::getModfilts() {return Pmodfilts;}
-int  Echotron::getLfoType() {return lfo.getPlfOtype();}
-int  Echotron::getFilters() {return Pfilters;}
+int Echotron::getVolume() {
+	return Pvolume;
+}
+int Echotron::getDepth() {
+	return Pdepth;
+}
+int Echotron::getWidth() {
+	return Pwidth;
+}
+int Echotron::getLength() {
+	return Plength;
+}
+int Echotron::getUser() {
+	return Puser;
+}
+int Echotron::getTempo() {
+	return Ptempo;
+}
+int Echotron::getHidamp() {
+	return Phidamp;
+}
+int Echotron::getLrcross() {
+	return Plrcross;
+}
+int Echotron::getFile() {
+	return 0; /** TODO PFILE */
+}
+int Echotron::getLfoStereo() {
+	return lfo.getPstereo();
+}
+int Echotron::getFb() {
+	return Pfb;
+}
+int Echotron::getPanning() {
+	return Ppanning;
+}
+int Echotron::getModdly() {
+	return Pmoddly;
+}
+int Echotron::getModfilts() {
+	return Pmodfilts;
+}
+int Echotron::getLfoType() {
+	return lfo.getPlfOtype();
+}
+int Echotron::getFilters() {
+	return Pfilters;
+}
+/**
+ * toXml member
+ */
+const char *Echotron::toXml() {
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "Filenum", Filenum);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "f_qmode", f_qmode);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "initparams", initparams);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "maxx_size", maxx_size);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "offset", offset);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pchange", Pchange);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pdepth", Pdepth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pfb", Pfb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pfilters", Pfilters);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Phidamp", Phidamp);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plength", Plength);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrcross", Plrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pmoddly", Pmoddly);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pmodfilts", Pmodfilts);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pstdiff", Pstdiff);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ptempo", Ptempo);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Puser", Puser);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pwidth", Pwidth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dlyrange", dlyrange);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ldmod", ldmod);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rdmod", rdmod);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldldmod", oldldmod);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldrdmod", oldrdmod);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "interpl", interpl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "interpr", interpr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "level", level);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fb", fb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rfeedback", rfeedback);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lfeedback", lfeedback);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "levpanl", levpanl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "levpanr", levpanr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lrcross", lrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ilrcross", ilrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lpanning", lpanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rpanning", rpanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "hidamp", hidamp);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "alpha_hidamp", alpha_hidamp);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "convlength", convlength);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "subdiv_dmod", subdiv_dmod);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "subdiv_fmod", subdiv_fmod);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "tempo_coeff", tempo_coeff);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "width", width);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "depth", depth);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
+}

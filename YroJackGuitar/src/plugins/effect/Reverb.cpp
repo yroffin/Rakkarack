@@ -394,3 +394,56 @@ int Reverb::getType() {
 int Reverb::getRoomsize() {
 	return Proomsize;
 }
+/**
+ * toXml member
+*/
+const char *Reverb::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"idelayk",idelayk);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"idelaylen",idelaylen);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"rdelaylen",rdelaylen);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Perbalance",Perbalance);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phpf",Phpf);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pidelay",Pidelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pidelayfb",Pidelayfb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plpf",Plpf);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppan",Ppan);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Prdelay",Prdelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Proomsize",Proomsize);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ptime",Ptime);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ptype",Ptype);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lohifb",lohifb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"idelayfb",idelayfb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"roomsize",roomsize);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rs",rs);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"pan",pan);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"erbalance",erbalance);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rs_coeff",rs_coeff);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

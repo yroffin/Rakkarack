@@ -887,3 +887,52 @@ int StompBox::getMode() {
 	return Pmode;
 }
 
+/**
+ * toXml member
+*/
+const char *StompBox::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Pgain",Pgain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phigh",Phigh);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plow",Plow);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pmid",Pmid);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pmode",Pmode);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gain",gain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"pre1gain",pre1gain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"pre2gain",pre2gain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lowb",lowb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"midb",midb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"highb",highb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volume",volume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"LG",LG);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"MG",MG);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"HG",HG);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"RGP2",RGP2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"RGPST",RGPST);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"pgain",pgain);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

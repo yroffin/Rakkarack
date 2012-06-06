@@ -36,6 +36,7 @@ public:
 	~StompBox();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration

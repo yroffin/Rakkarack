@@ -704,3 +704,68 @@ int  Sequence::getAmplitude() {return Pamplitude;}
 int  Sequence::getStdiff() {return Pstdiff;}
 int  Sequence::getMode() {return Pmode;}
 int  Sequence::getRange() {return Prange;}
+/**
+ * toXml member
+*/
+const char *Sequence::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"DS_state",DS_state);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"hq",hq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nPERIOD",nPERIOD);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nSAMPLE_RATE",nSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pamplitude",Pamplitude);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pmode",Pmode);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pq",Pq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Prange",Prange);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Psequence[8]",Psequence[8]);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pstdiff",Pstdiff);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ptempo",Ptempo);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"rndflag",rndflag);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"subdiv",subdiv);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"tcount",tcount);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"scount",scount);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"dscount",dscount);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"intperiod",intperiod);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fq",fq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fsequence[8]",fsequence[8]);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ifperiod",ifperiod);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fperiod",fperiod);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"seqpower",seqpower);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"MINFREQ",MINFREQ);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"MAXFREQ",MAXFREQ);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"nfSAMPLE_RATE",nfSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

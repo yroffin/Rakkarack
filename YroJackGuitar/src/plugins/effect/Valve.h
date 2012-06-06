@@ -39,12 +39,13 @@ public:
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	float Wshape(float x);
 	void cleanup();
+	const char *toXml();
 	void applyfilters(float * efxoutl, float * efxoutr);
 
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_volume,
 		_panning,
@@ -184,7 +185,7 @@ private:
 
 	void init_coefs();
 
-	//Parametrii
+//Parametrii
 	int Pvolume; //Volumul or E/R
 	int Ppanning; //Panning
 	int Plrcross; // L/R Mixing
@@ -199,7 +200,7 @@ private:
 	int Ped;
 	int Presence;
 
-	//Parametrii reali
+//Parametrii reali
 	float panning, lrcross, q, dist, otml, otmr, itml, itmr, factor, atk;
 	float rm[10];
 

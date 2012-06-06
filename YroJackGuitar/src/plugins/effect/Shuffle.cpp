@@ -215,3 +215,48 @@ int Shuffle::getPq() {
 int Shuffle::getE() {
 	return E;
 }
+/**
+ * toXml member
+*/
+const char *Shuffle::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Cross1",Cross1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Cross2",Cross2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Cross3",Cross3);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Cross4",Cross4);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"E",E);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PQ",PQ);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PvolH",PvolH);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PvolL",PvolL);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PvolMH",PvolMH);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PvolML",PvolML);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"tmp",tmp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volL",volL);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volML",volML);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volMH",volMH);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volH",volH);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

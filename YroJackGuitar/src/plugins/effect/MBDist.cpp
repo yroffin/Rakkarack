@@ -310,3 +310,60 @@ int  MBDist::getNegate() {return Pnegate;}
 int  MBDist::getCross1() {return Cross1;}
 int  MBDist::getCross2() {return Cross2;}
 int  MBDist::getStereo() {return Pstereo;}
+/**
+ * toXml member
+*/
+const char *MBDist::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Cross1",Cross1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Cross2",Cross2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdrive",Pdrive);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PdriveH",PdriveH);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PdriveL",PdriveL);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PdriveM",PdriveM);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plevel",Plevel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pnegate",Pnegate);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pstereo",Pstereo);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PtypeH",PtypeH);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PtypeL",PtypeL);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PtypeM",PtypeM);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PvolH",PvolH);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PvolL",PvolL);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PvolM",PvolM);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lrcross",lrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volL",volL);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volM",volM);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volH",volH);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

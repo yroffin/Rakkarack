@@ -1,6 +1,6 @@
 /*
  ZynAddSubFX - a software synthesizer
- 
+
  Phaser.h - Phaser effect
  Copyright (C) 2002-2005 Nasca Octavian Paul
  Author: Nasca Octavian Paul
@@ -37,11 +37,12 @@ public:
 	~Phaser();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpsr);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_volume,
 		_panning,
@@ -170,7 +171,7 @@ public:
 private:
 	float outvolume;
 
-	//Parametrii Phaser
+//Parametrii Phaser
 	int Pvolume;
 	int Ppanning;
 	int Pdepth; //the depth of the Phaser
@@ -180,9 +181,9 @@ private:
 	int Poutsub; //if I wish to substract the output instead of the adding it
 	int Pphase;
 
-	//Control Parametrii
+//Control Parametrii
 
-	//Valorile interne
+//Valorile interne
 	float panning, fb, depth, lrcross, fbl, fbr, phase;
 	float *oldl, *oldr;
 	float oldlgain, oldrgain;

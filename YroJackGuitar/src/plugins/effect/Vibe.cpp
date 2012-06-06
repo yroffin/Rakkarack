@@ -504,7 +504,148 @@ int Vibe::getLrcross() {
 	return Plrcross;
 }
 
-void Vibe::setLfoPfreq(int value) {lfo.setPfreq(value);}
-void Vibe::setLfoPrandomness(int value) {lfo.setPrandomness(value);}
-void Vibe::setLfoPlfOtype(int value) {lfo.setPlfOtype(value);}
-void Vibe::setLfoPstereo(int value) {lfo.setPstereo(value);}
+void Vibe::setLfoPfreq(int value) {
+	lfo.setPfreq(value);
+}
+void Vibe::setLfoPrandomness(int value) {
+	lfo.setPrandomness(value);
+}
+void Vibe::setLfoPlfOtype(int value) {
+	lfo.setPlfOtype(value);
+}
+void Vibe::setLfoPstereo(int value) {
+	lfo.setPstereo(value);
+}
+/**
+ * toXml member
+ */
+const char *Vibe::toXml() {
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "Pdepth", Pdepth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pfb", Pfb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrcross", Plrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pwidth", Pwidth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "beta", beta);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "C1[8]", C1[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "C2", C2);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "cn1[8]", cn1[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "cn0[8]", cn0[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "cd1[8]", cd1[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "cd0[8]", cd0[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "cperiod", cperiod);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dalphal", dalphal);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dalphar", dalphar);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ecn1[8]", ecn1[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ecn0[8]", ecn0[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ecd1[8]", ecd1[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ecd0[8]", ecd0[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "en1[8]", en1[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "en0[8]", en0[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ed1[8]", ed1[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ed0[8]", ed0[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fb", fb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fbr", fbr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fbl", fbl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fdepth", fdepth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "flrcross", flrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fcross", fcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fwidth", fwidth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "gain", gain);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "k", k);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "gl", gl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldgl", oldgl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "gr", gr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldgr", oldgr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lstep", lstep);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rstep", rstep);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldcvolt[8]", oldcvolt[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "on1[8]", on1[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "on0[8]", on0[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "od1[8]", od1[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "od0[8]", od0[8]);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "outvolume", outvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "R1", R1);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "Ra", Ra);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "Rb", Rb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "b", b);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dTC", dTC);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dRCl", dRCl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dRCr", dRCr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lampTC", lampTC);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ilampTC", ilampTC);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "minTC", minTC);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "alphal", alphal);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "alphar", alphar);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rpanning", rpanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lpanning", lpanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "Rv", Rv);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "y1", y1);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
+}

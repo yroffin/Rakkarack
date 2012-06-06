@@ -3,8 +3,8 @@
 
  Compressor.h  -  Compressor Effect definitions
  Based on artscompressor.cc by Matthias Kretz <kretz@kde.org>
- Stefan Westerfeld <stefan@space.twc.de> 
- 
+ Stefan Westerfeld <stefan@space.twc.de>
+
  Copyright (C) 2008-2010 Josep Andreu
  Author: Josep Andreu & Ryan Billing
 
@@ -38,67 +38,108 @@ public:
 
 	void render(jack_nframes_t nframes, float * smps_l, float * smps_r);
 	void cleanup();
+	const char *toXml();
 
 	/**
-	* member declaration
-	*/
-	enum functions {
-	_preset
-	, _threshold
-	, _ratio
-	, _output
-	, _att
-	, _rel
-	, _out
-	, _knee
-	, _stereo
-	, _peak
+	 * member declaration
+	 */
+enum functions {
+		_preset,
+		_threshold,
+		_ratio,
+		_output,
+		_att,
+		_rel,
+		_out,
+		_knee,
+		_stereo,
+		_peak
 	};
 
 	/**
-	* setter and getter map
-	*/
-	int  get0() {return getPreset();}
-	void set0(int value) {setPreset(value);}
-	int  get1() {return getThreshold();}
-	void set1(int value) {setThreshold(value);}
-	int  get2() {return getRatio();}
-	void set2(int value) {setRatio(value);}
-	int  get3() {return getOutput();}
-	void set3(int value) {setOutput(value);}
-	int  get4() {return getAtt();}
-	void set4(int value) {setAtt(value);}
-	int  get5() {return getRel();}
-	void set5(int value) {setRel(value);}
-	int  get6() {return getOut();}
-	void set6(int value) {setOut(value);}
-	int  get7() {return getKnee();}
-	void set7(int value) {setKnee(value);}
-	int  get8() {return getStereo();}
-	void set8(int value) {setStereo(value);}
-	int  get9() {return getPeak();}
-	void set9(int value) {setPeak(value);}
+	 * setter and getter map
+	 */
+	int get0() {
+		return getPreset();
+	}
+	void set0(int value) {
+		setPreset(value);
+	}
+	int get1() {
+		return getThreshold();
+	}
+	void set1(int value) {
+		setThreshold(value);
+	}
+	int get2() {
+		return getRatio();
+	}
+	void set2(int value) {
+		setRatio(value);
+	}
+	int get3() {
+		return getOutput();
+	}
+	void set3(int value) {
+		setOutput(value);
+	}
+	int get4() {
+		return getAtt();
+	}
+	void set4(int value) {
+		setAtt(value);
+	}
+	int get5() {
+		return getRel();
+	}
+	void set5(int value) {
+		setRel(value);
+	}
+	int get6() {
+		return getOut();
+	}
+	void set6(int value) {
+		setOut(value);
+	}
+	int get7() {
+		return getKnee();
+	}
+	void set7(int value) {
+		setKnee(value);
+	}
+	int get8() {
+		return getStereo();
+	}
+	void set8(int value) {
+		setStereo(value);
+	}
+	int get9() {
+		return getPeak();
+	}
+	void set9(int value) {
+		setPeak(value);
+	}
 
 	/**
-	* setter and getter
-	*/
-	int  getThreshold();
+	 * setter and getter
+	 */
+	int getThreshold();
 	void setThreshold(int value);
-	int  getRatio();
+	int getRatio();
 	void setRatio(int value);
-	int  getOutput();
+	int getOutput();
 	void setOutput(int value);
-	int  getAtt();
+	int getAtt();
 	void setAtt(int value);
-	int  getRel();
+	int getRel();
 	void setRel(int value);
-	int  getOut();
+	int getOut();
 	void setOut(int value);
-	int  getKnee();
+	int getKnee();
 	void setKnee(int value);
-	int  getStereo();
+	int getStereo();
 	void setStereo(int value);
-	int  getPeak();
+	int getPeak();
 	void setPeak(int value);
 
 	void compute();

@@ -350,3 +350,78 @@ void Synthfilter::setLfoPstereo(int value) {lfo.setPstereo(value);}
 
 
 
+/**
+ * toXml member
+*/
+const char *Synthfilter::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Pattack",Pattack);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pbandwidth",Pbandwidth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdepth",Pdepth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdistortion",Pdistortion);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Penvelope",Penvelope);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfb",Pfb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phpstages",Phpstages);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plpstages",Plpstages);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Poutsub",Poutsub);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Prelease",Prelease);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"C",C);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Clp",Clp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Chp",Chp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"delta",delta);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"distortion",distortion);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fb",fb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"width",width);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"env",env);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"envdelta",envdelta);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"sns",sns);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"att",att);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rls",rls);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fbl",fbl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fbr",fbr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"depth",depth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldlgain",oldlgain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldrgain",oldrgain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"inv_period",inv_period);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Rmax",Rmax);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Rmin",Rmin);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

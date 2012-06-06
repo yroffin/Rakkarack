@@ -307,3 +307,56 @@ int NewDist::getLrcross() {
 int NewDist::getVolume() {
 	return Pvolume;
 }
+/**
+ * toXml member
+*/
+const char *NewDist::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Pdrive",Pdrive);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phpf",Phpf);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plevel",Plevel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plpf",Plpf);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pnegate",Pnegate);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Poctave",Poctave);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pprefiltering",Pprefiltering);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Prfreq",Prfreq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ptype",Ptype);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"inpll[4096]",inpll[4096]);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"inplr[4096]",inplr[4096]);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lrcross",lrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"octave_memoryl",octave_memoryl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"togglel",togglel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"octave_memoryr",octave_memoryr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"toggler",toggler);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rfreq",rfreq);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

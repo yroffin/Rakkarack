@@ -291,3 +291,72 @@ int RyanWah::getVariq() {
 int RyanWah::getQm() {
 	return Pqm;
 }
+/**
+ * toXml member
+*/
+const char *RyanWah::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Fstages",Fstages);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ftype",Ftype);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pampsmooth",Pampsmooth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pampsns",Pampsns);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pampsnsinv",Pampsnsinv);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pbp",Pbp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Php",Php);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plp",Plp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pminfreq",Pminfreq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pq",Pq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pqm",Pqm);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Prange",Prange);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pstages",Pstages);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pwidth",Pwidth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"variq",variq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"centfreq",centfreq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ms1",ms1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lpmix",lpmix);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"hpmix",hpmix);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"bpmix",bpmix);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rpanning",rpanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lpanning",lpanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"depth",depth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ampsns",ampsns);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ampsmooth",ampsmooth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"wahsmooth",wahsmooth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fbias",fbias);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

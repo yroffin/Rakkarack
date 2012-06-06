@@ -341,3 +341,88 @@ int Arpie::getPattern() {
 	return Ppattern;
 }
 
+/**
+ * toXml member
+*/
+const char *Arpie::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"dl",dl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"dr",dr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"delay",delay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"lrdelay",lrdelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"kl",kl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"kr",kr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"rvkl",rvkl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"rvkr",rvkr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"rvfl",rvfl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"rvfr",rvfr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"maxx_delay",maxx_delay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"fade",fade);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"harmonic",harmonic);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"envcnt",envcnt);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdelay",Pdelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfb",Pfb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pharms",Pharms);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phidamp",Phidamp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrdelay",Plrdelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppattern",Ppattern);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Preverse",Preverse);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Psubdiv",Psubdiv);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"subdiv",subdiv);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldl",oldl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldr",oldr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lrcross",lrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fb",fb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"hidamp",hidamp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"reverse",reverse);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Srate_Attack_Coeff",Srate_Attack_Coeff);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"envattack",envattack);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"envswell",envswell);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

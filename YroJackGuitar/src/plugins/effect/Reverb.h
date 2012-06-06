@@ -1,188 +1,224 @@
 /*
-  ZynAddSubFX - a software synthesizer
- 
-  Reverb.h - Reverberation effect
-  Copyright (C) 2002-2005 Nasca Octavian Paul
-  Author: Nasca Octavian Paul
+ ZynAddSubFX - a software synthesizer
 
-  Modified for rakarrack by Josep Andreu
+ Reverb.h - Reverberation effect
+ Copyright (C) 2002-2005 Nasca Octavian Paul
+ Author: Nasca Octavian Paul
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of version 2 of the GNU General Public License 
-  as published by the Free Software Foundation.
+ Modified for rakarrack by Josep Andreu
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License (version 2) for more details.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of version 2 of the GNU General Public License
+ as published by the Free Software Foundation.
 
-  You should have received a copy of the GNU General Public License (version 2)
-  along with this program; if not, write to the Free Software Foundation,
-  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License (version 2) for more details.
 
-*/
+ You should have received a copy of the GNU General Public License (version 2)
+ along with this program; if not, write to the Free Software Foundation,
+ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+ */
 
 #ifndef REVERB_H
 #define REVERB_H
 
-
 #include <plugins/YroEffectPlugin.h>
 #include <plugins/filter/AnalogFilter.h>
 
-
-
 namespace std {
 
-class Reverb : public YroEffectPlugin
+class Reverb: public YroEffectPlugin
 
 {
 public:
-  Reverb();
-  ~Reverb();
-  void render(jack_nframes_t nframes,float * smps_l, float * smps_r);
-  void cleanup ();
+	Reverb();
+	~Reverb();
+	void render(jack_nframes_t nframes, float * smps_l, float * smps_r);
+	void cleanup();
+	const char *toXml();
 
-  /**
-  * member declaration
-  */
-  enum functions {
-  _preset
-  , _volume
-  , _pan
-  , _time
-  , _idelay
-  , _idelayfb
-  , _lpf
-  , _hpf
-  , _lohidamp
-  , _type
-  , _roomsize
-  };
+	/**
+	 * member declaration
+	 */
+enum functions {
+		_preset,
+		_volume,
+		_pan,
+		_time,
+		_idelay,
+		_idelayfb,
+		_lpf,
+		_hpf,
+		_lohidamp,
+		_type,
+		_roomsize
+	};
 
-  /**
-  * setter and getter map
-  */
-  int  get0() {return getPreset();}
-  void set0(int value) {setPreset(value);}
-  int  get1() {return getVolume();}
-  void set1(int value) {setVolume(value);}
-  int  get2() {return getPan();}
-  void set2(int value) {setPan(value);}
-  int  get3() {return getTime();}
-  void set3(int value) {setTime(value);}
-  int  get4() {return getIdelay();}
-  void set4(int value) {setIdelay(value);}
-  int  get5() {return getIdelayfb();}
-  void set5(int value) {setIdelayfb(value);}
-  int  get6() {return getLpf();}
-  void set6(int value) {setLpf(value);}
-  int  get7() {return getHpf();}
-  void set7(int value) {setHpf(value);}
-  int  get8() {return getLohidamp();}
-  void set8(int value) {setLohidamp(value);}
-  int  get9() {return getType();}
-  void set9(int value) {setType(value);}
-  int  get10() {return getRoomsize();}
-  void set10(int value) {setRoomsize(value);}
+	/**
+	 * setter and getter map
+	 */
+	int get0() {
+		return getPreset();
+	}
+	void set0(int value) {
+		setPreset(value);
+	}
+	int get1() {
+		return getVolume();
+	}
+	void set1(int value) {
+		setVolume(value);
+	}
+	int get2() {
+		return getPan();
+	}
+	void set2(int value) {
+		setPan(value);
+	}
+	int get3() {
+		return getTime();
+	}
+	void set3(int value) {
+		setTime(value);
+	}
+	int get4() {
+		return getIdelay();
+	}
+	void set4(int value) {
+		setIdelay(value);
+	}
+	int get5() {
+		return getIdelayfb();
+	}
+	void set5(int value) {
+		setIdelayfb(value);
+	}
+	int get6() {
+		return getLpf();
+	}
+	void set6(int value) {
+		setLpf(value);
+	}
+	int get7() {
+		return getHpf();
+	}
+	void set7(int value) {
+		setHpf(value);
+	}
+	int get8() {
+		return getLohidamp();
+	}
+	void set8(int value) {
+		setLohidamp(value);
+	}
+	int get9() {
+		return getType();
+	}
+	void set9(int value) {
+		setType(value);
+	}
+	int get10() {
+		return getRoomsize();
+	}
+	void set10(int value) {
+		setRoomsize(value);
+	}
 
-  /**
-  * setter and getter
-  */
-  int  getVolume();
-  void setVolume(int value);
-  int  getPan();
-  void setPan(int value);
-  int  getTime();
-  void setTime(int value);
-  int  getIdelay();
-  void setIdelay(int value);
-  int  getIdelayfb();
-  void setIdelayfb(int value);
-  int  getLpf();
-  void setLpf(int value);
-  int  getHpf();
-  void setHpf(int value);
-  int  getLohidamp();
-  void setLohidamp(int value);
-  int  getType();
-  void setType(int value);
-  int  getRoomsize();
-  void setRoomsize(int value);
+	/**
+	 * setter and getter
+	 */
+	int getVolume();
+	void setVolume(int value);
+	int getPan();
+	void setPan(int value);
+	int getTime();
+	void setTime(int value);
+	int getIdelay();
+	void setIdelay(int value);
+	int getIdelayfb();
+	void setIdelayfb(int value);
+	int getLpf();
+	void setLpf(int value);
+	int getHpf();
+	void setHpf(int value);
+	int getLohidamp();
+	void setLohidamp(int value);
+	int getType();
+	void setType(int value);
+	int getRoomsize();
+	void setRoomsize(int value);
 
 private:
-  void processmono (int ch, float * output);
+	void processmono(int ch, float * output);
 
-  //Amount of the reverb,
-  int Pvolume;
+//Amount of the reverb,
+	int Pvolume;
 
-  //LefT/Right Panning
-  int Ppan;
+//LefT/Right Panning
+	int Ppan;
 
-  //duration of reverb
-  int Ptime;
+//duration of reverb
+	int Ptime;
 
-  //Initial delay 
-  int Pidelay;
+//Initial delay
+	int Pidelay;
 
-  //Initial delay feedback
-  int Pidelayfb;
+//Initial delay feedback
+	int Pidelayfb;
 
-  //delay between ER/Reverbs
-  int Prdelay;
+//delay between ER/Reverbs
+	int Prdelay;
 
-  //EarlyReflections/Reverb Balance
-  int Perbalance;
+//EarlyReflections/Reverb Balance
+	int Perbalance;
 
-  //HighPassFilter 
-  int Plpf;
+//HighPassFilter
+	int Plpf;
 
-  //LowPassFilter
-  int Phpf;
+//LowPassFilter
+	int Phpf;
 
-  //Low/HighFrequency Damping
-  int Plohidamp;	// 0..63 lpf,64=off,65..127=hpf(TODO)
+//Low/HighFrequency Damping
+	int Plohidamp; // 0..63 lpf,64=off,65..127=hpf(TODO)
 
-  //Reverb type
-  int Ptype;
+//Reverb type
+	int Ptype;
 
-  //Room Size
-  int Proomsize;
+//Room Size
+	int Proomsize;
 
-  //Parametrii 2  
-  int lohidamptype;		//0=disable,1=highdamp(lowpass),2=lowdamp(highpass)
-  int idelaylen, rdelaylen;
-  int idelayk;
-  int comblen[REV_COMBS * 2];
-  int aplen[REV_APS * 2];
+//Parametrii 2
+	int lohidamptype; //0=disable,1=highdamp(lowpass),2=lowdamp(highpass)
+	int idelaylen, rdelaylen;
+	int idelayk;
+	int comblen[REV_COMBS * 2];
+	int aplen[REV_APS * 2];
 
+	int combk[REV_COMBS * 2];
+	int apk[REV_APS * 2];
 
-  int combk[REV_COMBS * 2];
-  int apk[REV_APS * 2];
+	float lohifb, idelayfb, roomsize, rs; //rs is used to "normalise" the volume according to the roomsize
+	float rs_coeff;
+//parameter control
+	float pan, erbalance;
 
-  float lohifb, idelayfb, roomsize, rs;	//rs is used to "normalise" the volume according to the roomsize
-  float rs_coeff;
-  //parameter control
-  float pan, erbalance;
+//Valorile interne
 
+	float *comb[REV_COMBS * 2];
 
-  //Valorile interne
+	float combfb[REV_COMBS * 2]; //feedback-ul fiecarui filtru "comb"
+	float lpcomb[REV_COMBS * 2]; //pentru Filtrul LowPass
 
-  float *comb[REV_COMBS * 2];
+	float *ap[REV_APS * 2];
+	float *inputbuf;
+	float *idelay;
 
-  float combfb[REV_COMBS * 2];	//feedback-ul fiecarui filtru "comb"
-  float lpcomb[REV_COMBS * 2];	//pentru Filtrul LowPass
-
-  float *ap[REV_APS * 2];
-  float *inputbuf;
-  float *idelay;
-
-  AnalogFilter *lpf, *hpf;	//filters
-  
+	AnalogFilter *lpf, *hpf; //filters
 
 };
-
-
-
 
 }
 #endif

@@ -332,3 +332,72 @@ void AnalogPhaser::setLfoPrandomness(int value) {
 void AnalogPhaser::setLfoPfreq(int value) {
 	lfo.setPfreq(value);
 }
+/**
+ * toXml member
+*/
+const char *AnalogPhaser::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Pbarber",Pbarber);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdepth",Pdepth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdistortion",Pdistortion);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfb",Pfb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phyper",Phyper);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Poffset",Poffset);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Poutsub",Poutsub);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pstages",Pstages);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"C",C);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"CFs",CFs);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"distortion",distortion);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fb",fb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"width",width);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"offsetpct",offsetpct);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fbl",fbl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fbr",fbr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"depth",depth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"mis",mis);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldlgain",oldlgain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldrgain",oldrgain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rdiff",rdiff);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ldiff",ldiff);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"invperiod",invperiod);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Rconst",Rconst);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Rmax",Rmax);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Rmin",Rmin);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Rmx",Rmx);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

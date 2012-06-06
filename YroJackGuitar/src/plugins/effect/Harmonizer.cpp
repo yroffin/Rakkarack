@@ -302,3 +302,54 @@ int Harmonizer::getQ() {
 int Harmonizer::getMidi() {
 	return PMIDI;
 }
+/**
+ * toXml member
+ */
+const char *Harmonizer::toXml() {
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "DS_state", DS_state);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "fPfreq", fPfreq);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "fPgain", fPgain);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "fPq", fPq);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "hq", hq);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "mira", mira);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "nPERIOD", nPERIOD);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "nSAMPLE_RATE", nSAMPLE_RATE);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pgain", Pgain);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pinterval", Pinterval);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "PMIDI", PMIDI);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pnote", Pnote);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppan", Ppan);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "PSELECT", PSELECT);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ptype", Ptype);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "gain", gain);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "interval", interval);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "nfSAMPLE_RATE", nfSAMPLE_RATE);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "panning", panning);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
+}

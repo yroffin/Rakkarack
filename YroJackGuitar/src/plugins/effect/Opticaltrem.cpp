@@ -174,3 +174,60 @@ void Opticaltrem::setLfoType(int value) {
 void Opticaltrem::setLfoStereo(int value) {
 	lfo.setPstereo(value);
 }
+/**
+ * toXml member
+*/
+const char *Opticaltrem::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Pdepth",Pdepth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"cperiod",cperiod);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gl",gl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldgl",oldgl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gr",gr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldgr",oldgr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lstep",lstep);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rstep",rstep);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Ra",Ra);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"Rb",Rb);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"R1",R1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"b",b);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dTC",dTC);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dRCl",dRCl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dRCr",dRCr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"minTC",minTC);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"alphal",alphal);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"alphar",alphar);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"stepl",stepl);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"stepr",stepr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rpanning",rpanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lpanning",lpanning);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

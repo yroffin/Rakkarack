@@ -36,11 +36,12 @@ public:
 	~Arpie();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpr);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_volume,
 		_panning,
@@ -159,7 +160,7 @@ public:
 
 private:
 	float outvolume;
-	//Parametrii
+//Parametrii
 	int Pvolume; //Volumul or E/R
 	int Ppanning; //Panning
 	int Pdelay;
@@ -182,7 +183,7 @@ private:
 	void setreverse(int Preverse);
 	void setpattern(int Ppattern);
 
-	//Parametrii reali
+//Parametrii reali
 	void initdelays();
 
 	int dl, dr, delay, lrdelay;

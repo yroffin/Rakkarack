@@ -134,3 +134,46 @@ int Sustainer::getVolume() {
 int Sustainer::getSustain() {
 	return Psustain;
 }
+/**
+ * toXml member
+*/
+const char *Sustainer::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Psustain",Psustain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"timer",timer);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"hold",hold);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"level",level);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fsustain",fsustain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"input",input);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"tmpgain",tmpgain);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"prls",prls);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"compeak",compeak);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"compg",compg);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"compenv",compenv);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldcompenv",oldcompenv);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"calpha",calpha);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"cbeta",cbeta);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"cthresh",cthresh);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

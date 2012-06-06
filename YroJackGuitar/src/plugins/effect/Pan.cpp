@@ -163,3 +163,38 @@ int Pan::getExtraOn() {
 	return PextraON;
 }
 
+/**
+ * toXml member
+*/
+const char *Pan::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"PAutoPan",PAutoPan);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pextra",Pextra);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PextraON",PextraON);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"dvalue",dvalue);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lfol",lfol);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lfor",lfor);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ll",ll);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lr",lr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"mul",mul);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

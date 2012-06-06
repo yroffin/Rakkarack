@@ -296,3 +296,44 @@ int DynamicFilter::getAmpsnsinv() {
 int DynamicFilter::getAmpsmooth() {
 	return Pampsmooth;
 }
+/**
+ * toXml member
+*/
+const char *DynamicFilter::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Pampsmooth",Pampsmooth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pampsns",Pampsns);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pampsnsinv",Pampsnsinv);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdepth",Pdepth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ms1",ms1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ms2",ms2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ms3",ms3);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ms4",ms4);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"depth",depth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ampsns",ampsns);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ampsmooth",ampsmooth);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

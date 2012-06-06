@@ -226,3 +226,48 @@ int CoilCrafter::getTone() {
 int CoilCrafter::getMode() {
 	return Pmode;
 }
+/**
+ * toXml member
+*/
+const char *CoilCrafter::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Pfreq1",Pfreq1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfreq2",Pfreq2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pmode",Pmode);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppd",Ppd);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppo",Ppo);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pq1",Pq1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pq2",Pq2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ptone",Ptone);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"att",att);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"freq1",freq1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"q1",q1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"freq2",freq2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"q2",q2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rm[10]",rm[10]);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"tfreqs[10]",tfreqs[10]);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"tqs[10]",tqs[10]);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

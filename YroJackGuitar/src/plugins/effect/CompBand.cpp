@@ -302,3 +302,42 @@ int CompBand::getCross3() {
 int CompBand::getLevel() {
 	return Plevel;
 }
+/**
+ * toXml member
+*/
+const char *CompBand::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Cross1",Cross1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Cross2",Cross2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Cross3",Cross3);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PHratio",PHratio);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PHthres",PHthres);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plevel",Plevel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PLratio",PLratio);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PLthres",PLthres);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PMHratio",PMHratio);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PMHthres",PMHthres);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PMLratio",PMLratio);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"PMLthres",PMLthres);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"level",level);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

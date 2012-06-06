@@ -164,3 +164,48 @@ int Gate::getHpf() {
 int Gate::getHold() {
 	return Phold;
 }
+/**
+ * toXml member
+*/
+const char *Gate::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"hold_count",hold_count);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ohold",Ohold);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdecay",Pdecay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phold",Phold);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phpf",Phpf);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plpf",Plpf);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Prange",Prange);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"state",state);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"a_rate",a_rate);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"cut",cut);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"d_rate",d_rate);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"env",env);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fs",fs);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gate",gate);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"hold",hold);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"range",range);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"t_level",t_level);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

@@ -38,11 +38,12 @@ public:
 	~StereoHarm();
 	void render(jack_nframes_t nframes, float *smpsl, float *smpsr);
 	void cleanup();
+	const char *toXml();
 	void adjust(int DS);
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_volume,
 		_gain0,

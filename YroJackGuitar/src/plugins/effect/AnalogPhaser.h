@@ -1,6 +1,6 @@
 /*
  ZynAddSubFX - a software synthesizer
- 
+
  AnalogPhaser.h - Phaser effect
  Copyright (C) 2002-2005 Nasca Octavian Paul
  Author: Nasca Octavian Paul
@@ -39,11 +39,12 @@ public:
 	~AnalogPhaser();
 	void render(jack_nframes_t nframes, float * smpsl, float * smpsr);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_volume,
 		_distortion,
@@ -201,7 +202,7 @@ public:
 
 private:
 	float outvolume;
-	//Phaser parameters
+//Phaser parameters
 	YroLowfrequencyOscillation lfo; //Phaser modulator
 	int Pvolume; //Used in Process.C to set wet/dry mix
 	int Pdistortion; //Model distortion added by FET element
@@ -214,7 +215,7 @@ private:
 	int Pdepth; //Depth of phaser sweep
 	int Pbarber; //Enable barber pole phasing
 
-	//Internal Variables
+//Internal Variables
 	bool barber; //Barber pole phasing flag
 	float distortion, fb, width, offsetpct, fbl, fbr, depth;
 	float *lxn1, *lyn1, *rxn1, *ryn1, *offset;

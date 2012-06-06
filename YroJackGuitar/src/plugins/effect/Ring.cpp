@@ -278,3 +278,60 @@ int Ring::getInput() {
 int Ring::getAfreq() {
 	return Pafreq;
 }
+/**
+ * toXml member
+*/
+const char *Ring::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"offset",offset);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pafreq",Pafreq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdepthp",Pdepthp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfreq",Pfreq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pinput",Pinput);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plevel",Plevel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Psaw",Psaw);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Psin",Psin);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Psqu",Psqu);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pstereo",Pstereo);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ptri",Ptri);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning",panning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lrcross",lrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"sin",sin);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"tri",tri);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"saw",saw);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"squ",squ);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"scale",scale);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"depth",depth);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"idepth",idepth);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

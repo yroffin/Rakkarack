@@ -413,3 +413,82 @@ int Vocoder::getRing() {
 	return Pring;
 }
 
+/**
+ * toXml member
+*/
+const char *Vocoder::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"DS_state",DS_state);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nPERIOD",nPERIOD);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"nSAMPLE_RATE",nSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pband",Pband);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pinput",Pinput);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plevel",Plevel);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pmuffle",Pmuffle);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pqq",Pqq);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pring",Pring);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"VOC_BANDS",VOC_BANDS);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"alpha",alpha);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"beta",beta);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"prls",prls);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gate",gate);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"compeak",compeak);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"compg",compg);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"compenv",compenv);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldcompenv",oldcompenv);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"calpha",calpha);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"cbeta",cbeta);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"cthresh",cthresh);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"cratio",cratio);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lpanning",lpanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"rpanning",rpanning);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"input",input);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"level",level);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ncSAMPLE_RATE",ncSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"nfSAMPLE_RATE",nfSAMPLE_RATE);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"ringworm",ringworm);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"vulevel",vulevel);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

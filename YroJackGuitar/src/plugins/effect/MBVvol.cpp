@@ -355,3 +355,66 @@ int MBVvol::getCross3() {
 int MBVvol::getCombi() {
 	return Pcombi;
 }
+/**
+ * toXml member
+*/
+const char *MBVvol::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Cross1",Cross1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Cross2",Cross2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Cross3",Cross3);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pcombi",Pcombi);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"coeff",coeff);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"d1",d1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"d2",d2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"d3",d3);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"d4",d4);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lfo1l",lfo1l);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lfo1r",lfo1r);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lfo2l",lfo2l);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lfo2r",lfo2r);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"v1l",v1l);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"v1r",v1r);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"v2l",v2l);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"v2r",v2r);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volLr",volLr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volMLr",volMLr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volMHr",volMHr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volHr",volHr);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volL",volL);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volML",volML);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volMH",volMH);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"volH",volH);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

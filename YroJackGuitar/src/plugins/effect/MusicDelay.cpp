@@ -366,3 +366,88 @@ int MusicDelay::getGain1() {
 int MusicDelay::getGain2() {
 	return Pgain2;
 }
+/**
+ * toXml member
+*/
+const char *MusicDelay::toXml() {
+        char _buffer[256];
+        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
+        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"dl1",dl1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"dr1",dr1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"dl2",dl2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"dr2",dr2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"delay1",delay1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"delay2",delay2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"lrdelay",lrdelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"kl1",kl1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"kr1",kr1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"kl2",kl2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"kr2",kr2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"maxx_delay",maxx_delay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdelay1",Pdelay1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pdelay2",Pdelay2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfb1",Pfb1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pfb2",Pfb2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pgain1",Pgain1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pgain2",Pgain2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Phidamp",Phidamp);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Plrdelay",Plrdelay);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning1",Ppanning1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ppanning2",Ppanning2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Ptempo",Ptempo);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gain1",gain1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"gain2",gain2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldl1",oldl1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldr1",oldr1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldl2",oldl2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"oldr2",oldr2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning1",panning1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"panning2",panning2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"lrcross",lrcross);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fb1",fb1);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"fb2",fb2);
+        strcat(_toXml,_buffer);
+        sprintf(_buffer,_formatf,"hidamp",hidamp);
+        strcat(_toXml,_buffer);
+        strcat(_toXml,"</attributes>");
+        return _toXml;
+}

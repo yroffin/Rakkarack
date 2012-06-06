@@ -5,7 +5,7 @@
 
  Gate.h  -  Noise Gate Effect definitions
  Based on Steve Harris LADSPA gate.
- 
+
  Copyright (C) 2008 Josep Andreu
  Author: Josep Andreu
 
@@ -39,6 +39,7 @@ public:
 	~Gate();
 	void render(jack_nframes_t nframes, float * smps_l, float * smps_r);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration

@@ -37,11 +37,12 @@ public:
 
 	void render(jack_nframes_t nframes, float * smpsl, float * smpsr);
 	void cleanup();
+	const char *toXml();
 
 	/**
 	 * member declaration
 	 */
-	enum functions {
+enum functions {
 		_preset,
 		_depth,
 		_lfofreq,
