@@ -79,11 +79,12 @@ int load(TiXmlDocument &xml, const char *filename) {
 			data += line;
 		}
 		myfile.close();
-	} else
-		cout << "Unable to open file";
-
+	} else {
+		fprintf(stderr,"Unable to open file %s\n", filename);
+		exit(1);
+	}
 	xml.Parse(data.c_str());
-	fprintf(stderr, "Loading %s ok ...\n", filename);
+	fprintf(stdout, "Loading %s ok ...\n", filename);
 	return 0;
 }
 
@@ -92,7 +93,8 @@ int load(TiXmlDocument &xml, const char *filename) {
  * @param TiXmlDocument &reference, reference document
  * @param  TiXmlDocument &current, the current element to compare
  */
-int compareContexts(TiXmlDocument &reference, TiXmlDocument &current, const char *filename) {
+int compareContexts(YroEffectPlugin *efx, TiXmlDocument &reference, TiXmlDocument &current,
+		const char *filename) {
 	TiXmlNode* element = 0;
 	while ((element =
 			reference.FirstChildElement("attributes")->IterateChildren(element))
@@ -100,7 +102,8 @@ int compareContexts(TiXmlDocument &reference, TiXmlDocument &current, const char
 		TiXmlNode* cmp = 0;
 		int errors = 0;
 		char tokens[16384];
-		sprintf(tokens,"Errors, while checking members initialization (%s):",filename);
+		sprintf(tokens, "Errors, while checking members initialization (%s):",
+				filename);
 		while ((cmp = current.FirstChildElement("attributes")->IterateChildren(
 				cmp)) != 0) {
 			if (strcmp(element->ToElement()->Attribute("name"),
@@ -111,18 +114,22 @@ int compareContexts(TiXmlDocument &reference, TiXmlDocument &current, const char
 				if (strcmp(element->ToElement()->Attribute("value"),
 						cmp->ToElement()->Attribute("value")) != 0) {
 					fprintf(stderr,
-							"Attribute %s in error, expected %s, receive %s\n",
+							"Attribute %s in error, expected %s, receive %s for effect %s\n",
+							element->ToElement()->Attribute("name"),
+							element->ToElement()->Attribute("value"),
+							cmp->ToElement()->Attribute("value"),
+							efx->getName());
+					char __token[1024];
+					sprintf(__token, " %s[%s/%s ko]",
 							element->ToElement()->Attribute("name"),
 							element->ToElement()->Attribute("value"),
 							cmp->ToElement()->Attribute("value"));
-					char __token[1024];
-					sprintf(__token," %s[%s/%s ko]",element->ToElement()->Attribute("name"),element->ToElement()->Attribute("value"),cmp->ToElement()->Attribute("value"));
-					strcat(tokens,__token);
+					strcat(tokens, __token);
 					errors++;
 				}
 			}
 		}
-		if(errors > 0) {
+		if (errors > 0) {
 			CPPUNIT_FAIL(tokens);
 		}
 	}
@@ -137,7 +144,7 @@ int extract(TiXmlDocument &xml, float *left, float *right, int size,
 		const char *ileft, const char *iright) {
 	TiXmlNode* element = 0;
 	int check = (xml.FirstChildElement("elements") != 0);
-	CPPUNIT_ASSERT_EQUAL(check,1);
+	CPPUNIT_ASSERT_EQUAL(check, 1);
 	const char *name = strdup(
 			xml.FirstChildElement("elements")->Attribute("effect"));
 	preset = atoi(xml.FirstChildElement("elements")->Attribute("preset"));
@@ -145,9 +152,7 @@ int extract(TiXmlDocument &xml, float *left, float *right, int size,
 			xml.FirstChildElement("elements")->Attribute(hashl));
 	const char *hashir = strdup(
 			xml.FirstChildElement("elements")->Attribute(hashr));
-	cout << "name: " << name << "/" << preset << endl;
-	cout << hashl << " : " << hashil << endl;
-	cout << hashr << " : " << hashir << endl;
+	cout << "name: " << name << ", preset " << preset << endl;
 	YroMd5 *myMd5 = new YroMd5();
 	real = 0;
 	while ((element = xml.FirstChildElement("elements")->IterateChildren(
@@ -159,11 +164,9 @@ int extract(TiXmlDocument &xml, float *left, float *right, int size,
 	}
 	const char *hashilComputed = myMd5->digestMemory((BYTE *) left,
 			real * sizeof(float));
-	cout << "computed left hash: " << hashilComputed << endl;
 	int checkl = (strcmp(hashil, hashilComputed) == 0);
 	const char *hashirComputed = myMd5->digestMemory((BYTE *) right,
 			real * sizeof(float));
-	cout << "computed right hash: " << hashirComputed << endl;
 	int checkr = (strcmp(hashir, hashirComputed) == 0);
 	return checkl && checkr;
 }
@@ -171,7 +174,14 @@ int extract(TiXmlDocument &xml, float *left, float *right, int size,
 /**
  * stress test basic
  */
-void YroEffectFactoryTest::checkup(YroEffectPlugin *efx, const char *ctx,const char *buf) {
+void YroEffectFactoryTest::checkup(YroEffectPlugin *efx, const char *effectName,
+		int indice) {
+	char ctx[1024];
+	char buf[1024];
+
+	sprintf(ctx, "src/tests/data/%s-%08x-context.xml", effectName, indice);
+	sprintf(buf, "src/tests/data/%s-%08x-buffer.xml", effectName, indice);
+
 	jack_default_audio_sample_t *left, *right;
 	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerPeriod();
 	left = new jack_default_audio_sample_t[nframes];
@@ -198,22 +208,31 @@ void YroEffectFactoryTest::checkup(YroEffectPlugin *efx, const char *ctx,const c
 			/**
 			 * check result
 			 */
-			fprintf(stderr, "Checking contexts ...\n");
 			xmlContext.Parse(efx->toXml());
-			if (compareContexts(xmlContextReference, xmlContext, ctx) != 0) {
-				fprintf(stderr, "Contexts in errror ...\n");
+			if (compareContexts(efx,xmlContextReference, xmlContext, ctx) != 0) {
+				fprintf(stderr, "Contexts in error for effect %s ...\n", efx->getName());
+			} else {
+				fprintf(stdout, "Contexts ok for effect %s ...\n", efx->getName());
 			}
-			fprintf(stderr, "Checking %d bytes ...\n", real);
 			int checkByteError = 0;
 			for (unsigned int i = 0; i < real; i++) {
 				char message[1024];
-				sprintf(message, "While checking index (left) %d, espected %9.40f, result %9.40f, delta %9.40f", i, oleftCheck[i], oleft[i],oleftCheck[i] - oleft[i]);
+				sprintf(message,
+						"While checking index (left) %d, espected %9.40f, result %9.40f, delta %9.40f",
+						i, oleftCheck[i], oleft[i], oleftCheck[i] - oleft[i]);
 				CPPUNIT_ASSERT_EQUAL_MESSAGE(message, oleftCheck[i], oleft[i]);
-				sprintf(message, "While checking index (right) %d, espected %9.40f, result %9.40f, delta %9.40f", i, orightCheck[i], oright[i], orightCheck[i] - oright[i]);
-				CPPUNIT_ASSERT_EQUAL_MESSAGE(message, orightCheck[i], oright[i]);
+			}
+			for (unsigned int i = 0; i < real; i++) {
+				char message[1024];
+				sprintf(message,
+						"While checking index (right) %d, espected %9.40f, result %9.40f, delta %9.40f",
+						i, orightCheck[i], oright[i],
+						orightCheck[i] - oright[i]);
+				CPPUNIT_ASSERT_EQUAL_MESSAGE(message, orightCheck[i],
+						oright[i]);
 			}
 			if (checkByteError == 0) {
-				fprintf(stderr, "%d bytes checked ok ...\n", real);
+				fprintf(stdout, "%d bytes checked ok ...\n", real);
 			}
 		}
 	} else {
@@ -221,67 +240,208 @@ void YroEffectFactoryTest::checkup(YroEffectPlugin *efx, const char *ctx,const c
 	}
 }
 
-void YroEffectFactoryTest::testDistortion() {
-	YroEffectPlugin *efx = new std::Distortion();
-	checkup(efx, "src/tests/data/Distorsion-00000000-context.xml","src/tests/data/Distorsion-00000000-buffer.xml");
-	checkup(efx, "src/tests/data/Distorsion-00000001-context.xml","src/tests/data/Distorsion-00000001-buffer.xml");
-	checkup(efx, "src/tests/data/Distorsion-00000002-context.xml","src/tests/data/Distorsion-00000002-buffer.xml");
-	checkup(efx, "src/tests/data/Distorsion-00000003-context.xml","src/tests/data/Distorsion-00000003-buffer.xml");
-	checkup(efx, "src/tests/data/Distorsion-00000004-context.xml","src/tests/data/Distorsion-00000004-buffer.xml");
-	checkup(efx, "src/tests/data/Distorsion-00000005-context.xml","src/tests/data/Distorsion-00000005-buffer.xml");
+void YroEffectFactoryTest::checkup(YroEffectPlugin *efx) {
+	for (int indice = 0; indice < efx->getPresetCount(); indice++) {
+		checkup(efx, efx->getName(), indice);
+	}
+	fprintf(stdout,"Effect %s, successfully tested with %d preset(s)\n", efx->getName(),efx->getPresetCount());
 }
 
+void YroEffectFactoryTest::testAlienwah() {
+	YroEffectPlugin *efx = new std::Alienwah();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testAnalogPhaser() {
+	YroEffectPlugin *efx = new std::AnalogPhaser();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testArpie() {
+	YroEffectPlugin *efx = new std::Arpie();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testChorus() {
+	YroEffectPlugin *efx = new std::Chorus();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testCoilCrafter() {
+	YroEffectPlugin *efx = new std::CoilCrafter();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testCompBand() {
+	return;
+	YroEffectPlugin *efx = new std::CompBand();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testCompressor() {
+	YroEffectPlugin *efx = new std::Compressor();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testConvolotron() {
+	return;
+	YroEffectPlugin *efx = new std::Convolotron(
+			YroParamHelper::instance()->getConvolotronDownsample(),
+			YroParamHelper::instance()->getConvolotronUpQuality(),
+			YroParamHelper::instance()->getConvolotronDownQuality());
+	checkup(efx);
+}
+void YroEffectFactoryTest::testDualFlanger() {
+	YroEffectPlugin *efx = new std::DualFlanger();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testDynamicFilter() {
+	YroEffectPlugin *efx = new std::DynamicFilter();
+	checkup(efx);
+}
 void YroEffectFactoryTest::testEcho() {
 	YroEffectPlugin *efx = new std::Echo();
-	checkup(efx, "src/tests/data/Echo-00000000-context.xml","src/tests/data/Echo-00000000-buffer.xml");
-	checkup(efx, "src/tests/data/Echo-00000001-context.xml","src/tests/data/Echo-00000001-buffer.xml");
-	checkup(efx, "src/tests/data/Echo-00000002-context.xml","src/tests/data/Echo-00000002-buffer.xml");
-	checkup(efx, "src/tests/data/Echo-00000003-context.xml","src/tests/data/Echo-00000003-buffer.xml");
-	checkup(efx, "src/tests/data/Echo-00000004-context.xml","src/tests/data/Echo-00000004-buffer.xml");
-	checkup(efx, "src/tests/data/Echo-00000005-context.xml","src/tests/data/Echo-00000005-buffer.xml");
-	checkup(efx, "src/tests/data/Echo-00000006-context.xml","src/tests/data/Echo-00000006-buffer.xml");
-	checkup(efx, "src/tests/data/Echo-00000007-context.xml","src/tests/data/Echo-00000007-buffer.xml");
-	checkup(efx, "src/tests/data/Echo-00000008-context.xml","src/tests/data/Echo-00000008-buffer.xml");
+	checkup(efx);
 }
-
-void YroEffectFactoryTest::testChorus() {
+void YroEffectFactoryTest::testEchotron() {
 	return;
-	std::YroEffectFactory *factory = std::YroEffectFactory::instance();
-	factory->unload(0);
-	Chorus *eff = (Chorus *) factory->addEffect("chorus#2", new Chorus());
-
-	eff->setPlrcross(0);
-	eff->setPpanning(0);
-
-	jack_default_audio_sample_t *in1, *in2, *out1, *out2;
-
-	/**
-	 * first render simulation
-	 */
-	jack_nframes_t nframes = YroParamHelper::instance()->getIntegerPeriod();
-	in1 = new jack_default_audio_sample_t[nframes];
-	in2 = new jack_default_audio_sample_t[nframes];
-	out1 = new jack_default_audio_sample_t[nframes];
-	out2 = new jack_default_audio_sample_t[nframes];
-
-	init(nframes, in1, in2);
-	init(nframes, out1, out2);
-
-	factory->render(in1, in2, out1, out2);
-
-	dump("in1:", nframes, in1);
-	dump("in2:", nframes, in2);
-	dump("out1:", nframes, out1);
-	dump("out2:", nframes, out2);
-
-	float verif1[16] = { -0.001284, -0.003113, -0.003914, -0.004067, -0.004036,
-			-0.003816, -0.003551, -0.003246, -0.002938, -0.002620, -0.002223,
-			-0.001692, -0.000171, -0.000027, 0.000070, 0.000134 };
-	compare(nframes, out1, verif1);
-	float verif2[16] = { -0.324965, -0.787524, -0.990300, -1.029034, -1.021163,
-			-0.965348, -0.898507, -0.821213, -0.743281, -0.662865, -0.562343,
-			-0.428202, -0.043322, -0.006895, 0.017683, 0.033956 };
-	compare(nframes, out2, verif2);
+	YroEffectPlugin *efx = new std::Echotron();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testEQ() {
+	return;
+	YroEffectPlugin *efx = new std::EQ();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testExciter() {
+	YroEffectPlugin *efx = new std::Exciter();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testGate() {
+	YroEffectPlugin *efx = new std::Gate();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testHarmonizer() {
+	YroEffectPlugin *efx = new std::Harmonizer(
+			YroParamHelper::instance()->getHarmonizerQuality(),
+			YroParamHelper::instance()->getHarmonizerDownsample(),
+			YroParamHelper::instance()->getHarmonizerUpQuality(),
+			YroParamHelper::instance()->getHarmonizerDownQuality());
+	checkup(efx);
+}
+void YroEffectFactoryTest::testLooper() {
+	return;
+	YroEffectPlugin *efx = new std::Looper(1024);
+	checkup(efx);
+}
+void YroEffectFactoryTest::testMBDist() {
+	YroEffectPlugin *efx = new std::MBDist();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testMBVvol() {
+	YroEffectPlugin *efx = new std::MBVvol();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testMusicDelay() {
+	YroEffectPlugin *efx = new std::MusicDelay();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testNewDist() {
+	YroEffectPlugin *efx = new std::NewDist();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testOpticaltrem() {
+	YroEffectPlugin *efx = new std::Opticaltrem();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testPan() {
+	YroEffectPlugin *efx = new std::Pan();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testPhaser() {
+	YroEffectPlugin *efx = new std::Phaser();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testRBEcho() {
+	YroEffectPlugin *efx = new std::RBEcho();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testReverb() {
+	YroEffectPlugin *efx = new std::Reverb();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testReverbtron() {
+	return;
+	YroEffectPlugin *efx = new std::Reverbtron(
+			YroParamHelper::instance()->getReverbtronDownsample(),
+			YroParamHelper::instance()->getReverbtronUpQuality(),
+			YroParamHelper::instance()->getReverbtronDownQuality());
+	checkup(efx);
+}
+void YroEffectFactoryTest::testRing() {
+	YroEffectPlugin *efx = new std::Ring();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testRyanWah() {
+	YroEffectPlugin *efx = new std::RyanWah();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testSequence() {
+	YroEffectPlugin *efx = new std::Sequence(
+			YroParamHelper::instance()->getHarmonizerQuality(),
+			YroParamHelper::instance()->getSequenceDownsample(),
+			YroParamHelper::instance()->getSequenceUpQuality(),
+			YroParamHelper::instance()->getSequenceDownQuality());
+	checkup(efx);
+}
+void YroEffectFactoryTest::testShelfBoost() {
+	YroEffectPlugin *efx = new std::ShelfBoost();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testShifter() {
+	YroEffectPlugin *efx = new std::Shifter(
+			YroParamHelper::instance()->getHarmonizerQuality(),
+			YroParamHelper::instance()->getShifterDownsample(),
+			YroParamHelper::instance()->getShifterUpQuality(),
+			YroParamHelper::instance()->getShifterDownQuality());
+	checkup(efx);
+}
+void YroEffectFactoryTest::testShuffle() {
+	YroEffectPlugin *efx = new std::Shuffle();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testStereoHarm() {
+	return;
+	YroEffectPlugin *efx = new std::StereoHarm(
+			YroParamHelper::instance()->getStereoHarmQuality(),
+			YroParamHelper::instance()->getStereoHarmDownsample(),
+			YroParamHelper::instance()->getStereoHarmUpQuality(),
+			YroParamHelper::instance()->getStereoHarmDownQuality());
+	checkup(efx);
+}
+void YroEffectFactoryTest::testStompBox() {
+	YroEffectPlugin *efx = new std::StompBox();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testSustainer() {
+	YroEffectPlugin *efx = new std::Sustainer();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testSynthfilter() {
+	YroEffectPlugin *efx = new std::Synthfilter();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testValve() {
+	YroEffectPlugin *efx = new std::Valve();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testVibe() {
+	return;
+	YroEffectPlugin *efx = new std::Vibe();
+	checkup(efx);
+}
+void YroEffectFactoryTest::testVocoder() {
+	return;
+	YroEffectPlugin *efx = new std::Vocoder(
+			0,
+			0,
+			YroParamHelper::instance()->getVocoderDownsample(),
+			YroParamHelper::instance()->getVocoderUpQuality(),
+			YroParamHelper::instance()->getVocoderDownQuality());
+	checkup(efx);
 }
 
 void YroEffectFactoryTest::testYroScope() {

@@ -35,14 +35,14 @@ using namespace std;
 DualFlanger::DualFlanger() :
 		YroEffectPlugin("DualFlanger",
 				"Preset1: -32,0,0,110,800,10,-27,16000,1,0,24,64,1,10;"
-				"Flange-Wha: 0,0,64,500,3000,50,-40,8000,1,0,196,96,0,0;"
-				"FbFlange: 0,0,64,68,75,50,-50,8000,0,1,23,96,5,0;"
-				"SoftFlange: -32,0,64,60,10,100,20,16000,0,0,16,90,4,0;"
-				"Flanger: -32,0,64,170,1200,50,0,16000,1,0,68,127,0,0;"
-				"Chorus1: -15,0,0,42,12,50,-10,1500,0,0,120,0,0,20;"
-				"Chorus2: -40,0,0,35,9,67,12,4700,1,1,160,75,0,60;"
-				"Preset8: 0,0,0,0,0,0,0,0,0,0,0,0,0,0;"
-				"Preset9: 0,0,0,0,0,0,0,0,0,0,0,0,0,0;") {
+						"Flange-Wha: 0,0,64,500,3000,50,-40,8000,1,0,196,96,0,0;"
+						"FbFlange: 0,0,64,68,75,50,-50,8000,0,1,23,96,5,0;"
+						"SoftFlange: -32,0,64,60,10,100,20,16000,0,0,16,90,4,0;"
+						"Flanger: -32,0,64,170,1200,50,0,16000,1,0,68,127,0,0;"
+						"Chorus1: -15,0,0,42,12,50,-10,1500,0,0,120,0,0,20;"
+						"Chorus2: -40,0,0,35,9,67,12,4700,1,1,160,75,0,60;"
+						"Preset8: 0,0,0,0,0,0,0,0,0,0,0,0,0,0;"
+						"Preset9: 0,0,0,0,0,0,0,0,0,0,0,0,0,0;") {
 
 	period_const = 1.0f / fPERIOD;
 
@@ -67,10 +67,10 @@ DualFlanger::DualFlanger() :
 	rsB = 0.0f;
 	lsA = 0.0f;
 	lsB = 0.0f;
+	fzero = 0.0f;
 	setPreset(0);
 	cleanup();
 }
-;
 
 DualFlanger::~DualFlanger() {
 }
@@ -97,9 +97,9 @@ void DualFlanger::cleanup() {
 	lflange0 = 0.0f;
 	rflange1 = 0.0f;
 	lflange1 = 0.0f;
-
+	kl = maxx_delay + 1;
+	kr = maxx_delay + 1;
 }
-;
 
 /*
  * Effect output
@@ -254,186 +254,213 @@ void DualFlanger::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 ;
 
 void DualFlanger::setWetdry(int value) {
-Pwetdry = value;
-dry = (float) (Pwetdry + 64) / 128.0f;
-wet = 1.0f - dry;
+	Pwetdry = value;
+	dry = (float) (Pwetdry + 64) / 128.0f;
+	wet = 1.0f - dry;
 }
 void DualFlanger::setPanning(int value) {
-Ppanning = value;
-if (value < 0) {
-rpan = 1.0f + (float) Ppanning / 64.0;
-lpan = 1.0f;
-} else {
-lpan = 1.0f - (float) Ppanning / 64.0;
-rpan = 1.0f;
-}
-;
+	Ppanning = value;
+	if (value < 0) {
+		rpan = 1.0f + (float) Ppanning / 64.0;
+		lpan = 1.0f;
+	} else {
+		lpan = 1.0f - (float) Ppanning / 64.0;
+		rpan = 1.0f;
+	};
 }
 void DualFlanger::setLrcross(int value) {
-Plrcross = value;
-flrcross = (float) Plrcross / 127.0;
-frlcross = 1.0f - flrcross; //keep this out of the DSP loop
+	Plrcross = value;
+	flrcross = (float) Plrcross / 127.0;
+	frlcross = 1.0f - flrcross; //keep this out of the DSP loop
 }
 void DualFlanger::setDepth(int value) {
-Pdepth = value;
-fdepth = (float) Pdepth;
-zcenter = (int) floor(0.5f * (fdepth + fwidth));
+	Pdepth = value;
+	fdepth = (float) Pdepth;
+	zcenter = (int) floor(0.5f * (fdepth + fwidth));
 }
 void DualFlanger::setWidth(int value) {
-Pwidth = value;
-fwidth = (float) Pwidth;
-zcenter = (int) floor(0.5f * (fdepth + fwidth));
+	Pwidth = value;
+	fwidth = (float) Pwidth;
+	zcenter = (int) floor(0.5f * (fdepth + fwidth));
 }
 void DualFlanger::setOff(int value) {
-Poffset = value;
-foffset = 0.5f + (float) Poffset / 255.0;
+	Poffset = value;
+	foffset = 0.5f + (float) Poffset / 255.0;
 }
 void DualFlanger::setFb(int value) {
-Pfb = value;
-ffb = (float) Pfb / 64.5f;
+	Pfb = value;
+	ffb = (float) Pfb / 64.5f;
 }
 void DualFlanger::setHidamp(int value) {
-Phidamp = value;
-fhidamp = expf(-D_PI * (float) Phidamp / fSAMPLE_RATE);
+	Phidamp = value;
+	fhidamp = expf(-D_PI * (float) Phidamp / fSAMPLE_RATE);
 }
 void DualFlanger::setSubtract(int value) {
-Psubtract = value;
-fsubtract = 0.5f;
-if (Psubtract)
-fsubtract = -0.5f; //In loop a mult by 0.5f is necessary, so this kills 2 birds with 1...
+	Psubtract = value;
+	fsubtract = 0.5f;
+	if (Psubtract)
+		fsubtract = -0.5f; //In loop a mult by 0.5f is necessary, so this kills 2 birds with 1...
 }
 void DualFlanger::setZero(int value) {
-Pzero = value;
-if (Pzero)
-fzero = 1.0f;
+	Pzero = value;
+	if (Pzero)
+		fzero = 1.0f;
 }
 void DualFlanger::setLfoFreq(int value) {
-lfo.setPfreq(value);
+	lfo.setPfreq(value);
 }
 void DualFlanger::setLfoStereo(int value) {
-lfo.setPstereo(value);
+	lfo.setPstereo(value);
 }
 void DualFlanger::setLfoType(int value) {
-lfo.setPlfOtype(value);
+	lfo.setPlfOtype(value);
 }
 void DualFlanger::setLfoRandomness(int value) {
-lfo.setPrandomness(value);
+	lfo.setPrandomness(value);
 }
 
-int  DualFlanger::getWetdry() {return Pwetdry;}
-int  DualFlanger::getPanning() {return Ppanning;}
-int  DualFlanger::getLrcross() {return Plrcross;}
-int  DualFlanger::getDepth() {return Pdepth;}
-int  DualFlanger::getWidth() {return Pwidth;}
-int  DualFlanger::getOff() {return Poffset;}
-int  DualFlanger::getFb() {return Pfb;}
-int  DualFlanger::getHidamp() {return Phidamp;}
-int  DualFlanger::getSubtract() {return Psubtract;}
-int  DualFlanger::getZero() {return Pzero;}
-int  DualFlanger::getLfoFreq() {return lfo.getPfreq();}
-int  DualFlanger::getLfoStereo() {return lfo.getPstereo();}
-int  DualFlanger::getLfoType() {return lfo.getPlfOtype();}
-int  DualFlanger::getLfoRandomness() {return lfo.getPrandomness();}
+int DualFlanger::getWetdry() {
+	return Pwetdry;
+}
+int DualFlanger::getPanning() {
+	return Ppanning;
+}
+int DualFlanger::getLrcross() {
+	return Plrcross;
+}
+int DualFlanger::getDepth() {
+	return Pdepth;
+}
+int DualFlanger::getWidth() {
+	return Pwidth;
+}
+int DualFlanger::getOff() {
+	return Poffset;
+}
+int DualFlanger::getFb() {
+	return Pfb;
+}
+int DualFlanger::getHidamp() {
+	return Phidamp;
+}
+int DualFlanger::getSubtract() {
+	return Psubtract;
+}
+int DualFlanger::getZero() {
+	return Pzero;
+}
+int DualFlanger::getLfoFreq() {
+	return lfo.getPfreq();
+}
+int DualFlanger::getLfoStereo() {
+	return lfo.getPstereo();
+}
+int DualFlanger::getLfoType() {
+	return lfo.getPlfOtype();
+}
+int DualFlanger::getLfoRandomness() {
+	return lfo.getPrandomness();
+}
 /**
  * toXml member
-*/
+ */
 const char *DualFlanger::toXml() {
-        char _buffer[256];
-        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
-        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
-        strcpy(_toXml,"<attributes>");
-        sprintf(_buffer,_formatd,"kl",kl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"kr",kr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"zl",zl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"zr",zr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"maxx_delay",maxx_delay);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pdepth",Pdepth);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pfb",Pfb);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Psubtract",Psubtract);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pwetdry",Pwetdry);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pzero",Pzero);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"zcenter",zcenter);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"fdepth",fdepth);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ffb",ffb);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"flrcross",flrcross);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"frlcross",frlcross);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"foffset",foffset);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"fsubtract",fsubtract);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"fwidth",fwidth);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"fzero",fzero);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lpan",lpan);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rpan",rpan);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"l",l);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"r",r);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ldl",ldl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rdl",rdl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"zdr",zdr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"zdl",zdl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"oldl",oldl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"oldr",oldr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"period_const",period_const);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"base",base);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ibase",ibase);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rflange0",rflange0);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rflange1",rflange1);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lflange0",lflange0);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lflange1",lflange1);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"oldrflange0",oldrflange0);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"oldrflange1",oldrflange1);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rsA",rsA);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rsB",rsB);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lsA",lsA);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lsB",lsB);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"wet",wet);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"dry",dry);
-        strcat(_toXml,_buffer);
-        strcat(_toXml,"</attributes>");
-        return _toXml;
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "kl", kl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "kr", kr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "zl", zl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "zr", zr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "maxx_delay", maxx_delay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pdepth", Pdepth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pfb", Pfb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrcross", Plrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Psubtract", Psubtract);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pwetdry", Pwetdry);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pzero", Pzero);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "zcenter", zcenter);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fdepth", fdepth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ffb", ffb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "flrcross", flrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "frlcross", frlcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "foffset", foffset);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fsubtract", fsubtract);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fwidth", fwidth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fzero", fzero);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lpan", lpan);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rpan", rpan);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "l", l);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "r", r);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ldl", ldl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rdl", rdl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "zdr", zdr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "zdl", zdl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldl", oldl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldr", oldr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "period_const", period_const);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "base", base);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ibase", ibase);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rflange0", rflange0);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rflange1", rflange1);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lflange0", lflange0);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lflange1", lflange1);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldrflange0", oldrflange0);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldrflange1", oldrflange1);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rsA", rsA);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rsB", rsB);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lsA", lsA);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lsB", lsB);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "wet", wet);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dry", dry);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
 }

@@ -30,7 +30,7 @@ using namespace std;
 
 Chorus::Chorus() :
 		YroEffectPlugin("Chorus",
-				"Chorus1: 64, 64, 33, 0, 0, 90, 40, 85, 64, 119, 0, 0;"
+						"Chorus1: 64, 64, 33, 0, 0, 90, 40, 85, 64, 119, 0, 0;"
 						"Chorus2: 64, 64, 19, 0, 0, 98, 56, 90, 64, 19, 0, 0;"
 						"Chorus3: 64, 64, 7, 0, 1, 42, 97, 95, 90, 127, 0, 0;"
 						"Celeste1: 64, 64, 1, 0, 0, 42, 115, 18, 90, 127, 0, 0;"
@@ -42,13 +42,15 @@ Chorus::Chorus() :
 						"Flange5: 64, 64, 34, 105, 0, 24, 39, 19, 17, 0, 0, 1;") {
 	dlk = 0;
 	drk = 0;
-	maxdelay = lrintf(MAX_CHORUS_DELAY / 1000.0 * iSAMPLE_RATE);
+	maxdelay = lrintf(MAX_CHORUS_DELAY / 1000.0 * fSAMPLE_RATE);
 	delayl = new float[maxdelay];
 	delayr = new float[maxdelay];
 
+	setPreset(0);
 	lfo.render(1, &lfol, &lfor);
 	dl2 = getdelay(lfol);
 	dr2 = getdelay(lfor);
+
 	cleanup();
 }
 ;
@@ -173,10 +175,9 @@ void Chorus::cleanup() {
 	for (int i = 0; i < maxdelay; i++) {
 		delayl[i] = 0.0;
 		delayr[i] = 0.0;
-	};
-
+	}
+	dlhi = 0;
 }
-;
 
 /*
  * Parameter control },

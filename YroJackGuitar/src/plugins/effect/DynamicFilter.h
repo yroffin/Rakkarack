@@ -44,7 +44,8 @@ public:
 	/**
 	 * member declaration
 	 */
-enum functions {
+	enum functions {
+		_preset,
 		_volume,
 		_panning,
 		_LfoPfreq,
@@ -61,63 +62,69 @@ enum functions {
 	 * setter and getter map
 	 */
 	int get0() {
-		return getVolume();
+		return getPreset();
 	}
 	void set0(int value) {
-		setVolume(value);
+		setPreset(value);
 	}
 	int get1() {
-		return getPanning();
+		return getVolume();
 	}
 	void set1(int value) {
-		setPanning(value);
+		setVolume(value);
 	}
 	int get2() {
-		return getLfoPfreq();
+		return getPanning();
 	}
 	void set2(int value) {
-		setLfoPfreq(value);
+		setPanning(value);
 	}
 	int get3() {
-		return getLfoPrandomness();
+		return getLfoPfreq();
 	}
 	void set3(int value) {
-		setLfoPrandomness(value);
+		setLfoPfreq(value);
 	}
 	int get4() {
-		return getLfoPlfOtype();
+		return getLfoPrandomness();
 	}
 	void set4(int value) {
-		setLfoPlfOtype(value);
+		setLfoPrandomness(value);
 	}
 	int get5() {
-		return getLfoPstereo();
+		return getLfoPlfOtype();
 	}
 	void set5(int value) {
-		setLfoPstereo(value);
+		setLfoPlfOtype(value);
 	}
 	int get6() {
-		return getDepth();
+		return getLfoPstereo();
 	}
 	void set6(int value) {
-		setDepth(value);
+		setLfoPstereo(value);
 	}
 	int get7() {
-		return getAmpsns();
+		return getDepth();
 	}
 	void set7(int value) {
-		setAmpsns(value);
+		setDepth(value);
 	}
 	int get8() {
-		return getAmpsnsinv();
+		return getAmpsns();
 	}
 	void set8(int value) {
-		setAmpsnsinv(value);
+		setAmpsns(value);
 	}
 	int get9() {
-		return getAmpsmooth();
+		return getAmpsnsinv();
 	}
 	void set9(int value) {
+		setAmpsnsinv(value);
+	}
+	int get10() {
+		return getAmpsmooth();
+	}
+	void set10(int value) {
 		setAmpsmooth(value);
 	}
 

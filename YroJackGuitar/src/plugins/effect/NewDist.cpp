@@ -32,7 +32,8 @@ using namespace std;
  */
 
 NewDist::NewDist() :
-		YroEffectPlugin("NewDist", "NewDist1: 0,64,64,83,65,15,0,2437,169,68,0;"
+		YroEffectPlugin("NewDist",
+				"NewDist1: 0,64,64,83,65,15,0,2437,169,68,0;"
 				"NewDist2: 0,64,64,95,45,6,0,3459,209,60,1;"
 				"NewDist3: 0,64,64,43,77,16,0,2983,118,83,0;") {
 	octoutl = (float *) malloc(sizeof(float) * iPERIOD);
@@ -338,10 +339,6 @@ const char *NewDist::toXml() {
         sprintf(_buffer,_formatd,"Ptype",Ptype);
         strcat(_toXml,_buffer);
         sprintf(_buffer,_formatd,"Pvolume",Pvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"inpll[4096]",inpll[4096]);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"inplr[4096]",inplr[4096]);
         strcat(_toXml,_buffer);
         sprintf(_buffer,_formatf,"panning",panning);
         strcat(_toXml,_buffer);

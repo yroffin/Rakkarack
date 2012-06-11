@@ -28,7 +28,8 @@
 using namespace std;
 
 Arpie::Arpie() :
-		YroEffectPlugin("Arpie", "Arpie 1: 67, 64, 35, 64, 30, 59, 0, 127, 4;"
+		YroEffectPlugin("Arpie",
+				"Arpie 1: 67, 64, 35, 64, 30, 59, 0, 127, 4;"
 				"Arpie 2: 67, 64, 21, 64, 30, 59, 0, 64, 4;"
 				"Arpie 3: 67, 75, 60, 64, 30, 59, 10, 0, 4;"
 				"Simple Arpie: 67, 60, 44, 64, 30, 0, 0, 0, 4;"
@@ -67,11 +68,9 @@ Arpie::Arpie() :
 	setPattern(0);
 	cleanup();
 }
-;
 
 Arpie::~Arpie() {
 }
-;
 
 /*
  * Cleanup the effect
@@ -86,8 +85,9 @@ void Arpie::cleanup() {
 	kl = 0;
 	kr = 0;
 	harmonic = 1;
+	rvfl = 0;
+	rvfr = 0;
 }
-;
 
 /*
  * Initialize the delays
@@ -118,7 +118,6 @@ void Arpie::initdelays() {
 	oldr = 0.0;
 
 }
-;
 
 /*
  * Effect output
@@ -211,7 +210,6 @@ void Arpie::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	};
 
 }
-;
 
 /*
  * Parameter control
@@ -223,22 +221,19 @@ void Arpie::setVolume(int Pvolume) {
 		cleanup();
 
 }
-;
 
 void Arpie::setPanning(int Ppanning) {
 	this->Ppanning = Ppanning;
 	panning = ((float) Ppanning + 0.5f) / 127.0f;
 }
-;
 
 void Arpie::setReverse(int Preverse) {
 	this->Preverse = Preverse;
 	reverse = (float) Preverse / 127.0f;
 }
-;
 
 void Arpie::setDelay(int value) {
-	this->Pdelay = Pdelay;
+	this->Pdelay = value;
 	if (Pdelay < 2)
 		Pdelay = 2;
 	if (Pdelay > 600)
@@ -258,13 +253,11 @@ void Arpie::setLrdelay(int Plrdelay) {
 	lrdelay = lrintf(tmp);
 	initdelays();
 }
-;
 
 void Arpie::setLrcross(int Plrcross) {
 	this->Plrcross = Plrcross;
 	lrcross = (float) Plrcross / 127.0f * 1.0f;
 }
-;
 
 void Arpie::setFb(int Pfb) {
 	this->Pfb = Pfb;
@@ -292,7 +285,6 @@ void Arpie::setPattern(int Ppattern) {
 		pattern[ii] = setpatterns[Ppattern][ii];
 
 }
-;
 
 int Arpie::getHarms() {
 	return Pharms;
@@ -343,86 +335,86 @@ int Arpie::getPattern() {
 
 /**
  * toXml member
-*/
+ */
 const char *Arpie::toXml() {
-        char _buffer[256];
-        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
-        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
-        strcpy(_toXml,"<attributes>");
-        sprintf(_buffer,_formatd,"dl",dl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"dr",dr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"delay",delay);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"lrdelay",lrdelay);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"kl",kl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"kr",kr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"rvkl",rvkl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"rvkr",rvkr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"rvfl",rvfl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"rvfr",rvfr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"maxx_delay",maxx_delay);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"fade",fade);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"harmonic",harmonic);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"envcnt",envcnt);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pdelay",Pdelay);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pfb",Pfb);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pharms",Pharms);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Phidamp",Phidamp);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Plrdelay",Plrdelay);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Ppattern",Ppattern);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Preverse",Preverse);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Psubdiv",Psubdiv);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"subdiv",subdiv);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"oldl",oldl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"oldr",oldr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"outvolume",outvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"panning",panning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lrcross",lrcross);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"fb",fb);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"hidamp",hidamp);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"reverse",reverse);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"Srate_Attack_Coeff",Srate_Attack_Coeff);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"envattack",envattack);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"envswell",envswell);
-        strcat(_toXml,_buffer);
-        strcat(_toXml,"</attributes>");
-        return _toXml;
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "dl", dl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "dr", dr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "delay", delay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "lrdelay", lrdelay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "kl", kl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "kr", kr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "rvkl", rvkl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "rvkr", rvkr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "rvfl", rvfl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "rvfr", rvfr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "maxx_delay", maxx_delay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "fade", fade);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "harmonic", harmonic);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "envcnt", envcnt);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pdelay", Pdelay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pfb", Pfb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pharms", Pharms);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Phidamp", Phidamp);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrcross", Plrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrdelay", Plrdelay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppattern", Ppattern);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Preverse", Preverse);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Psubdiv", Psubdiv);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "subdiv", subdiv);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldl", oldl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldr", oldr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "outvolume", outvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "panning", panning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lrcross", lrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fb", fb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "hidamp", hidamp);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "reverse", reverse);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "Srate_Attack_Coeff", Srate_Attack_Coeff);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "envattack", envattack);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "envswell", envswell);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
 }

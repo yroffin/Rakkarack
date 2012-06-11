@@ -26,7 +26,8 @@
 using namespace std;
 
 Exciter::Exciter() :
-		YroEffectPlugin("Exciter", "Plain: 64,0,0,0,0,0,0,0,0,0,0,20000,20;"
+		YroEffectPlugin("Exciter",
+				"Plain: 64,0,0,0,0,0,0,0,0,0,0,20000,20;"
 				"Loudness: 64,0,0,0,0,24,0,-24,0,24,0,80,20;"
 				"Exciter1: 64,64,0,0,0,64,0,0,0,64,0,20000,20;"
 				"Exciter2: 64,0,0,0,-32,0,-32,-64,0,48,0,14100,5660;"
@@ -121,16 +122,24 @@ const char *Exciter::toXml() {
         char _buffer[256];
         char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
         char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
+        char _formatdi[] = {"<attribute name=\"%s\" value=\"%d\" instance=\"%d\" />"};
+        char _formatfi[] = {"<attribute name=\"%s\" value=\"%9.40f\" instance=\"%d\" />"};
         strcpy(_toXml,"<attributes>");
+        sprintf(_buffer,_formatd,"Ppreset",preset);
+        strcat(_toXml,_buffer);
         sprintf(_buffer,_formatd,"hpffreq",hpffreq);
         strcat(_toXml,_buffer);
         sprintf(_buffer,_formatd,"lpffreq",lpffreq);
         strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Prm[10]",Prm[10]);
-        strcat(_toXml,_buffer);
+        for(int i=0;i<10;i++) {
+        	sprintf(_buffer,_formatdi,"Prm",Prm[i],i);
+        	strcat(_toXml,_buffer);
+            sprintf(_buffer,_formatfi,"rm",rm[i],i);
+            strcat(_toXml,_buffer);
+        }
         sprintf(_buffer,_formatd,"Pvolume",Pvolume);
         strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rm[10]",rm[10]);
+        sprintf(_buffer,_formatf,"outvolume",outvolume);
         strcat(_toXml,_buffer);
         strcat(_toXml,"</attributes>");
         return _toXml;

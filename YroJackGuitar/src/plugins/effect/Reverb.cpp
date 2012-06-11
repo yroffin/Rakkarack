@@ -30,22 +30,19 @@ using namespace std;
 
 Reverb::Reverb() :
 		YroEffectPlugin("Reverb",
-		/**
-		 * TODO supression 5,6 position (deprecated)
-		 */
-		"Cathedral1: 80,64,63,24,0,0,0,4002,27,83,1,64;"
-				"Cathedral2: 80,64,69,35,0,0,0,25040,21,71,0,64;"
-				"Cathedral3: 80,64,69,24,0,0,0,25040,2417,78,1,85;"
-				"Hall1: 90,64,51,10,0,0,0,25040,81,78,1,64;"
-				"Hall2: 90,64,53,20,0,0,0,25040,2417,71,1,64;"
-				"Room1: 100,64,33,0,0,0,0,25040,21,106,0,30;"
-				"Room2: 100,64,21,26,0,0,0,1223,21,77,1,45;"
-				"Basement: 110,64,14,0,0,0,0,25040,27,71,0,25;"
-				"Tunnel: 85,80,84,20,42,0,0,652,21,78,1,105;"
-				"Echoed1: 95,64,26,60,71,0,0,14722,21,64,1,64;"
-				"Echoed2: 90,64,40,88,71,0,0,14722,21,88,1,64;"
-				"VeryLong1: 90,64,93,15,0,0,0,14722,21,77,0,95;"
-				"VeryLong2: 90,64,111,30,0,0,0,14722,5058,74,1,80;") {
+				"Cathedral1: 80,64, 63,24, 0, 4002,  27,83,1,64;"
+				"Cathedral2: 80,64, 69,35, 0,25040,  21,71,0,64;"
+				"Cathedral3: 80,64, 69,24, 0,25040,2417,78,1,85;"
+				"Hall1: 	 90,64, 51,10, 0,25040,  81,78,1,64;"
+				"Hall2:      90,64, 53,20, 0,25040,2417,71,1,64;"
+				"Room1:    100,64, 33, 0, 0,25040,  21,106,0,30;"
+				"Room2:    100,64, 21,26, 0, 1223,  21,77,1,45;"
+				"Basement: 110,64, 14, 0, 0,25040,  27,71,0,25;"
+				"Tunnel:    85,80, 84,20,42,  652,  21,78,1,105;"
+				"Echoed1:   95,64, 26,60,71,14722,  21,64,1,64;"
+				"Echoed2:   90,64, 40,88,71,14722,  21,88,1,64;"
+				"VeryLong1: 90,64, 93,15, 0,14722,  21,77,0,95;"
+				"VeryLong2: 90,64,111,30, 0,14722,5058,74,1,80;") {
 	inputbuf = new float[iPERIOD];
 
 	//defaults
@@ -84,8 +81,34 @@ Reverb::Reverb() :
 	hpf = new AnalogFilter(3, 20, 1, 0);
 	idelay = NULL;
 
+	/**
+	 * initialization for first cleanup call
+	 * TODO avoid this allocation for comb, ap and idelay
+	 */
+	for (int i = 0; i < REV_COMBS * 2; i++) {
+		comb[i] = new float[comblen[i]];
+		for (int j = 0; j < comblen[i]; j++)
+			comb[i][j] = 0.0;
+	}
+
+	for (int i = 0; i < REV_APS * 2; i++) {
+		ap[i] = new float[aplen[i]];
+		for (int j = 0; j < aplen[i]; j++) {
+			ap[i][j] = 0.0;
+		}
+	}
+
+	if (idelay != NULL) {
+		idelay = new float[idelaylen];
+		for (int i = 0; i < idelaylen; i++)
+			idelay[i] = 0.0;
+	}
+
 	setPreset(0);
-	cleanup(); //do not call this before the comb initialisation
+	/**
+	 * do not call this before the comb initialisation
+	 */
+	cleanup();
 }
 
 Reverb::~Reverb() {
@@ -113,9 +136,9 @@ void Reverb::cleanup() {
 
 	hpf->cleanup();
 	lpf->cleanup();
-
+	rdelaylen = 0;
+	erbalance = 0.;
 }
-;
 
 /*
  * Process one channel; 0=left,1=right
@@ -208,7 +231,6 @@ void Reverb::setVolume(int Pvolume) {
 		cleanup();
 
 }
-;
 
 void Reverb::setPan(int Ppan) {
 	this->Ppan = Ppan;

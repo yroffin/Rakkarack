@@ -45,7 +45,8 @@ public:
 	 * member declaration
 	 */
 	enum functions {
-		_preset, _tempo
+		_preset,
+		_tempo
 	};
 
 	/**

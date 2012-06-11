@@ -39,7 +39,20 @@ public:
 	 * member declaration
 	 */
 	enum functions {
-		_preset, _volume, _lpf, _hpf
+		_preset,
+		_volume,
+		_har0,
+		_har1,
+		_har2,
+		_har3,
+		_har4,
+		_har5,
+		_har6,
+		_har7,
+		_har8,
+		_har9,
+		_lpf,
+		_hpf
 	};
 
 	/**
@@ -58,76 +71,76 @@ public:
 		setVolume(value);
 	}
 	int get2() {
-		return getLpf();
-	}
-	void set2(int value) {
-		setLpf(value);
-	}
-	int get3() {
-		return getHpf();
-	}
-	void set3(int value) {
-		setHpf(value);
-	}
-	int get4() {
 		return getHar(0);
 	}
-	void set4(int value) {
-		setHar(0, value);
+	void set2(int value) {
+		setHar(0,value);
 	}
-	int get5() {
+	int get3() {
 		return getHar(1);
 	}
-	void set5(int value) {
-		setHar(1, value);
+	void set3(int value) {
+		setHar(1,value);
 	}
-	int get6() {
+	int get4() {
 		return getHar(2);
 	}
-	void set6(int value) {
-		setHar(2, value);
+	void set4(int value) {
+		setHar(2,value);
 	}
-	int get7() {
+	int get5() {
 		return getHar(3);
 	}
-	void set7(int value) {
-		setHar(3, value);
+	void set5(int value) {
+		setHar(3,value);
 	}
-	int get8() {
+	int get6() {
 		return getHar(4);
 	}
-	void set8(int value) {
-		setHar(4, value);
+	void set6(int value) {
+		setHar(4,value);
 	}
-	int get9() {
+	int get7() {
 		return getHar(5);
 	}
-	void set9(int value) {
-		setHar(5, value);
+	void set7(int value) {
+		setHar(5,value);
 	}
-	int get10() {
+	int get8() {
 		return getHar(6);
 	}
-	void set10(int value) {
-		setHar(6, value);
+	void set8(int value) {
+		setHar(6,value);
 	}
-	int get11() {
+	int get9() {
 		return getHar(7);
 	}
-	void set11(int value) {
-		setHar(7, value);
+	void set9(int value) {
+		setHar(7,value);
 	}
-	int get12() {
+	int get10() {
 		return getHar(8);
 	}
-	void set12(int value) {
-		setHar(8, value);
+	void set10(int value) {
+		setHar(8,value);
 	}
-	int get13() {
+	int get11() {
 		return getHar(9);
 	}
+	void set11(int value) {
+		setHar(9,value);
+	}
+	int get12() {
+		return getLpf();
+	}
+	void set12(int value) {
+		setLpf(value);
+	}
+	int get13() {
+		return getHpf();
+	}
 	void set13(int value) {
-		setHar(9, value);
+		setHpf(value);
 	}
 
 	/**

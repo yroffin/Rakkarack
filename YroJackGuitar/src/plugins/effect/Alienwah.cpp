@@ -27,20 +27,20 @@ using namespace std;
 
 Alienwah::Alienwah() :
 		YroEffectPlugin("Alienwah",
-				"AlienWah1: 64, 64, 80, 0, 0, 62, 60, 105, 25, 0, 64;"
+						"AlienWah1: 64, 64, 80, 0, 0, 62, 60, 105, 25, 0, 64;"
 						"AlienWah2: 64, 64, 95, 106, 0, 101, 60, 105, 17, 0, 64;"
 						"AlienWah3: 64, 64, 55, 0, 1, 100, 112, 105, 31, 0, 42;"
 						"AlienWah4: 64, 64, 1, 0, 1, 66, 101, 11, 47, 0, 86;") {
+	setPreset(0);
+	cleanup();
 	oldclfol.a = fb;
 	oldclfol.b = 0.0;
 	oldclfor.a = fb;
 	oldclfor.b = 0.0;
-	cleanup();
 }
 
 Alienwah::~Alienwah() {
 }
-;
 
 /*
  * Apply the effect
@@ -50,7 +50,7 @@ void Alienwah::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	float lfol, lfor;
 	COMPLEXTYPE clfol, clfor, out, tmp;
 
-	lfo.render(nframes, &lfol, &lfor);
+	lfo.render(1,&lfol, &lfor);
 	lfol *= depth * D_PI;
 	lfor *= depth * D_PI;
 	clfol.a = cosf(lfol + phase) * fb;
@@ -94,9 +94,7 @@ void Alienwah::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	oldclfol.b = clfol.b;
 	oldclfor.a = clfor.a;
 	oldclfor.b = clfor.b;
-
 }
-;
 
 /*
  * Cleanup the effect
@@ -214,42 +212,42 @@ void Alienwah::setLfoPfreq(int value) {
 }
 /**
  * toXml member
-*/
+ */
 const char *Alienwah::toXml() {
-        char _buffer[256];
-        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
-        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
-        strcpy(_toXml,"<attributes>");
-        sprintf(_buffer,_formatd,"oldk",oldk);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"oldpdelay",oldpdelay);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pdelay",Pdelay);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pdepth",Pdepth);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pfb",Pfb);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pphase",Pphase);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"outvolume",outvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"panning",panning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"fb",fb);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"depth",depth);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lrcross",lrcross);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"phase",phase);
-        strcat(_toXml,_buffer);
-        strcat(_toXml,"</attributes>");
-        return _toXml;
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "oldk", oldk);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "oldpdelay", oldpdelay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pdelay", Pdelay);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pdepth", Pdepth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pfb", Pfb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrcross", Plrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pphase", Pphase);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "outvolume", outvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "panning", panning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "fb", fb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "depth", depth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lrcross", lrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "phase", phase);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
 }

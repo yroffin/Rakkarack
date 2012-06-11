@@ -27,8 +27,8 @@ using namespace std;
 
 DynamicFilter::DynamicFilter() :
 		YroEffectPlugin("DynamicFilter",
-				"WahWah: {64, 64, 80, 0, 0, 64, 70, 90, 0, 60;"
-						"AutoWah: {64, 64, 70, 0, 0, 80, 70, 0, 0, 60;"
+				"WahWah: 64, 64, 80, 0, 0, 64, 70, 90, 0, 60;"
+						"AutoWah: 64, 64, 70, 0, 0, 80, 70, 0, 0, 60;"
 						"Sweep: 64, 64, 30, 0, 0, 50, 80, 0, 0, 60;"
 						"VocalMorph1: 64, 64, 80, 0, 0, 64, 70, 64, 0, 60;"
 						"VocalMorph1: 64, 64, 50, 0, 0, 96, 64, 0, 0, 60;") {
@@ -111,35 +111,6 @@ void DynamicFilter::cleanup() {
 /*
  * Parameter control
  */
-
-void DynamicFilter::setDepth(int Pdepth) {
-	this->Pdepth = Pdepth;
-	depth = powf(((float) Pdepth / 127.0f), 2.0f);
-}
-;
-
-void DynamicFilter::setVolume(int Pvolume) {
-	this->Pvolume = Pvolume;
-	outvolume = (float) Pvolume / 127.0f;
-
-}
-;
-
-void DynamicFilter::setPanning(int Ppanning) {
-	this->Ppanning = Ppanning;
-	panning = ((float) Ppanning + .5f) / 127.0f;
-}
-;
-
-void DynamicFilter::setAmpsns(int Pampsns) {
-	ampsns = powf((float) Pampsns / 127.0f, 2.5f) * 10.0f;
-	if (Pampsnsinv != 0)
-		ampsns = -ampsns;
-	ampsmooth = expf((float) -Pampsmooth / 127.0f * 10.0f) * 0.99f;
-	this->Pampsns = Pampsns;
-}
-;
-
 void DynamicFilter::reinitfilter() {
 	if (filterl != NULL)
 		delete (filterl);
@@ -245,6 +216,38 @@ void DynamicFilter::setPreset(int npreset) {
 }
 ;
 
+void DynamicFilter::setVolume(int Pvolume) {
+	this->Pvolume = Pvolume;
+	outvolume = (float) Pvolume / 127.0f;
+
+}
+void DynamicFilter::setPanning(int Ppanning) {
+	this->Ppanning = Ppanning;
+	panning = ((float) Ppanning + .5f) / 127.0f;
+}
+void DynamicFilter::setLfoPfreq(int value) {
+	lfo.setPfreq(value);
+}
+void DynamicFilter::setLfoPrandomness(int value) {
+	lfo.setPrandomness(value);
+}
+void DynamicFilter::setLfoPlfOtype(int value) {
+	lfo.setPlfOtype(value);
+}
+void DynamicFilter::setLfoPstereo(int value) {
+	lfo.setPstereo(value);
+}
+void DynamicFilter::setDepth(int Pdepth) {
+	this->Pdepth = Pdepth;
+	depth = powf(((float) Pdepth / 127.0f), 2.0f);
+}
+void DynamicFilter::setAmpsns(int Pampsns) {
+	ampsns = powf((float) Pampsns / 127.0f, 2.5f) * 10.0f;
+	if (Pampsnsinv != 0)
+		ampsns = -ampsns;
+	ampsmooth = expf((float) -Pampsmooth / 127.0f * 10.0f) * 0.99f;
+	this->Pampsns = Pampsns;
+}
 void DynamicFilter::setAmpsnsinv(int value) {
 	Pampsnsinv = value;
 	setAmpsns(Pampsns);
@@ -272,18 +275,6 @@ int DynamicFilter::getLfoPlfOtype() {
 int DynamicFilter::getLfoPstereo() {
 	return lfo.getPstereo();
 }
-void DynamicFilter::setLfoPfreq(int value) {
-	lfo.setPfreq(value);
-}
-void DynamicFilter::setLfoPrandomness(int value) {
-	lfo.setPrandomness(value);
-}
-void DynamicFilter::setLfoPlfOtype(int value) {
-	lfo.setPlfOtype(value);
-}
-void DynamicFilter::setLfoPstereo(int value) {
-	lfo.setPstereo(value);
-}
 int DynamicFilter::getDepth() {
 	return Pdepth;
 }
@@ -298,42 +289,42 @@ int DynamicFilter::getAmpsmooth() {
 }
 /**
  * toXml member
-*/
+ */
 const char *DynamicFilter::toXml() {
-        char _buffer[256];
-        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
-        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
-        strcpy(_toXml,"<attributes>");
-        sprintf(_buffer,_formatd,"Pampsmooth",Pampsmooth);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pampsns",Pampsns);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pampsnsinv",Pampsnsinv);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pdepth",Pdepth);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ms1",ms1);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ms2",ms2);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ms3",ms3);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ms4",ms4);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"outvolume",outvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"panning",panning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"depth",depth);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ampsns",ampsns);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ampsmooth",ampsmooth);
-        strcat(_toXml,_buffer);
-        strcat(_toXml,"</attributes>");
-        return _toXml;
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "Pampsmooth", Pampsmooth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pampsns", Pampsns);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pampsnsinv", Pampsnsinv);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pdepth", Pdepth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ms1", ms1);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ms2", ms2);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ms3", ms3);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ms4", ms4);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "outvolume", outvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "panning", panning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "depth", depth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ampsns", ampsns);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ampsmooth", ampsmooth);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
 }

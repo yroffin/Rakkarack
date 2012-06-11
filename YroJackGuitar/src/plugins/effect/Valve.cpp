@@ -47,10 +47,10 @@ Valve::Valve() :
 	Plpf = 127;
 	Phpf = 0;
 	Q_q = 64;
+	q = (float) Q_q / 127.0f - 1.0f;
 	Ped = 0;
 	Pstereo = 0;
 	Pprefiltering = 0;
-	q = 0.0f;
 	dist = 0.0f;
 	setLpf(127);
 	setHpf(1);
@@ -64,6 +64,7 @@ Valve::Valve() :
 	rm[6] = -1.0f;
 	rm[8] = 1.0f;
 	harm->calcula_mag(rm);
+	dist = 0.;
 
 	setPreset(0);
 	init_coefs();
@@ -268,21 +269,20 @@ void Valve::setVolume(int Pvolume) {
 	outvolume = (float) Pvolume / 127.0f;
 	if (Pvolume == 0)
 		cleanup();
-
+	init_coefs();
 }
-;
 
 void Valve::setPanning(int Ppanning) {
 	this->Ppanning = Ppanning;
 	panning = ((float) Ppanning + 0.5f) / 127.0f;
+	init_coefs();
 }
-;
 
 void Valve::setLrcross(int Plrcross) {
 	this->Plrcross = Plrcross;
 	lrcross = (float) Plrcross / 127.0f * 1.0f;
+	init_coefs();
 }
-;
 
 void Valve::setLpf(int value) {
 	Plpf = value;
@@ -290,8 +290,8 @@ void Valve::setLpf(int value) {
 
 	lpfl->setfreq(fr);
 	lpfr->setfreq(fr);
+	init_coefs();
 }
-;
 
 void Valve::setHpf(int value) {
 	Phpf = value;
@@ -301,8 +301,8 @@ void Valve::setHpf(int value) {
 	hpfr->setfreq(fr);
 
 	//Prefiltering of 51 is approx 630 Hz. 50 - 60 generally good for OD pedal.
+	init_coefs();
 }
-;
 
 void Valve::setPresence(int value) {
 	Presence = value;
@@ -312,7 +312,7 @@ void Valve::setPresence(int value) {
 
 	harm->set_freqh(1, freq);
 	harm->set_vol(1, nvol);
-
+	init_coefs();
 }
 
 void Valve::setDrive(int value) {

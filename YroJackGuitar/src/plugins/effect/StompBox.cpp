@@ -24,7 +24,8 @@
 using namespace std;
 
 StompBox::StompBox() :
-		YroEffectPlugin("StompBox", "Odie: 80, 32, 0, 32, 10, 0;"
+		YroEffectPlugin("StompBox",
+				"Odie: 80, 32, 0, 32, 10, 0;"
 				"Grunger: 48, 10, -6, 55, 85, 1;"
 				"Hard Dist.: 48, -22, -6, 38, 12;"
 				"Ratty: 48, -20, 0, 0, 70, 2;"
@@ -63,11 +64,19 @@ StompBox::StompBox() :
 	rwshape2 = new WaveShaper();
 	lwshape2 = new WaveShaper();
 
-	cleanup();
+	pre1gain = 268.;
+	pre2gain = 3000.;
+	midb = 0.;
+	LG = 0.;
+	MG = 0.;
+	HG = 0;
+	RGP2 = 0.;
+	RGPST = 0;
+	pgain = 0.;
 
+	cleanup();
 	setPreset(0);
 }
-;
 
 StompBox::~StompBox() {
 }

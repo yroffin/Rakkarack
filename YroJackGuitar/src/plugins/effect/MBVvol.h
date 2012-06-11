@@ -162,6 +162,8 @@ enum functions {
 	int getCombi();
 	void setCombi(int value);
 
+	void compute(int value);
+
 private:
 	float *lowl;
 	float *lowr;

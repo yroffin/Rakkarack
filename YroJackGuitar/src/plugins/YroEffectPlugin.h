@@ -112,6 +112,9 @@ public:
 	int getPreset() const {
 		return preset;
 	}
+	int getPresetCount() const {
+		return presets->size();
+	}
 
 	/**
 	 * internal debug

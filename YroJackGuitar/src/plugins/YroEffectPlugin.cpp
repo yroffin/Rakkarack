@@ -73,7 +73,10 @@ void YroEffectPlugin::setPreset(int _preset, int forceCleanup) {
  		}
  		preset = _preset;
  		if(forceCleanup || forcedCleanup) {
+ 			LOG->debug("Effect %s, fix preset to %d and cleanup", name, _preset);
  			cleanup();
+ 		} else {
+ 			LOG->debug("Effect %s, fix preset to %d", name, _preset);
  		}
  	}
 }
@@ -171,7 +174,9 @@ void YroEffectPlugin::onChange(wxCheckBox *widget) {
  * Effect advertise for change
  */
 void YroEffectPlugin::onChange(int index) {
-	LOG->debug("onChange(%d) => set %d", index, getInt(index));
+	/**
+	 * TODO LOG->debug("onChange(%d) => set %d", index, getInt(index));
+	 */
 	if (mapIndexSpinCtrl.find(index) != mapIndexSpinCtrl.end()) {
 		mapIndexSpinCtrl[index]->SetValue(getInt(index));
 		return;

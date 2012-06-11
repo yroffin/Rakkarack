@@ -49,12 +49,64 @@ public:
 	int getErrorNumber() const;
 	void setErrorNumber(int errorNumber);
 
+	int getConvolotronDownQuality() const;
+	void setConvolotronDownQuality(int convolotronDownQuality);
+	int getConvolotronDownsample() const;
+	void setConvolotronDownsample(int convolotronDownsample);
+	int getConvolotronUpQuality() const;
+	void setConvolotronUpQuality(int convolotronUpQuality);
+	int getHarmonizerDownQuality() const;
+	void setHarmonizerDownQuality(int harmonizerDownQuality);
+	int getHarmonizerDownsample() const;
+	void setHarmonizerDownsample(int harmonizerDownsample);
+	int getHarmonizerUpQuality() const;
+	void setHarmonizerUpQuality(int harmonizerUpQuality);
+	int getReverbtronDownQuality() const;
+	void setReverbtronDownQuality(int reverbtronDownQuality);
+	int getReverbtronDownsample() const;
+	void setReverbtronDownsample(int reverbtronDownsample);
+	int getReverbtronUpQuality() const;
+	void setReverbtronUpQuality(int reverbtronUpQuality);
+	int getSequenceDownQuality() const;
+	void setSequenceDownQuality(int sequenceDownQuality);
+	int getSequenceDownsample() const;
+	void setSequenceDownsample(int sequenceDownsample);
+	int getSequenceUpQuality() const;
+	void setSequenceUpQuality(int sequenceUpQuality);
+	int getShifterDownQuality() const;
+	void setShifterDownQuality(int shifterDownQuality);
+	int getShifterDownsample() const;
+	void setShifterDownsample(int shifterDownsample);
+	int getShifterUpQuality() const;
+	void setShifterUpQuality(int shifterUpQuality);
+	int getStereoHarmDownQuality() const;
+	void setStereoHarmDownQuality(int stereoHarmDownQuality);
+	int getStereoHarmDownsample() const;
+	void setStereoHarmDownsample(int stereoHarmDownsample);
+	int getStereoHarmUpQuality() const;
+	void setStereoHarmUpQuality(int stereoHarmUpQuality);
+	int getVocoderDownQuality() const;
+	void setVocoderDownQuality(int vocoderDownQuality);
+	int getVocoderDownsample() const;
+	void setVocoderDownsample(int vocoderDownsample);
+	int getVocoderUpQuality() const;
+	void setVocoderUpQuality(int vocoderUpQuality);
+
+    /**
+     * 4, 8, 16 or 32
+     */
+	int getHarmonizerQuality() const;
+	void setHarmonizerQuality(int harmonizerQuality);
+
+	int getStereoHarmQuality() const;
+	void setStereoHarmQuality(int stereoHarmQuality);
+
 	int getMaxLength() const {
 		return maxLength;
 	}
 
 	void check() {
-		floatSampleRate = (float) ((((integerSampleRate))));
+		floatSampleRate = (float) (((((((integerSampleRate)))))));
 		inverseFloatSampleRate = 1.0f / floatSampleRate;
 		floatPeriod = float(integerPeriod);
 		if(integerPeriod > 0)
@@ -80,6 +132,30 @@ private:
 	int waveshapeUpQuality;
 	int waveshapeDownQuality;
 	int timePeriod;
+
+    int harmonizerDownsample;
+    int harmonizerUpQuality;
+    int harmonizerDownQuality;
+    int reverbtronDownsample;
+    int reverbtronUpQuality;
+    int reverbtronDownQuality;
+    int convolotronDownsample;
+    int convolotronUpQuality;
+    int convolotronDownQuality;
+    int sequenceDownsample;
+    int sequenceUpQuality;
+    int sequenceDownQuality;
+    int shifterDownsample;
+    int shifterUpQuality;
+    int shifterDownQuality;
+    int vocoderDownsample;
+    int vocoderUpQuality;
+    int vocoderDownQuality;
+    int stereoHarmDownsample;
+    int stereoHarmUpQuality;
+    int stereoHarmDownQuality;
+    int harmonizerQuality;
+    int stereoHarmQuality;
 
 	/**
 	 * TODO verify use of maxLength, UpAmo, UpQual, DownQual

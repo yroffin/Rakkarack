@@ -68,6 +68,7 @@ Synthfilter::Synthfilter() :
 	Clp = 0.00000005f;
 	att = delta * 5.0f; //200ms
 	rls = delta * 5.0f; //200ms
+	env = 0.;
 
 	setPreset(0);
 	cleanup();
@@ -87,7 +88,7 @@ void Synthfilter::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	lgain = 0.0;
 	rgain = 0.0;
 
-	lfo.render(nframes, &lfol, &lfor);
+	lfo.render(1, &lfol, &lfor);
 	lmod = lfol * width + depth + env * sns;
 	rmod = lfor * width + depth + env * sns;
 
@@ -119,7 +120,7 @@ void Synthfilter::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 		gr += xr; //linear interpolation of LFO
 
 		//Envelope detection
-		envdelta = (fabsf(efxoutl[i]) + fabsf(efxoutr[i])) - env; //envelope follower from Compressor.C
+		envdelta = (fabsf(smpsl[i]) + fabsf(smpsr[i])) - env; //envelope follower from Compressor.C
 		if (delta > 0.0)
 			env += att * envdelta;
 		else

@@ -39,6 +39,33 @@ YroParamHelper::YroParamHelper() {
 	waveshapeDownQuality = 2;
 	upsample = 0;
 	getBogomips();
+
+    harmonizerDownsample = 0;
+    harmonizerUpQuality = 0;
+    harmonizerDownQuality = 0;
+    reverbtronDownsample = 0;
+    reverbtronUpQuality = 0;
+    reverbtronDownQuality = 0;
+    convolotronDownsample = 6;
+    convolotronUpQuality = 0;
+    convolotronDownQuality = 0;
+    sequenceDownsample = 0;
+    sequenceUpQuality = 0;
+    sequenceDownQuality = 0;
+    shifterDownsample = 0;
+    shifterUpQuality = 0;
+    shifterDownQuality = 0;
+    vocoderDownsample = 0;
+    vocoderUpQuality = 0;
+    vocoderDownQuality = 0;
+    stereoHarmDownsample = 0;
+    stereoHarmUpQuality = 0;
+    stereoHarmDownQuality = 0;
+
+    harmonizerQuality = 4;
+    stereoHarmQuality = 0;
+    sequenceDownsample = 5;
+    shifterDownsample = 5;
 }
 
 YroParamHelper::~YroParamHelper() {
@@ -57,6 +84,190 @@ YroParamHelper* YroParamHelper::instance() {
 		__instance = new YroParamHelper();
 	}
 	return __instance;
+}
+
+int YroParamHelper::getConvolotronDownQuality() const {
+	return convolotronDownQuality;
+}
+
+void YroParamHelper::setConvolotronDownQuality(int convolotronDownQuality) {
+	this->convolotronDownQuality = convolotronDownQuality;
+}
+
+int YroParamHelper::getConvolotronDownsample() const {
+	return convolotronDownsample;
+}
+
+void YroParamHelper::setConvolotronDownsample(int convolotronDownsample) {
+	this->convolotronDownsample = convolotronDownsample;
+}
+
+int YroParamHelper::getConvolotronUpQuality() const {
+	return convolotronUpQuality;
+}
+
+void YroParamHelper::setConvolotronUpQuality(int convolotronUpQuality) {
+	this->convolotronUpQuality = convolotronUpQuality;
+}
+
+int YroParamHelper::getHarmonizerDownQuality() const {
+	return harmonizerDownQuality;
+}
+
+void YroParamHelper::setHarmonizerDownQuality(int harmonizerDownQuality) {
+	this->harmonizerDownQuality = harmonizerDownQuality;
+}
+
+int YroParamHelper::getHarmonizerDownsample() const {
+	return harmonizerDownsample;
+}
+
+void YroParamHelper::setHarmonizerDownsample(int harmonizerDownsample) {
+	this->harmonizerDownsample = harmonizerDownsample;
+}
+
+int YroParamHelper::getHarmonizerUpQuality() const {
+	return harmonizerUpQuality;
+}
+
+void YroParamHelper::setHarmonizerUpQuality(int harmonizerUpQuality) {
+	this->harmonizerUpQuality = harmonizerUpQuality;
+}
+
+int YroParamHelper::getReverbtronDownQuality() const {
+	return reverbtronDownQuality;
+}
+
+void YroParamHelper::setReverbtronDownQuality(int reverbtronDownQuality) {
+	this->reverbtronDownQuality = reverbtronDownQuality;
+}
+
+int YroParamHelper::getReverbtronDownsample() const {
+	return reverbtronDownsample;
+}
+
+void YroParamHelper::setReverbtronDownsample(int reverbtronDownsample) {
+	this->reverbtronDownsample = reverbtronDownsample;
+}
+
+int YroParamHelper::getReverbtronUpQuality() const {
+	return reverbtronUpQuality;
+}
+
+void YroParamHelper::setReverbtronUpQuality(int reverbtronUpQuality) {
+	this->reverbtronUpQuality = reverbtronUpQuality;
+}
+
+int YroParamHelper::getSequenceDownQuality() const {
+	return sequenceDownQuality;
+}
+
+void YroParamHelper::setSequenceDownQuality(int sequenceDownQuality) {
+	this->sequenceDownQuality = sequenceDownQuality;
+}
+
+int YroParamHelper::getSequenceDownsample() const {
+	return sequenceDownsample;
+}
+
+void YroParamHelper::setSequenceDownsample(int sequenceDownsample) {
+	this->sequenceDownsample = sequenceDownsample;
+}
+
+int YroParamHelper::getSequenceUpQuality() const {
+	return sequenceUpQuality;
+}
+
+void YroParamHelper::setSequenceUpQuality(int sequenceUpQuality) {
+	this->sequenceUpQuality = sequenceUpQuality;
+}
+
+int YroParamHelper::getShifterDownQuality() const {
+	return shifterDownQuality;
+}
+
+void YroParamHelper::setShifterDownQuality(int shifterDownQuality) {
+	this->shifterDownQuality = shifterDownQuality;
+}
+
+int YroParamHelper::getShifterDownsample() const {
+	return shifterDownsample;
+}
+
+void YroParamHelper::setShifterDownsample(int shifterDownsample) {
+	this->shifterDownsample = shifterDownsample;
+}
+
+int YroParamHelper::getShifterUpQuality() const {
+	return shifterUpQuality;
+}
+
+void YroParamHelper::setShifterUpQuality(int shifterUpQuality) {
+	this->shifterUpQuality = shifterUpQuality;
+}
+
+int YroParamHelper::getStereoHarmDownQuality() const {
+	return stereoHarmDownQuality;
+}
+
+void YroParamHelper::setStereoHarmDownQuality(int stereoHarmDownQuality) {
+	this->stereoHarmDownQuality = stereoHarmDownQuality;
+}
+
+int YroParamHelper::getStereoHarmDownsample() const {
+	return stereoHarmDownsample;
+}
+
+void YroParamHelper::setStereoHarmDownsample(int stereoHarmDownsample) {
+	this->stereoHarmDownsample = stereoHarmDownsample;
+}
+
+int YroParamHelper::getStereoHarmUpQuality() const {
+	return stereoHarmUpQuality;
+}
+
+void YroParamHelper::setStereoHarmUpQuality(int stereoHarmUpQuality) {
+	this->stereoHarmUpQuality = stereoHarmUpQuality;
+}
+
+int YroParamHelper::getVocoderDownQuality() const {
+	return vocoderDownQuality;
+}
+
+void YroParamHelper::setVocoderDownQuality(int vocoderDownQuality) {
+	this->vocoderDownQuality = vocoderDownQuality;
+}
+
+int YroParamHelper::getVocoderDownsample() const {
+	return vocoderDownsample;
+}
+
+void YroParamHelper::setVocoderDownsample(int vocoderDownsample) {
+	this->vocoderDownsample = vocoderDownsample;
+}
+
+int YroParamHelper::getVocoderUpQuality() const {
+	return vocoderUpQuality;
+}
+
+void YroParamHelper::setVocoderUpQuality(int vocoderUpQuality) {
+	this->vocoderUpQuality = vocoderUpQuality;
+}
+
+int YroParamHelper::getHarmonizerQuality() const {
+	return harmonizerQuality;
+}
+
+void YroParamHelper::setHarmonizerQuality(int harmonizerQuality) {
+	this->harmonizerQuality = harmonizerQuality;
+}
+
+int YroParamHelper::getStereoHarmQuality() const {
+	return stereoHarmQuality;
+}
+
+void YroParamHelper::setStereoHarmQuality(int stereoHarmQuality) {
+	this->stereoHarmQuality = stereoHarmQuality;
 }
 
 int YroParamHelper::getBogomips() {

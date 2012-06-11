@@ -42,7 +42,13 @@ public:
 	 * member declaration
 	 */
 	enum functions {
-		_preset, _volume, _high, _mid, _low, _gain, _mode
+		_preset,
+		_volume,
+		_high,
+		_mid,
+		_low,
+		_gain,
+		_mode
 	};
 
 	/**

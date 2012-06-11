@@ -28,7 +28,7 @@ using namespace std;
 
 Convolotron::Convolotron(int DS, int uq, int dq) :
 		YroEffectPlugin("Convolotron",
-				"Convolotron1: 67,64,1,100,0,64,30,20,0,0,0;"
+						"Convolotron1: 67,64,1,100,0,64,30,20,0,0,0;"
 						"Convolotron2: 67,64,1,100,0,64,30,20,1,0,0;"
 						"Convolotron3: 67,75,1,100,0,64,30,20,2,0,0;"
 						"Convolotron4: 67,60,1,100,0,64,30,20,3,0,0;") {
@@ -72,9 +72,7 @@ Convolotron::~Convolotron() {
  * Cleanup the effect
  */
 void Convolotron::cleanup() {
-
 }
-;
 
 void Convolotron::adjust(int DS) {
 

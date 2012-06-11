@@ -28,7 +28,8 @@
 using namespace std;
 
 EQ::EQ() :
-		YroEffectPlugin("EQ", "EQ 1: 67;"
+		YroEffectPlugin("EQ",
+				"EQ 1: 67;"
 				"EQ 2: 67;") {
 
 	for (int i = 0; i < MAX_EQ_BANDS; i++) {
@@ -39,7 +40,8 @@ EQ::EQ() :
 		filter[i].Pstages = 0;
 		filter[i].l = new AnalogFilter(6, 1000.0f, 1.0f, 0);
 		filter[i].r = new AnalogFilter(6, 1000.0f, 1.0f, 0);
-	};
+	}
+
 	//default values
 	Pvolume = 50;
 	setPreset(0);

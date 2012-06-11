@@ -29,11 +29,12 @@
  (version2)  along with this program; if not, write to the Free Software
  Foundation,
  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
  */
 
 #include <plugins/effect/Compressor.h>
+
 using namespace std;
+
 #define  MIN_GAIN  0.00001f        // -100dB  This will help prevent evaluation of denormal numbers
 Compressor::Compressor() :
 		YroEffectPlugin("Compressor",
@@ -73,57 +74,86 @@ Compressor::Compressor() :
 	hold = (int) (fSAMPLE_RATE * 0.0125); //12.5ms
 	clipping = 0;
 	limit = 0;
+	eratio = 0.;
 
+	setPreset(0);
+	cleanup();
 }
 
 Compressor::~Compressor() {
 }
 
 void Compressor::cleanup() {
-
 	lgain = rgain = 1.0f;
 	lgain_old = rgain_old = 1.0f;
 	rpeak = 0.0f;
 	lpeak = 0.0f;
 	limit = 0;
 	clipping = 0;
+	eratio = 0.;
 }
 
 void Compressor::setThreshold(int value) {
 	tthreshold = value;
 	thres_db = (float) tthreshold; //implicit type cast int to float
+	compute();
+	onChange(_threshold);
 }
+
 void Compressor::setRatio(int value) {
 	tratio = value;
 	ratio = (float) tratio;
+	compute();
+	onChange(_ratio);
 }
+
 void Compressor::setOutput(int value) {
 	toutput = value;
+	compute();
+	onChange(_output);
 }
+
 void Compressor::setAtt(int value) {
 	tatt = value;
 	att = cSAMPLE_RATE / (((float) value / 1000.0f) + cSAMPLE_RATE);
 	attr = att;
 	attl = att;
+	compute();
+	onChange(_att);
 }
+
 void Compressor::setRel(int value) {
 	trel = value;
 	rel = cSAMPLE_RATE / (((float) value / 1000.0f) + cSAMPLE_RATE);
 	rell = rel;
 	relr = rel;
+	compute();
+	onChange(_rel);
 }
+
 void Compressor::setOut(int value) {
 	a_out = value;
+	compute();
+	onChange(_out);
 }
+
 void Compressor::setKnee(int value) {
 	tknee = value; //knee expressed a percentage of range between thresh and zero dB
 	kpct = (float) tknee / 100.1f;
+	compute();
+	onChange(_knee);
 }
+
 void Compressor::setStereo(int value) {
 	stereo = value;
+	compute();
+	onChange(_stereo);
 }
+
 void Compressor::setPeak(int value) {
 	peak = value;
+	compute();
+	onChange(_peak);
 }
 
 void Compressor::compute() {
@@ -143,18 +173,43 @@ void Compressor::compute() {
 		outlevel = dB2rap((float)toutput) * makeuplin;
 	else
 		outlevel = dB2rap((float)toutput);
-
 }
 
-int  Compressor::getThreshold() {return tthreshold;}
-int  Compressor::getRatio() {return tratio;}
-int  Compressor::getOutput() {return toutput;}
-int  Compressor::getAtt() {return tatt;}
-int  Compressor::getRel() {return trel;}
-int  Compressor::getOut() {return a_out;}
-int  Compressor::getKnee() {return tknee;}
-int  Compressor::getStereo() {return stereo;}
-int  Compressor::getPeak() {return peak;}
+int Compressor::getThreshold() {
+	return tthreshold;
+}
+
+int Compressor::getRatio() {
+	return tratio;
+}
+
+int Compressor::getOutput() {
+	return toutput;
+}
+
+int Compressor::getAtt() {
+	return tatt;
+}
+
+int Compressor::getRel() {
+	return trel;
+}
+
+int Compressor::getOut() {
+	return a_out;
+}
+
+int Compressor::getKnee() {
+	return tknee;
+}
+
+int Compressor::getStereo() {
+	return stereo;
+}
+
+int Compressor::getPeak() {
+	return peak;
+}
 
 void Compressor::render(jack_nframes_t nframes, float *efxoutl,
 		float *efxoutr) {
@@ -163,8 +218,7 @@ void Compressor::render(jack_nframes_t nframes, float *efxoutl,
 
 	for (i = 0; i < iPERIOD; i++) {
 		float rdelta = 0.0f;
-		float ldelta = 0.0f;
-//Right Channel
+		float ldelta = 0.0f; //Right Channel
 
 		if (peak) {
 			if (rtimer > hold) {
@@ -321,104 +375,104 @@ void Compressor::render(jack_nframes_t nframes, float *efxoutl,
 
 /**
  * toXml member
-*/
+ */
 const char *Compressor::toXml() {
-        char _buffer[256];
-        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
-        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
-        strcpy(_toXml,"<attributes>");
-        sprintf(_buffer,_formatd,"a_out",a_out);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"clipping",clipping);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"limit",limit);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"ltimer",ltimer);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"rtimer",rtimer);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"hold",hold);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"peak",peak);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"stereo",stereo);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"tknee",tknee);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"toutput",toutput);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"tratio",tratio);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"tthreshold",tthreshold);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"att",att);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"attr",attr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"attl",attl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"coeff_kk",coeff_kk);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"coeff_knee",coeff_knee);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"coeff_kratio",coeff_kratio);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"coeff_ratio",coeff_ratio);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"eratio",eratio);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"knee",knee);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"kpct",kpct);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"kratio",kratio);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lgain",lgain);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lgain_old",lgain_old);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lgain_t",lgain_t);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lpeak",lpeak);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lvolume",lvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lvolume_db",lvolume_db);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"makeup",makeup);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"makeuplin",makeuplin);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"outlevel",outlevel);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ratio",ratio);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"relcnst",relcnst);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"attconst",attconst);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rel",rel);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"relr",relr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rell",rell);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rgain",rgain);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rgain_old",rgain_old);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rgain_t",rgain_t);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rpeak",rpeak);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rvolume",rvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rvolume_db",rvolume_db);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"thres_db",thres_db);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"thres_mx",thres_mx);
-        strcat(_toXml,_buffer);
-        strcat(_toXml,"</attributes>");
-        return _toXml;
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "a_out", a_out);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "clipping", clipping);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "limit", limit);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "ltimer", ltimer);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "rtimer", rtimer);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "hold", hold);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "peak", peak);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "stereo", stereo);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "tknee", tknee);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "toutput", toutput);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "tratio", tratio);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "tthreshold", tthreshold);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "att", att);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "attr", attr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "attl", attl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "coeff_kk", coeff_kk);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "coeff_knee", coeff_knee);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "coeff_kratio", coeff_kratio);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "coeff_ratio", coeff_ratio);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "eratio", eratio);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "knee", knee);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "kpct", kpct);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "kratio", kratio);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lgain", lgain);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lgain_old", lgain_old);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lgain_t", lgain_t);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lpeak", lpeak);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lvolume", lvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lvolume_db", lvolume_db);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "makeup", makeup);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "makeuplin", makeuplin);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "outlevel", outlevel);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ratio", ratio);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "relcnst", relcnst);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "attconst", attconst);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rel", rel);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "relr", relr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rell", rell);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rgain", rgain);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rgain_old", rgain_old);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rgain_t", rgain_t);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rpeak", rpeak);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rvolume", rvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rvolume_db", rvolume_db);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "thres_db", thres_db);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "thres_mx", thres_mx);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
 }

@@ -61,11 +61,17 @@ MBVvol::MBVvol() :
 	Pvolume = 50;
 	coeff = 1.0 / (float) iPERIOD;
 	volL = volLr = volML = volMLr = volMH = volMHr = volH = volHr = 2.0f;
-
+	v1l = 0.;
+	v1r = 0.;
+	v2l = 0.;
+	v2r = 0.;
+	d1 = 0.;
+	d2 = 0.;
+	d3 = 0.;
+	d4 = 0.;
 	setPreset(0);
 	cleanup();
 }
-;
 
 MBVvol::~MBVvol() {
 }
@@ -87,9 +93,8 @@ void MBVvol::cleanup() {
 	hpf3l->cleanup();
 	lpf3r->cleanup();
 	hpf3r->cleanup();
-
 }
-;
+
 /*
  * Effect output
  */
@@ -120,8 +125,8 @@ void MBVvol::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	lpf3r->filterout(iPERIOD, fPERIOD, midhr);
 	hpf3r->filterout(iPERIOD, fPERIOD, highr);
 
-	lfo1.render(nframes, &lfo1l, &lfo1r);
-	lfo2.render(nframes, &lfo2l, &lfo2r);
+	lfo1.render(1, &lfo1l, &lfo1r);
+	lfo2.render(1, &lfo2l, &lfo2r);
 
 	d1 = (lfo1l - v1l) * coeff;
 	d2 = (lfo1r - v1r) * coeff;
@@ -129,9 +134,7 @@ void MBVvol::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	d4 = (lfo2r - v2r) * coeff;
 
 	for (i = 0; i < iPERIOD; i++) {
-
-		setCombi(Pcombi);
-
+		compute(Pcombi);
 		efxoutl[i] = lowl[i] * volL + midll[i] * volML + midhl[i] * volMH
 				+ highl[i] * volH;
 		efxoutr[i] = lowr[i] * volLr + midlr[i] * volMLr + midhr[i] * volMHr
@@ -148,9 +151,12 @@ void MBVvol::setVolume(int value) {
 	Pvolume = value;
 	outvolume = (float) Pvolume / 127.0f;
 }
-;
 
 void MBVvol::setCombi(int value) {
+	Pcombi = value;
+}
+
+void MBVvol::compute(int value) {
 	Pcombi = value;
 	v1l += d1;
 	v1r += d2;
@@ -357,64 +363,64 @@ int MBVvol::getCombi() {
 }
 /**
  * toXml member
-*/
+ */
 const char *MBVvol::toXml() {
-        char _buffer[256];
-        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
-        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
-        strcpy(_toXml,"<attributes>");
-        sprintf(_buffer,_formatd,"Cross1",Cross1);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Cross2",Cross2);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Cross3",Cross3);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pcombi",Pcombi);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"coeff",coeff);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"d1",d1);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"d2",d2);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"d3",d3);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"d4",d4);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lfo1l",lfo1l);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lfo1r",lfo1r);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lfo2l",lfo2l);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lfo2r",lfo2r);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"v1l",v1l);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"v1r",v1r);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"v2l",v2l);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"v2r",v2r);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"volLr",volLr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"volMLr",volMLr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"volMHr",volMHr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"volHr",volHr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"volL",volL);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"volML",volML);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"volMH",volMH);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"volH",volH);
-        strcat(_toXml,_buffer);
-        strcat(_toXml,"</attributes>");
-        return _toXml;
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "Cross1", Cross1);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Cross2", Cross2);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Cross3", Cross3);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pcombi", Pcombi);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "coeff", coeff);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "d1", d1);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "d2", d2);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "d3", d3);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "d4", d4);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lfo1l", lfo1l);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lfo1r", lfo1r);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lfo2l", lfo2l);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lfo2r", lfo2r);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "v1l", v1l);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "v1r", v1r);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "v2l", v2l);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "v2r", v2r);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "volLr", volLr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "volMLr", volMLr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "volMHr", volMHr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "volHr", volHr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "volL", volL);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "volML", volML);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "volMH", volMH);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "volH", volH);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
 }
