@@ -58,60 +58,62 @@ public:
 	void set0(int value) {
 		setPreset(value);
 	}
-	int get7() {
-		return getSequence();
-	}
-	void set7(int value) {
-		setSequence(value);
-	}
-	int get8() {
+	int get1() {return getSequence(0);} void set1(int value) {setSequence(0, value);}
+	int get2() {return getSequence(1);} void set2(int value) {setSequence(1, value);}
+	int get3() {return getSequence(2);} void set3(int value) {setSequence(2, value);}
+	int get4() {return getSequence(3);} void set4(int value) {setSequence(3, value);}
+	int get5() {return getSequence(4);} void set5(int value) {setSequence(4, value);}
+	int get6() {return getSequence(5);} void set6(int value) {setSequence(5, value);}
+	int get7() {return getSequence(6);} void set7(int value) {setSequence(6, value);}
+	int get8() {return getSequence(7);} void set8(int value) {setSequence(7, value);}
+	int get9() {
 		return getVolume();
 	}
-	void set8(int value) {
+	void set9(int value) {
 		setVolume(value);
 	}
-	int get9() {
+	int get10() {
 		return getTempo();
 	}
-	void set9(int value) {
+	void set10(int value) {
 		setTempo(value);
 	}
-	int get10() {
+	int get11() {
 		return getQ();
 	}
-	void set10(int value) {
+	void set11(int value) {
 		setQ(value);
 	}
-	int get11() {
+	int get12() {
 		return getAmplitude();
 	}
-	void set11(int value) {
+	void set12(int value) {
 		setAmplitude(value);
 	}
-	int get12() {
+	int get13() {
 		return getStdiff();
 	}
-	void set12(int value) {
+	void set13(int value) {
 		setStdiff(value);
 	}
-	int get13() {
+	int get14() {
 		return getMode();
 	}
-	void set13(int value) {
+	void set14(int value) {
 		setMode(value);
 	}
-	int get14() {
+	int get15() {
 		return getRange();
 	}
-	void set14(int value) {
+	void set15(int value) {
 		setRange(value);
 	}
 
 	/**
 	 * setter and getter
 	 */
-	int getSequence();
-	void setSequence(int value);
+	int getSequence(int indice);
+	void setSequence(int indice, int value);
 	int getVolume();
 	void setVolume(int value);
 	int getTempo();

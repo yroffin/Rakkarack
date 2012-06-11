@@ -29,8 +29,8 @@ using namespace std;
 Valve::Valve() :
 		YroEffectPlugin("Valve",
 				"Valve 1: 0, 64, 64, 127, 64, 0, 5841, 61, 1, 0, 69, 1, 84;"
-						"Valve 2: 0, 64, 64, 127, 64, 0, 5078, 61, 1, 0, 112, 0, 30;"
-						"Valve 3: 0, 64, 35, 80, 64, 1, 3134, 358, 1, 1, 100, 1, 30;") {
+				"Valve 2: 0, 64, 64, 127, 64, 0, 5078, 61, 1, 0, 112, 0, 30;"
+				"Valve 3: 0, 64, 35, 80, 64, 1, 3134, 358, 1, 1, 100, 1, 30;") {
 
 	lpfl = new AnalogFilter(2, 22000.0f, 1.0f, 0);
 	lpfr = new AnalogFilter(2, 22000.0f, 1.0f, 0);
@@ -64,7 +64,6 @@ Valve::Valve() :
 	rm[6] = -1.0f;
 	rm[8] = 1.0f;
 	harm->calcula_mag(rm);
-	dist = 0.;
 
 	setPreset(0);
 	init_coefs();
@@ -255,6 +254,7 @@ void Valve::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
  */
 void Valve::init_coefs() {
 	coef = 1.0 / (1.0f - powf(2.0f, dist * q * LN2R));
+	fprintf(stderr,"init_coefs:%9.40f\n",coef);
 	qcoef = q * coef;
 	fdist = 1.0f / dist;
 	inputvol = powf(4.0f, ((float) Pdrive - 32.0f) / 127.0f);
@@ -275,13 +275,11 @@ void Valve::setVolume(int Pvolume) {
 void Valve::setPanning(int Ppanning) {
 	this->Ppanning = Ppanning;
 	panning = ((float) Ppanning + 0.5f) / 127.0f;
-	init_coefs();
 }
 
 void Valve::setLrcross(int Plrcross) {
 	this->Plrcross = Plrcross;
 	lrcross = (float) Plrcross / 127.0f * 1.0f;
-	init_coefs();
 }
 
 void Valve::setLpf(int value) {
@@ -290,7 +288,6 @@ void Valve::setLpf(int value) {
 
 	lpfl->setfreq(fr);
 	lpfr->setfreq(fr);
-	init_coefs();
 }
 
 void Valve::setHpf(int value) {
@@ -301,7 +298,6 @@ void Valve::setHpf(int value) {
 	hpfr->setfreq(fr);
 
 	//Prefiltering of 51 is approx 630 Hz. 50 - 60 generally good for OD pedal.
-	init_coefs();
 }
 
 void Valve::setPresence(int value) {
@@ -323,32 +319,27 @@ void Valve::setDrive(int value) {
 
 void Valve::setLevel(int value) {
 	Plevel = value;
-	init_coefs();
 }
 void Valve::setNegate(int value) {
 	if (value > 1)
 		value = 1;
 	Pnegate = value;
-	init_coefs();
 }
 
 void Valve::setStereo(int value) {
 	if (value > 1)
 		value = 1;
 	Pstereo = value;
-	init_coefs();
 }
 
 void Valve::setPrefiltering(int value) {
 	Pprefiltering = value;
-	init_coefs();
 }
 
 void Valve::setQq(int value) {
 	Q_q = value;
 	q = (float) Q_q / 127.0f - 1.0f;
 	factor = 1.0f - ((float) Q_q / 128.0f);
-	init_coefs();
 }
 
 void Valve::setEd(int value) {

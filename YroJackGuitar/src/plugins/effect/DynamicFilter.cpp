@@ -58,7 +58,7 @@ void DynamicFilter::render(jack_nframes_t nframes, float * smpsl,
 		cleanup();
 	};
 
-	lfo.render(nframes, &lfol, &lfor);
+	lfo.render(1, &lfol, &lfor);
 	lfol *= depth * 5.0f;
 	lfor *= depth * 5.0f;
 	float freq = filterpars->getfreq();

@@ -25,19 +25,19 @@ using namespace std;
 
 Sequence::Sequence(long int Quality, int DS, int uq, int dq) :
 		YroEffectPlugin("Sequence",
-		/**
-		 TODO * ignore up to 7th parameters
-		 */
-		"Jumpy: 20,100,10,50,25,120,60,127,0,90,40,0,0,0,3;"
+				/**
+		 	 	 TODO * ignore up to 7th parameters
+				 */
+				"Jumpy:     20,100,10,50,25,120,60,127,0,90,40,0,0,0,3;"
 				"StairStep: 10,20,30,50,75,90,100,127,64,90,96,0,0,2,5;"
-				"Mild: 20,30,10,40,25,60,100,50,0,90,40,0,0,0,4;"
-				"WahWah: 11,55,15,95,12,76,11,36,30,80,110,0,4,1,2;"
+				"Mild:      20,30,10,40,25,60,100,50,0,90,40,0,0,0,4;"
+				"WahWah:    11,55,15,95,12,76,11,36,30,80,110,0,4,1,2;"
 				"FilterPan: 28,59,94,127,120,80,50,24,64,180,107,0,3,0,8;"
-				"Stepper: 30,127,30,50,80,40,110,80,0,240,95,1,1,2,2;"
-				"Shifter: 0,0,127,127,0,0,127,127,64,114,64,1,0,3,0;"
-				"Tremor: 30,127,30,50,80,40,110,80,0,240,95,1,1,4,2;"
-				"Boogie: 0,40,50,60,70,60,40,0,0,220,64,0,0,5,0;"
-				"Chorus: 64,30,45,20,60,25,42,15,64,120,64,0,0,6,0;") {
+				"Stepper:   30,127,30,50,80,40,110,80,0,240,95,1,1,2,2;"
+				"Shifter:   0,0,127,127,0,0,127,127,64,114,64,1,0,3,0;"
+				"Tremor:    30,127,30,50,80,40,110,80,0,240,95,1,1,4,2;"
+				"Boogie:    0,40,50,60,70,60,40,0,0,220,64,0,0,5,0;"
+				"Chorus:    64,30,45,20,60,25,42,15,64,120,64,0,0,6,0;") {
 	hq = Quality;
 	adjust(DS);
 
@@ -643,10 +643,10 @@ void Sequence::adjust(int DS) {
 	u_down = (double) iPERIOD / (double) nPERIOD;
 }
 
-void Sequence::setSequence(int value) {
+void Sequence::setSequence(int indice, int value) {
 	int testegg, i;
-	Psequence[7] = value;
-	fsequence[7] = (float) value / 127.0f;
+	Psequence[indice] = value;
+	fsequence[indice] = (float) value / 127.0f;
 	seqpower = 0.0f;
 	for (i = 0; i < 8; i++)
 		seqpower += fsequence[i];
@@ -696,7 +696,7 @@ void Sequence::setRange(int value) {
 	setRanges(Prange);
 }
 
-int  Sequence::getSequence() {return Psequence[7];}
+int  Sequence::getSequence(int i) {return Psequence[i];}
 int  Sequence::getVolume() {return Pvolume;}
 int  Sequence::getTempo() {return Ptempo;}
 int  Sequence::getQ() {return Pq;}

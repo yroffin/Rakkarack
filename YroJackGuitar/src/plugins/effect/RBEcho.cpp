@@ -71,10 +71,13 @@ void RBEcho::cleanup() {
 		ldelay[i] = 0.0;
 	for (i = 0; i < maxx_delay; i++)
 		rdelay[i] = 0.0;
+	dl = 0;
+	dr = 0;
+	rvfl = 0;
+	rvfr = 0;
 	oldl = 0.0;
 	oldr = 0.0;
 }
-;
 
 /*
  * Initialize the delays

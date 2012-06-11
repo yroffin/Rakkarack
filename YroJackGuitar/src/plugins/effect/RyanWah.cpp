@@ -55,6 +55,14 @@ RyanWah::RyanWah() :
 	Ftype = 1;
 	filterl = new RBFilter(0, 80.0f, 70.0f, 1);
 	filterr = new RBFilter(0, 80.0f, 70.0f, 1);
+
+	/**
+	 * dead variable
+	 */
+	Ppanning = 0;
+	rpanning = 0.;
+	lpanning = 0.;
+
 	setPreset(0);
 	cleanup();
 }
@@ -70,7 +78,7 @@ void RyanWah::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	int i;
 
 	float lfol, lfor;
-	lfo.render(nframes, &lfol, &lfor);
+	lfo.render(1, &lfol, &lfor);
 	lfol *= depth * 5.0f;
 	lfor *= depth * 5.0f;
 

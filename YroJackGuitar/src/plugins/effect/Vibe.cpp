@@ -92,7 +92,7 @@ void Vibe::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 
 	input = cvolt = ocvolt = evolt = 0.0f;
 
-	lfo.render(nframes, &lfol, &lfor);
+	lfo.render(1, &lfol, &lfor);
 
 	lfol = fdepth + lfol * fwidth;
 	lfor = fdepth + lfor * fwidth;

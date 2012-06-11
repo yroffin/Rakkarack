@@ -54,7 +54,7 @@ void Phaser::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	int i, j;
 	float lfol, lfor, lgain, rgain, tmp;
 
-	lfo.render(nframes, &lfol, &lfor);
+	lfo.render(1, &lfol, &lfor);
 	lgain = lfol;
 	rgain = lfor;
 	lgain = (expf(lgain * PHASER_LFO_SHAPE) - 1.0f)

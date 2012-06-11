@@ -93,7 +93,7 @@ int load(TiXmlDocument &xml, const char *filename) {
  * @param TiXmlDocument &reference, reference document
  * @param  TiXmlDocument &current, the current element to compare
  */
-int compareContexts(YroEffectPlugin *efx, TiXmlDocument &reference, TiXmlDocument &current,
+int compareContexts(YroRawEffectPlugin *efx, TiXmlDocument &reference, TiXmlDocument &current,
 		const char *filename) {
 	TiXmlNode* element = 0;
 	while ((element =
@@ -174,7 +174,7 @@ int extract(TiXmlDocument &xml, float *left, float *right, int size,
 /**
  * stress test basic
  */
-void YroEffectFactoryTest::checkup(YroEffectPlugin *efx, const char *effectName,
+void YroEffectFactoryTest::checkup(YroRawEffectPlugin *efx, const char *effectName,
 		int indice) {
 	char ctx[1024];
 	char buf[1024];
@@ -199,9 +199,18 @@ void YroEffectFactoryTest::checkup(YroEffectPlugin *efx, const char *effectName,
 		float *orightCheck = new jack_default_audio_sample_t[nframes];
 		efx->setPreset(preset);
 		efx->cleanup();
-		efx->setOutLeft(oleft);
-		efx->setOutRight(oright);
-		efx->render(nframes, left, right);
+		switch(efx->getBehaviour()) {
+			case YroRawEffectPlugin::_applyEffectOnInAndCopyToOut:
+				((YroEffectPlugin *) efx)->setOutLeft(oleft);
+				((YroEffectPlugin *) efx)->setOutRight(oright);
+				efx->render(nframes, left, right);
+				break;
+			case YroRawEffectPlugin::_applyEffectOnInput:
+				memcpy(oleft,left,nframes * sizeof(float));
+				memcpy(oright,right,nframes * sizeof(float));
+				efx->render(nframes, oleft, oright);
+				break;
+		}
 		unsigned int real = 0;
 		if (extract(xmlBuffer, oleftCheck, orightCheck, nframes, real, preset,
 				"hashol", "hashor", "oleft", "oright")) {
@@ -240,7 +249,7 @@ void YroEffectFactoryTest::checkup(YroEffectPlugin *efx, const char *effectName,
 	}
 }
 
-void YroEffectFactoryTest::checkup(YroEffectPlugin *efx) {
+void YroEffectFactoryTest::checkup(YroRawEffectPlugin *efx) {
 	for (int indice = 0; indice < efx->getPresetCount(); indice++) {
 		checkup(efx, efx->getName(), indice);
 	}
@@ -273,7 +282,7 @@ void YroEffectFactoryTest::testCompBand() {
 	checkup(efx);
 }
 void YroEffectFactoryTest::testCompressor() {
-	YroEffectPlugin *efx = new std::Compressor();
+	YroRawEffectPlugin *efx = new std::Compressor();
 	checkup(efx);
 }
 void YroEffectFactoryTest::testConvolotron() {
@@ -311,7 +320,7 @@ void YroEffectFactoryTest::testExciter() {
 	checkup(efx);
 }
 void YroEffectFactoryTest::testGate() {
-	YroEffectPlugin *efx = new std::Gate();
+	YroRawEffectPlugin *efx = new std::Gate();
 	checkup(efx);
 }
 void YroEffectFactoryTest::testHarmonizer() {

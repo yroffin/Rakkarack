@@ -68,6 +68,13 @@ DualFlanger::DualFlanger() :
 	lsA = 0.0f;
 	lsB = 0.0f;
 	fzero = 0.0f;
+
+	/**
+	 * TODO dead variable ?
+	 */
+	kl = kr = zl = zr = 0.;
+	zdr = zdl = 0.;
+
 	setPreset(0);
 	cleanup();
 }
@@ -97,8 +104,6 @@ void DualFlanger::cleanup() {
 	lflange0 = 0.0f;
 	rflange1 = 0.0f;
 	lflange1 = 0.0f;
-	kl = maxx_delay + 1;
-	kr = maxx_delay + 1;
 }
 
 /*
@@ -113,7 +118,7 @@ void DualFlanger::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	float ldif0, ldif1, rdif0, rdif1; //Difference between fractional delay and floor(fractional delay)
 	float drA, drB, dlA, dlB; //LFO inside the loop.
 
-	lfo.render(nframes, &lfol, &lfor);
+	lfo.render(1, &lfol, &lfor);
 	lmod = lfol;
 	rmod = lfor;
 //  lmod = (powf (2.0f, lmod*LOG_FMAX) - 1.0f) * LFO_CONSTANT;  //2^x type sweep for musical interpretation of moving delay line.

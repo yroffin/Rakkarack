@@ -168,7 +168,7 @@ void HarmEnhancer::harm_out(jack_nframes_t nframes, float *smpsl, float *smpsr) 
 	hpfl->filterout(iPERIOD, fPERIOD, inputl);
 	hpfr->filterout(iPERIOD, fPERIOD, inputr);
 
-	limiter->render(nframes, inputl, inputr);
+	limiter->render(iPERIOD, inputl, inputr);
 
 	for (jack_nframes_t i = 0; i < nframes; i++) {
 		float xl = inputl[i];

@@ -95,7 +95,7 @@ void AnalogPhaser::render(jack_nframes_t nframes, float * smpsl,
 	hpfl = 0.0;
 	hpfr = 0.0;
 
-	lfo.render(nframes, &lfol, &lfor);
+	lfo.render(1, &lfol, &lfor);
 	lmod = lfol * width + depth;
 	rmod = lfor * width + depth;
 

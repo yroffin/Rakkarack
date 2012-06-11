@@ -73,8 +73,8 @@ public:
 	void setUp();
 	void tearDown();
 
-	void checkup(std::YroEffectPlugin *efx, const char *effectName,int indice);
-	void checkup(std::YroEffectPlugin *efx);
+	void checkup(std::YroRawEffectPlugin *efx, const char *effectName,int indice);
+	void checkup(std::YroRawEffectPlugin *efx);
 
 	void testAlienwah();
 	void testAnalogPhaser();

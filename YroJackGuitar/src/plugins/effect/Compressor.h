@@ -27,23 +27,23 @@
 #ifndef COMPRESSOR_H
 #define COMPRESSOR_H
 
-#include <plugins/YroEffectPlugin.h>
+#include <plugins/YroRawEffectPlugin.h>
 
 namespace std {
 
-class Compressor: public YroEffectPlugin {
+class Compressor: public YroRawEffectPlugin {
 public:
 	Compressor();
 	~Compressor();
 
-	void render(jack_nframes_t nframes, float * smps_l, float * smps_r);
+	void render(jack_nframes_t nframes, float * smpsl, float * smpsr);
 	void cleanup();
 	const char *toXml();
 
 	/**
 	 * member declaration
 	 */
-enum functions {
+	enum functions {
 		_preset,
 		_threshold,
 		_ratio,

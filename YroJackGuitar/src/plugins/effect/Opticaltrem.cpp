@@ -56,6 +56,8 @@ Opticaltrem::Opticaltrem() :
 	gl = 0.0f;
 	gr = 0.0f;
 	cperiod = 1.0f / fPERIOD;
+	stepl = 0.;
+	stepr = 0.;
 
 }
 
@@ -72,7 +74,7 @@ void Opticaltrem::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 	int i;
 	float lfol, lfor, xl, xr, fxl, fxr;
 	float rdiff, ldiff;
-	lfo.render(nframes, &lfol, &lfor);
+	lfo.render(1, &lfol, &lfor);
 
 	lfol = 1.0f - lfol * fdepth;
 	lfor = 1.0f - lfor * fdepth;

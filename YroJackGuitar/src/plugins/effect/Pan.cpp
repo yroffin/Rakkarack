@@ -76,7 +76,7 @@ void Pan::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 
 		ll = lfol;
 		lr = lfor;
-		lfo.render(nframes, &lfol, &lfor);
+		lfo.render(1, &lfol, &lfor);
 		for (i = 0; i < iPERIOD; i++) {
 			fi = (float) i;
 			P_i = (float) (iPERIOD - i);

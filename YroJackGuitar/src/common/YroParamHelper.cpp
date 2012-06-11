@@ -40,7 +40,7 @@ YroParamHelper::YroParamHelper() {
 	upsample = 0;
 	getBogomips();
 
-    harmonizerDownsample = 0;
+    harmonizerDownsample = 5;
     harmonizerUpQuality = 0;
     harmonizerDownQuality = 0;
     reverbtronDownsample = 0;

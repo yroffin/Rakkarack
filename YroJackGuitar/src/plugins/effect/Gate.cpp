@@ -29,7 +29,7 @@
 using namespace std;
 
 Gate::Gate() :
-		YroEffectPlugin("Gate",
+		YroRawEffectPlugin("Gate",
 				"+00:   0, 0, 1, 2, 6703, 76, 2;"
 				"-10: 0, -10, 1, 2, 6703, 76, 2;"
 				"-20: 0, -20, 1, 2, 6703, 76, 2;") {
@@ -43,6 +43,11 @@ Gate::Gate() :
 	fs = fSAMPLE_RATE;
 	state = CLOSED;
 	hold_count = 0;
+
+	/**
+	 * TODO dead variable
+	 */
+	range = 0.;
 
 	setPreset(0);
 	cleanup();

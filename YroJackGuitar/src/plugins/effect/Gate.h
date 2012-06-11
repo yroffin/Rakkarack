@@ -28,12 +28,12 @@
 #ifndef NOISEGATE_H
 #define NOISEGATE_H
 
-#include <plugins/YroEffectPlugin.h>
+#include <plugins/YroRawEffectPlugin.h>
 #include <plugins/filter/AnalogFilter.h>
 
 namespace std {
 
-class Gate: public YroEffectPlugin {
+class Gate: public YroRawEffectPlugin {
 public:
 	Gate();
 	~Gate();
