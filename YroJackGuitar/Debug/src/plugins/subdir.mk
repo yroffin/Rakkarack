@@ -7,19 +7,22 @@ CPP_SRCS += \
 ../src/plugins/YroEffectGenerator.cpp \
 ../src/plugins/YroEffectPlugin.cpp \
 ../src/plugins/YroPreset.cpp \
-../src/plugins/YroPresets.cpp 
+../src/plugins/YroPresets.cpp \
+../src/plugins/YroRawEffectPlugin.cpp 
 
 OBJS += \
 ./src/plugins/YroEffectGenerator.o \
 ./src/plugins/YroEffectPlugin.o \
 ./src/plugins/YroPreset.o \
-./src/plugins/YroPresets.o 
+./src/plugins/YroPresets.o \
+./src/plugins/YroRawEffectPlugin.o 
 
 CPP_DEPS += \
 ./src/plugins/YroEffectGenerator.d \
 ./src/plugins/YroEffectPlugin.d \
 ./src/plugins/YroPreset.d \
-./src/plugins/YroPresets.d 
+./src/plugins/YroPresets.d \
+./src/plugins/YroRawEffectPlugin.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
