@@ -25,7 +25,8 @@
 using namespace std;
 
 Pan::Pan() :
-		YroEffectPlugin("Pan", "AutoPan: 64,64,26,0,0,0,0,1,0;"
+		YroRawEffectPlugin("Pan",
+				"AutoPan: 64,64,26,0,0,0,0,1,0;"
 				"ExtraStereo: 64,64,80,0,0,0,10,0,1;") {
 	setPreset(0);
 	/**
@@ -34,18 +35,14 @@ Pan::Pan() :
 	lfo.render(1, &lfol, &lfor);
 	cleanup();
 }
-;
 
 Pan::~Pan() {
 }
-;
 
 void Pan::cleanup() {
 }
-;
 
 void Pan::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
-
 	int i;
 	float avg, ldiff, rdiff, tmp;
 	float pp;
@@ -53,11 +50,7 @@ void Pan::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 	float fi, P_i;
 
 	if (PextraON) {
-
-		for (i = 0; i < iPERIOD; i++)
-
-		{
-
+		for (i = 0; i < iPERIOD; i++) {
 			avg = (smpsl[i] + smpsr[i]) * .5f;
 			ldiff = smpsl[i] - avg;
 			rdiff = smpsr[i] - avg;
@@ -67,54 +60,39 @@ void Pan::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 
 			tmp = avg + rdiff * mul;
 			smpsr[i] = tmp * sinf(dvalue);
-
 		}
-
 	}
 
 	if (PAutoPan) {
-
 		ll = lfol;
 		lr = lfor;
 		lfo.render(1, &lfol, &lfor);
 		for (i = 0; i < iPERIOD; i++) {
 			fi = (float) i;
 			P_i = (float) (iPERIOD - i);
-
 			pp = (ll * P_i + lfol * fi) * coeff_PERIOD;
-
 			smpsl[i] *= pp * panning;
-
 			pp = (lr * P_i + lfor * fi) * coeff_PERIOD;
-
 			smpsr[i] *= pp * (1.0f - panning);
-
 		}
-
 	}
-
 }
-;
 
-void Pan::setVolume(int Pvolume) {
-	this->Pvolume = Pvolume;
+void Pan::setVolume(int value) {
+	this->Pvolume = value;
 	outvolume = (float) Pvolume / 127.0f;
 }
-;
 
-void Pan::setPanning(int Ppanning) {
-	this->Ppanning = Ppanning;
+void Pan::setPanning(int value) {
+	this->Ppanning = value;
 	panning = ((float) Ppanning) / 127.0f;
 	dvalue = panning * M_PI_2;
-
 }
-;
 
-void Pan::setExtra(int Pextra) {
-	this->Pextra = Pextra;
+void Pan::setExtra(int value) {
+	this->Pextra = value;
 	mul = 4.0f * (float) Pextra / 127.0f;
 }
-;
 
 void Pan::setLfoFreq(int value) {
 	lfo.setPfreq(value);
@@ -165,36 +143,36 @@ int Pan::getExtraOn() {
 
 /**
  * toXml member
-*/
+ */
 const char *Pan::toXml() {
-        char _buffer[256];
-        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
-        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
-        strcpy(_toXml,"<attributes>");
-        sprintf(_buffer,_formatd,"PAutoPan",PAutoPan);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pextra",Pextra);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"PextraON",PextraON);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"dvalue",dvalue);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lfol",lfol);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lfor",lfor);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"ll",ll);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lr",lr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"panning",panning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"mul",mul);
-        strcat(_toXml,_buffer);
-        strcat(_toXml,"</attributes>");
-        return _toXml;
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "PAutoPan", PAutoPan);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pextra", Pextra);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "PextraON", PextraON);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dvalue", dvalue);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lfol", lfol);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lfor", lfor);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "ll", ll);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lr", lr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "panning", panning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "mul", mul);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
 }

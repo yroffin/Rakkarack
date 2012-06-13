@@ -37,7 +37,8 @@ using namespace std;
 
 #define  MIN_GAIN  0.00001f        // -100dB  This will help prevent evaluation of denormal numbers
 Compressor::Compressor() :
-		YroRawEffectPlugin("Compressor", "2:1: -30,2,-6,20,120,1,0,0,0;"
+		YroRawEffectPlugin("Compressor",
+				"2:1: -30,2,-6,20,120,1,0,0,0;"
 				"4:1: -26,4,-8,20,120,1,10,0,0;"
 				"8:1: -24,8,-12,20,35,1,30,0,0;"
 				"FinalLimiter: -1,15,0,5,250,0,0,1,1;"

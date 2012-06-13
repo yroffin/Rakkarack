@@ -42,7 +42,7 @@ public:
 	/**
 	 * member declaration
 	 */
-enum functions {
+	enum functions {
 		_preset,
 		_depth,
 		_lfofreq,

@@ -27,17 +27,28 @@
 using namespace std;
 
 Opticaltrem::Opticaltrem() :
-		YroEffectPlugin("Opticaltrem", "Fast: 127,260,10,0,64,64;"
-				"trem2: 45,140,10,0,64,64;"
-				"hardpan: 127,120,10,5,0,64;"
-				"softpan: 45,240,10,1,16,64;"
-				"rampdown: 65,200,0,3,32,64;"
-				"hardramp: 127,480,0,3,32,64;") {
+		YroEffectPlugin("Opticaltrem", "Fast:     127,260,10,0,64,64;"
+				"trem2:     45,140,10,0,64,64;"
+				"hardpan:  127,120,10,5, 0,64;"
+				"softpan:   45,240,10,1,16,64;"
+				"rampdown:  65,200, 0,3,32,64;"
+				"hardramp: 127,480, 0,3,32,64;") {
+	/**
+	 * TODO clean preset (dead)
+	 */
+	setPreset(0);
+	cleanup();
+}
+
+Opticaltrem::~Opticaltrem() {
+}
+
+void Opticaltrem::cleanup() {
 	R1 = 2700.0f; //tremolo circuit series resistance
 	Ra = 1000000.0f; //Cds cell dark resistance.
 	Ra = logf(Ra); //this is done for clarity
 	Rb = 300.0f; //Cds cell full illumination
-	b = (float) exp((float) Ra / (float) logf(Rb)) - CNST_E;
+	b = expf(Ra / logf(Rb)) - CNST_E;
 	dTC = 0.03f;
 	dRCl = dTC;
 	dRCr = dTC; //Right & left channel dynamic time contsants
@@ -46,34 +57,19 @@ Opticaltrem::Opticaltrem() :
 	alphar = alphal;
 	lstep = 0.0f;
 	rstep = 0.0f;
-	Pdepth = 127;
-	Ppanning = 64;
-	lpanning = 1.0f;
-	rpanning = 1.0f;
-	fdepth = 1.0f;
 	oldgl = 0.0f;
 	oldgr = 0.0f;
 	gl = 0.0f;
 	gr = 0.0f;
 	cperiod = 1.0f / fPERIOD;
-	stepl = 0.;
-	stepr = 0.;
-
+	oldstepl = 0;
+	oldstepr = 0;
 }
-
-Opticaltrem::~Opticaltrem() {
-}
-
-void Opticaltrem::cleanup() {
-
-}
-;
 
 void Opticaltrem::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
-
 	int i;
-	float lfol, lfor, xl, xr, fxl, fxr;
-	float rdiff, ldiff;
+	float lfol = 0., lfor = 0., xl = 0., xr = 0., fxl = 0., fxr = 0.;
+	float rdiff = 0., ldiff = 0.;
 	lfo.render(1, &lfol, &lfor);
 
 	lfol = 1.0f - lfol * fdepth;
@@ -125,8 +121,7 @@ void Opticaltrem::render(jack_nframes_t nframes, float *smpsl, float *smpsr) {
 		gl += ldiff;
 		gr += rdiff; //linear interpolation of LFO
 
-	};
-
+	}
 }
 
 void Opticaltrem::setPanning(int value) {
@@ -178,58 +173,58 @@ void Opticaltrem::setLfoStereo(int value) {
 }
 /**
  * toXml member
-*/
+ */
 const char *Opticaltrem::toXml() {
-        char _buffer[256];
-        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
-        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
-        strcpy(_toXml,"<attributes>");
-        sprintf(_buffer,_formatd,"Pdepth",Pdepth);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"cperiod",cperiod);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"gl",gl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"oldgl",oldgl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"gr",gr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"oldgr",oldgr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lstep",lstep);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rstep",rstep);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"Ra",Ra);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"Rb",Rb);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"R1",R1);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"b",b);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"dTC",dTC);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"dRCl",dRCl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"dRCr",dRCr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"minTC",minTC);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"alphal",alphal);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"alphar",alphar);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"stepl",stepl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"stepr",stepr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rpanning",rpanning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lpanning",lpanning);
-        strcat(_toXml,_buffer);
-        strcat(_toXml,"</attributes>");
-        return _toXml;
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "Pdepth", Pdepth);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "cperiod", cperiod);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "gl", gl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldgl", oldgl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "gr", gr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "oldgr", oldgr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lstep", lstep);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rstep", rstep);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "Ra", Ra);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "Rb", Rb);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "R1", R1);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "b", b);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dTC", dTC);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dRCl", dRCl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "dRCr", dRCr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "minTC", minTC);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "alphal", alphal);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "alphar", alphar);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "stepl", stepl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "stepr", stepr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rpanning", rpanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lpanning", lpanning);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
 }

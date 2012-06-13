@@ -24,12 +24,12 @@
 #ifndef AUTOPAN_H
 #define AUTOPAN_H
 
-#include <plugins/YroEffectPlugin.h>
+#include <plugins/YroRawEffectPlugin.h>
 #include <plugins/misc/YroLowfrequencyOscillation.h>
 
 namespace std {
 
-class Pan: public YroEffectPlugin
+class Pan: public YroRawEffectPlugin
 
 {
 
