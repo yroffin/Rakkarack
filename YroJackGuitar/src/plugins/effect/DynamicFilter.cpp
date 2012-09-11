@@ -28,10 +28,10 @@ using namespace std;
 DynamicFilter::DynamicFilter() :
 		YroEffectPlugin("DynamicFilter",
 				"WahWah: 64, 64, 80, 0, 0, 64, 70, 90, 0, 60;"
-						"AutoWah: 64, 64, 70, 0, 0, 80, 70, 0, 0, 60;"
-						"Sweep: 64, 64, 30, 0, 0, 50, 80, 0, 0, 60;"
-						"VocalMorph1: 64, 64, 80, 0, 0, 64, 70, 64, 0, 60;"
-						"VocalMorph1: 64, 64, 50, 0, 0, 96, 64, 0, 0, 60;") {
+				"AutoWah: 64, 64, 70, 0, 0, 80, 70, 0, 0, 60;"
+				"Sweep: 64, 64, 30, 0, 0, 50, 80, 0, 0, 60;"
+				"VocalMorph1: 64, 64, 80, 0, 0, 64, 70, 64, 0, 60;"
+				"VocalMorph1: 64, 64, 50, 0, 0, 96, 64, 0, 0, 60;") {
 
 	filterl = NULL;
 	filterr = NULL;
@@ -39,11 +39,9 @@ DynamicFilter::DynamicFilter() :
 	setPreset(0);
 	cleanup();
 }
-;
 
 DynamicFilter::~DynamicFilter() {
 }
-;
 
 /*
  * Apply the effect

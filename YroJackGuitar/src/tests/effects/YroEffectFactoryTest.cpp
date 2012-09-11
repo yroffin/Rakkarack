@@ -111,8 +111,16 @@ int compareContexts(YroRawEffectPlugin *efx, TiXmlDocument &reference,
 				/**
 				 * find attribute, then compare
 				 */
+				int iCheckInstance = 0;
+				int iInstance = 0;
+				if (element->ToElement()->Attribute("instance") != 0) {
+					iCheckInstance = atoi(
+							element->ToElement()->Attribute("instance"));
+					iInstance = atoi(cmp->ToElement()->Attribute("instance"));
+				}
 				if (strcmp(element->ToElement()->Attribute("value"),
-						cmp->ToElement()->Attribute("value")) != 0) {
+						cmp->ToElement()->Attribute("value")) != 0
+						&& iCheckInstance == iInstance) {
 					fprintf(stderr,
 							"Attribute %s in error, expected %s, receive %s for effect %s\n",
 							element->ToElement()->Attribute("name"),
@@ -230,17 +238,27 @@ void YroEffectFactoryTest::checkup(YroRawEffectPlugin *efx,
 			for (unsigned int i = 0; i < real; i++) {
 				float expected = oleftCheck[i];
 				float result = oleft[i];
-				if(expected != result) {
-					fprintf(stderr,"While checking %s index (left) %d, expected %9.40f, result %9.40f, delta %9.40f\n",
-							efx->getName(),i, expected, result, expected - result);
+				if (expected != result) {
+					char message[1024];
+					sprintf(message,
+							"While checking %s index (left) %d, expected %9.40f, result %9.40f, delta %9.40f",
+							efx->getName(), i, expected, result,
+							expected - result);
+					fprintf(stderr, "%s\n", message);
+					CPPUNIT_ASSERT_EQUAL_MESSAGE(message, expected, result);
 				}
 			}
 			for (unsigned int i = 0; i < real; i++) {
 				float expected = orightCheck[i];
 				float result = oright[i];
-				if(expected != result) {
-					fprintf(stderr,"While checking %s index (right) %d, expected %9.40f, result %9.40f, delta %9.40f\n",
-							efx->getName(),i, expected, result, expected - result);
+				if (expected != result) {
+					char message[1024];
+					sprintf(message,
+							"While checking %s index (right) %d, expected %9.40f, result %9.40f, delta %9.40f",
+							efx->getName(), i, expected, result,
+							expected - result);
+					fprintf(stderr, "%s\n", message);
+					CPPUNIT_ASSERT_EQUAL_MESSAGE(message, expected, result);
 				}
 			}
 			if (checkByteError == 0) {
@@ -277,7 +295,6 @@ void YroEffectFactoryTest::testChorus() {
 	checkup(efx);
 }
 void YroEffectFactoryTest::testCoilCrafter() {
-	return;
 	checkup(new std::CoilCrafter());
 }
 void YroEffectFactoryTest::testCompBand() {
@@ -302,8 +319,7 @@ void YroEffectFactoryTest::testDualFlanger() {
 }
 void YroEffectFactoryTest::testDynamicFilter() {
 	return;
-	YroEffectPlugin *efx = new std::DynamicFilter();
-	checkup(efx);
+	checkup(new std::DynamicFilter());
 }
 void YroEffectFactoryTest::testEcho() {
 	YroEffectPlugin *efx = new std::Echo();
@@ -320,13 +336,10 @@ void YroEffectFactoryTest::testEQ() {
 	checkup(efx);
 }
 void YroEffectFactoryTest::testExciter() {
-	return;
-	YroEffectPlugin *efx = new std::Exciter();
-	checkup(efx);
+	checkup(new std::Exciter());
 }
 void YroEffectFactoryTest::testGate() {
-	YroRawEffectPlugin *efx = new std::Gate();
-	checkup(efx);
+	checkup(new std::Gate());
 }
 void YroEffectFactoryTest::testHarmonizer() {
 	return;
@@ -355,7 +368,6 @@ void YroEffectFactoryTest::testMusicDelay() {
 	checkup(efx);
 }
 void YroEffectFactoryTest::testNewDist() {
-	return;
 	checkup(new std::NewDist());
 }
 void YroEffectFactoryTest::testOpticaltrem() {

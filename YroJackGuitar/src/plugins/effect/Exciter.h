@@ -22,12 +22,12 @@
 #ifndef EXCITER_H
 #define EXCITER_H
 
-#include <plugins/YroEffectPlugin.h>
+#include <plugins/YroRawEffectPlugin.h>
 #include <plugins/filter/HarmEnhancer.h>
 
 namespace std {
 
-class Exciter: public YroEffectPlugin {
+class Exciter: public YroRawEffectPlugin {
 public:
 	Exciter();
 	~Exciter();

@@ -23,13 +23,13 @@
 #ifndef COILCRAFTER_H
 #define COILCRAFTER_H
 
-#include <plugins/YroEffectPlugin.h>
+#include <plugins/YroRawEffectPlugin.h>
 #include <plugins/filter/AnalogFilter.h>
 #include <plugins/filter/HarmEnhancer.h>
 
 namespace std {
 
-class CoilCrafter: public YroEffectPlugin {
+class CoilCrafter: public YroRawEffectPlugin {
 public:
 	CoilCrafter();
 	~CoilCrafter();

@@ -26,7 +26,7 @@
 using namespace std;
 
 Exciter::Exciter() :
-		YroEffectPlugin("Exciter",
+		YroRawEffectPlugin("Exciter",
 				"Plain: 64,0,0,0,0,0,0,0,0,0,0,20000,20;"
 				"Loudness: 64,0,0,0,0,24,0,-24,0,24,0,80,20;"
 				"Exciter1: 64,64,0,0,0,64,0,0,0,64,0,20000,20;"
@@ -65,9 +65,7 @@ void Exciter::cleanup() {
  */
 void Exciter::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 	harm->harm_out(nframes, smpsl, smpsr);
-
 }
-;
 
 /*
  * Parameter control

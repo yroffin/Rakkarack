@@ -71,8 +71,8 @@ void Harmonizer::cleanup() {
 }
 ;
 
-void Harmonizer::applyfilters(float * efxoutl) {
-	pl->filterout(iPERIOD, fPERIOD, efxoutl);
+void Harmonizer::applyfilters(float * smps) {
+	pl->filterout(iPERIOD, fPERIOD, smps);
 }
 ;
 

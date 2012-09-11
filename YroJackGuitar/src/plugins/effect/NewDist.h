@@ -196,6 +196,12 @@ private:
 			octmix;
 	float *octoutl, *octoutr;
 
+	/**
+	 * in order to do not modify input
+	 * use saver and savel to backup original signal
+	 */
+	float *savel, *saver;
+
 //Parametrii reali
 	AnalogFilter *lpfl, *lpfr, *hpfl, *hpfr, *blockDCl, *blockDCr, *DCl, *DCr;
 	WaveShaper *wshapel, *wshaper;

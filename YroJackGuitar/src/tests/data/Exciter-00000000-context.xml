@@ -1,2 +1,38 @@
 <?xml version="1.0"?>
-<attributes><attribute name="Ppreset" value="0" /><attribute name="hpffreq" value="20" /><attribute name="lpffreq" value="20000" /><attribute name="Prm" value="0" instance="0" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="0" /><attribute name="Prm" value="0" instance="1" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="1" /><attribute name="Prm" value="0" instance="2" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="2" /><attribute name="Prm" value="0" instance="3" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="3" /><attribute name="Prm" value="0" instance="4" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="4" /><attribute name="Prm" value="0" instance="5" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="5" /><attribute name="Prm" value="0" instance="6" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="6" /><attribute name="Prm" value="0" instance="7" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="7" /><attribute name="Prm" value="0" instance="8" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="8" /><attribute name="Prm" value="0" instance="9" /><attribute name="rm" value="0.0000000000000000000000000000000000000000" instance="9" /><attribute name="Pvolume" value="64" /><attribute name="outvolume" value="0.5039370059967041015625000000000000000000" /></attributes>
+<attributes>
+	<attribute name="Ppreset" value="0" />
+	<attribute name="hpffreq" value="20" />
+	<attribute name="lpffreq" value="20000" />
+	<attribute name="Prm" value="0" instance="0" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="0" />
+	<attribute name="Prm" value="0" instance="1" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="1" />
+	<attribute name="Prm" value="0" instance="2" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="2" />
+	<attribute name="Prm" value="0" instance="3" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="3" />
+	<attribute name="Prm" value="0" instance="4" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="4" />
+	<attribute name="Prm" value="0" instance="5" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="5" />
+	<attribute name="Prm" value="0" instance="6" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="6" />
+	<attribute name="Prm" value="0" instance="7" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="7" />
+	<attribute name="Prm" value="0" instance="8" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="8" />
+	<attribute name="Prm" value="0" instance="9" />
+	<attribute name="rm" value="0.0000000000000000000000000000000000000000"
+		instance="9" />
+	<attribute name="Pvolume" value="64" />
+	<attribute name="outvolume" value="0.5039370059967041015625000000000000000000" />
+</attributes>

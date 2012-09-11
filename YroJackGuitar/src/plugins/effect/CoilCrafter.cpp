@@ -25,7 +25,7 @@
 using namespace std;
 
 CoilCrafter::CoilCrafter() :
-		YroEffectPlugin("CoilCrafter",
+		YroRawEffectPlugin("CoilCrafter",
 				"HtoS: 32,6,1,3300,16,4400,42,20,0;"
 				"StoH: 32,1,6,4400,42,3300,16,20,0;") {
 

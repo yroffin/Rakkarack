@@ -32,12 +32,14 @@ using namespace std;
  */
 
 NewDist::NewDist() :
-		YroEffectPlugin("NewDist",
-				"NewDist1: 0,64,64,83,65,15,0,2437,169,68,0;"
+		YroEffectPlugin("NewDist", "NewDist1: 0,64,64,83,65,15,0,2437,169,68,0;"
 				"NewDist2: 0,64,64,95,45,6,0,3459,209,60,1;"
 				"NewDist3: 0,64,64,43,77,16,0,2983,118,83,0;") {
+
 	octoutl = (float *) malloc(sizeof(float) * iPERIOD);
 	octoutr = (float *) malloc(sizeof(float) * iPERIOD);
+	savel   = (float *) malloc(sizeof(float) * iPERIOD);
+	saver   = (float *) malloc(sizeof(float) * iPERIOD);
 
 	lpfl = new AnalogFilter(2, 22000, 1, 0);
 	lpfr = new AnalogFilter(2, 22000, 1, 0);
@@ -93,8 +95,11 @@ NewDist::NewDist() :
 ;
 
 NewDist::~NewDist() {
+	delete octoutl;
+	delete octoutr;
+	delete savel;
+	delete saver;
 }
-;
 
 /*
  * Cleanup the effect
@@ -108,9 +113,7 @@ void NewDist::cleanup() {
 	blockDCl->cleanup();
 	DCl->cleanup();
 	DCr->cleanup();
-
 }
-;
 
 /*
  * Apply the filters
@@ -123,30 +126,42 @@ void NewDist::applyfilters(float * efxoutl, float * efxoutr) {
 	hpfr->filterout(iPERIOD, fPERIOD, efxoutr);
 
 }
-;
 
 /*
  * Effect output
+ * Modification of original code ... do not modify
+ * Input smpsl & smpsr
  */
-void NewDist::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
-	int i;
-	float l, r, lout, rout;
+void NewDist::render(jack_nframes_t nframes, float * left, float * right) {
+	int i = 0;
+	float l = 0.f, r = 0.f, lout = 0.f, rout = 0.f;
 
 	float inputvol = .5f;
 
 	if (Pnegate != 0)
 		inputvol *= -1.0f;
 
+	/**
+	 * backup original signal
+	 * only work on a copy
+	 */
+	memcpy(savel, left, iPERIOD * sizeof(float));
+	memcpy(saver, right, iPERIOD * sizeof(float));
+
 	if (Pprefiltering != 0)
-		applyfilters(smpsl, smpsr);
+		applyfilters(savel, saver);
 
 	//no optimised, yet (no look table)
 
-	wshapel->waveshapesmps(iPERIOD, smpsl, Ptype, Pdrive, 2);
-	wshaper->waveshapesmps(iPERIOD, smpsr, Ptype, Pdrive, 2);
+	wshapel->waveshapesmps(iPERIOD, savel, Ptype, Pdrive, 2);
+	wshaper->waveshapesmps(iPERIOD, saver, Ptype, Pdrive, 2);
 
-	memcpy(efxoutl, smpsl, iPERIOD * sizeof(float));
-	memcpy(efxoutr, smpsl, iPERIOD * sizeof(float));
+	/**
+	 * why do not copy smpsr to efxoutr ?
+	 * strange ...
+	 */
+	memcpy(efxoutl, savel, iPERIOD * sizeof(float));
+	memcpy(efxoutr, savel, iPERIOD * sizeof(float));
 
 	if (octmix > 0.01f) {
 		for (i = 0; i < iPERIOD; i++) {
@@ -170,8 +185,8 @@ void NewDist::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 		blockDCl->filterout(iPERIOD, fPERIOD, octoutl);
 	}
 
-	filterl->filterout(smpsl);
-	filterr->filterout(smpsr);
+	filterl->filterout(savel);
+	filterr->filterout(saver);
 
 	if (Pprefiltering == 0)
 		applyfilters(efxoutl, efxoutr);
@@ -195,14 +210,11 @@ void NewDist::render(jack_nframes_t nframes, float * smpsl, float * smpsr) {
 
 		efxoutl[i] = lout * level * panning;
 		efxoutr[i] = rout * level * (1.0f - panning);
-
-	};
+	}
 
 	DCr->filterout(iPERIOD, fPERIOD, efxoutr);
 	DCl->filterout(iPERIOD, fPERIOD, efxoutl);
-
 }
-;
 
 /*
  * Parameter control
@@ -213,21 +225,17 @@ void NewDist::setVolume(int Pvolume) {
 	outvolume = (float) Pvolume / 127.0f;
 	if (Pvolume == 0)
 		cleanup();
-
 }
-;
 
 void NewDist::setPanning(int Ppanning) {
 	this->Ppanning = Ppanning;
 	panning = ((float) Ppanning + 0.5f) / 127.0f;
 }
-;
 
 void NewDist::setLrcross(int Plrcross) {
 	this->Plrcross = Plrcross;
 	lrcross = (float) Plrcross / 127.0f * 1.0f;
 }
-;
 
 void NewDist::setLpf(int value) {
 	Plpf = value;
@@ -235,7 +243,6 @@ void NewDist::setLpf(int value) {
 	lpfl->setfreq(fr);
 	lpfr->setfreq(fr);
 }
-;
 
 void NewDist::setHpf(int value) {
 	Phpf = value;
@@ -243,10 +250,12 @@ void NewDist::setHpf(int value) {
 	hpfl->setfreq(fr);
 	hpfr->setfreq(fr);
 }
+
 void NewDist::setOctave(int Poctave) {
 	this->Poctave = Poctave;
 	octmix = (float) (Poctave) / 127.0f;
 }
+
 void NewDist::setDrive(int value) {
 	Pdrive = value;
 }
@@ -274,29 +283,29 @@ int NewDist::getOctave() {
 	return this->Poctave;
 }
 int NewDist::getDrive() {
-	return Pdrive ;
+	return Pdrive;
 }
 int NewDist::getLevel() {
-	return Plevel ;
+	return Plevel;
 }
 int NewDist::getType() {
-	return Ptype ;
+	return Ptype;
 }
 int NewDist::getNegate() {
-	return Pnegate ;
+	return Pnegate;
 }
 int NewDist::getRfreq() {
-	return Prfreq ;
+	return Prfreq;
 }
 int NewDist::getPrefiltering() {
-	return Pprefiltering ;
+	return Pprefiltering;
 }
 
 int NewDist::getHpf() {
-	return Phpf ;
+	return Phpf;
 }
 int NewDist::getLpf() {
-	return Plpf ;
+	return Plpf;
 }
 
 int NewDist::getPanning() {
@@ -310,50 +319,50 @@ int NewDist::getVolume() {
 }
 /**
  * toXml member
-*/
+ */
 const char *NewDist::toXml() {
-        char _buffer[256];
-        char _formatd[] = {"<attribute name=\"%s\" value=\"%d\" />"};
-        char _formatf[] = {"<attribute name=\"%s\" value=\"%9.40f\" />"};
-        strcpy(_toXml,"<attributes>");
-        sprintf(_buffer,_formatd,"Pdrive",Pdrive);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Phpf",Phpf);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Plevel",Plevel);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Plpf",Plpf);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Plrcross",Plrcross);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pnegate",Pnegate);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Poctave",Poctave);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Ppanning",Ppanning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pprefiltering",Pprefiltering);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Prfreq",Prfreq);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Ptype",Ptype);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatd,"Pvolume",Pvolume);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"panning",panning);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"lrcross",lrcross);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"octave_memoryl",octave_memoryl);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"togglel",togglel);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"octave_memoryr",octave_memoryr);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"toggler",toggler);
-        strcat(_toXml,_buffer);
-        sprintf(_buffer,_formatf,"rfreq",rfreq);
-        strcat(_toXml,_buffer);
-        strcat(_toXml,"</attributes>");
-        return _toXml;
+	char _buffer[256];
+	char _formatd[] = { "<attribute name=\"%s\" value=\"%d\" />" };
+	char _formatf[] = { "<attribute name=\"%s\" value=\"%9.40f\" />" };
+	strcpy(_toXml, "<attributes>");
+	sprintf(_buffer, _formatd, "Pdrive", Pdrive);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Phpf", Phpf);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plevel", Plevel);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plpf", Plpf);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Plrcross", Plrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pnegate", Pnegate);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Poctave", Poctave);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ppanning", Ppanning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pprefiltering", Pprefiltering);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Prfreq", Prfreq);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Ptype", Ptype);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatd, "Pvolume", Pvolume);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "panning", panning);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "lrcross", lrcross);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "octave_memoryl", octave_memoryl);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "togglel", togglel);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "octave_memoryr", octave_memoryr);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "toggler", toggler);
+	strcat(_toXml, _buffer);
+	sprintf(_buffer, _formatf, "rfreq", rfreq);
+	strcat(_toXml, _buffer);
+	strcat(_toXml, "</attributes>");
+	return _toXml;
 }
